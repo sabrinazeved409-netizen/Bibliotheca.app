@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#29231f">
+  <meta name="description" content="Sua biblioteca digital pessoal">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+  <title>Bibliotheca — sua biblioteca</title>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">SUA BIBLIOTECA PESSOAL</p>
+      <h1>Bibliotheca<span>✦</span></h1>
+    </div>
+    <button id="themeBtn" class="icon-btn" aria-label="Alternar tema">☾</button>
+  </header>
+
+  <main>
+    <section id="home" class="screen active">
+      <div class="welcome panel">
+        <div>
+          <p class="eyebrow">UM CAPÍTULO DE CADA VEZ</p>
+          <h2>Seu próximo mundo<br>espera por você.</h2>
+          <p class="muted">Leia no seu ritmo. Guarde o que importa.</p>
+        </div>
+        <div class="book-illustration" aria-hidden="true">📚</div>
+      </div>
+      <div class="section-head">
+        <h2>Continuar lendo</h2>
+        <button class="text-btn" data-go="library">Ver biblioteca</button>
+      </div>
+      <div id="continueList" class="book-grid compact-grid"></div>
+      <div class="section-head">
+        <h2>Seu ritmo</h2>
+        <button class="text-btn" data-go="stats">Detalhes</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><span>Hoje</span><strong id="todayTime">0 min</strong><small>tempo de leitura</small></div>
+        <div class="stat-card"><span>Esta semana</span><strong id="weekTime">0 min</strong><small>tempo de leitura</small></div>
+      </div>
+    </section>
+
+    <section id="library" class="screen">
+      <div class="section-head page-heading">
+        <div><p class="eyebrow">SEU ACERVO</p><h2>Minha biblioteca</h2></div>
+        <label class="primary-btn import-btn">＋ Adicionar<input id="fileInput" type="file" accept=".pdf,.epub,.mobi,.txt,application/pdf" multiple hidden></label>
+      </div>
+      <div class="search-wrap"><span>⌕</span><input id="searchInput" type="search" placeholder="Buscar por título ou autor"></div>
+      <div class="shelf-row">
+        <button class="filter-chip selected" data-filter="all">Todos</button>
+        <button class="filter-chip" data-filter="reading">Lendo</button>
+        <button class="filter-chip" data-filter="want">Quero ler</button>
+        <button class="filter-chip" data-filter="finished">Concluídos</button>
+      </div>
+      <div id="shelfList" class="book-grid"></div>
+      <div id="emptyLibrary" class="empty-state">
+        <div class="empty-icon">📖</div><h3>Sua estante começa aqui</h3>
+        <p>Adicione um PDF, EPUB ou arquivo de texto para começar. MOBI está listado, mas ainda não é compatível com este protótipo.</p>
+        <label class="primary-btn import-btn">Adicionar primeiro livro<input type="file" accept=".pdf,.epub,.mobi,.txt" multiple hidden onchange="document.getElementById('fileInput').files = this.files; document.getElementById('fileInput').dispatchEvent(new Event('change'))"></label>
+      </div>
+    </section>
+
+    <section id="stats" class="screen">
+      <p class="eyebrow">SEU HÁBITO LITERÁRIO</p><h2>Estatísticas</h2>
+      <div class="stats-row">
+        <div class="stat-card"><span>Hoje</span><strong id="statsToday">0 min</strong><small>tempo de leitura</small></div>
+        <div class="stat-card"><span>Últimos 7 dias</span><strong id="statsWeek">0 min</strong><small>tempo de leitura</small></div>
+      </div>
+      <div class="panel chart-panel"><h3>Leitura por dia</h3><div id="weekChart" class="week-chart"></div><p class="muted small">O tempo é contado enquanto o leitor está aberto; pause ou feche a leitura quando fizer uma pausa longa.</p></div>
+      <div class="panel goal-panel"><h3>Meta diária</h3><div class="goal-line"><input id="goalInput" type="number" min="5" max="600" step="5" value="30"><span>minutos por dia</span><button id="saveGoal" class="secondary-btn">Salvar</button></div><div class="progress-track"><div id="goalProgress" class="progress-fill"></div></div><p id="goalLabel" class="muted small">0 de 30 minutos hoje</p></div>
+      <div class="panel"><h3>Seu acervo</h3><div class="library-summary"><span>Livros adicionados</span><strong id="bookCount">0</strong></div><div class="library-summary"><span>Livros concluídos</span><strong id="finishedCount">0</strong></div></div>
+    </section>
+
+    <section id="notes" class="screen">
+      <p class="eyebrow">SUAS IDEIAS, SEMPRE POR PERTO</p><h2>Caderno literário</h2>
+      <p class="muted">Citações e adendos salvos nos livros aparecerão aqui.</p>
+      <div id="notesList" class="notes-list"></div>
+      <div id="emptyNotes" class="empty-state"><div class="empty-icon">✍️</div><h3>Um espaço para suas ideias</h3><p>Abra um livro e use “Anotar” para guardar uma reflexão ou citação.</p></div>
+    </section>
+
+    <section id="settings" class="screen">
+      <p class="eyebrow">DO SEU JEITO</p><h2>Personalizar</h2>
+      <div class="panel settings-panel">
+        <h3>Aparência</h3><p class="muted">Escolha o clima da sua biblioteca.</p>
+        <div class="theme-options">
+          <button class="theme-choice" data-theme="light"><span class="swatch light-swatch"></span>Claro</button>
+          <button class="theme-choice" data-theme="sepia"><span class="swatch sepia-swatch"></span>Sépia</button>
+          <button class="theme-choice" data-theme="dark"><span class="swatch dark-swatch"></span>Escuro</button>
+        </div>
+        <h3>Cor de destaque</h3><div class="accent-options">
+          <button class="accent-dot accent-gold" data-accent="#b18a4a" aria-label="Dourado"></button>
+          <button class="accent-dot accent-green" data-accent="#6f8b73" aria-label="Verde"></button>
+          <button class="accent-dot accent-wine" data-accent="#9b5969" aria-label="Vinho"></button>
+          <button class="accent-dot accent-blue" data-accent="#6689a4" aria-label="Azul"></button>
+        </div>
+      </div>
+      <div class="panel"><h3>Sobre este protótipo</h3><p class="muted">Esta é uma primeira versão experimental. Os dados ficam neste navegador e podem ser apagados se você limpar os dados do site. Faça cópias de segurança dos arquivos originais.</p><button id="exportBtn" class="secondary-btn full-btn">Exportar backup das anotações e estatísticas</button></div>
+    </section>
+
+    <section id="reader" class="screen reader-screen">
+      <div class="reader-top">
+        <button id="closeReader" class="icon-btn">‹</button><div class="reader-title-wrap"><strong id="readerTitle">Leitura</strong><small id="readerPosition">Abra um livro</small></div><button id="readerTheme" class="icon-btn">◐</button>
+      </div>
+      <div id="readerContent" class="reader-content"><div class="empty-state"><div class="empty-icon">📘</div><h3>Escolha um livro</h3><p>Abra um livro da sua biblioteca para começar.</p></div></div>
+      <div class="reader-toolbar">
+        <button id="markBtn">🔖 Marcar</button><button id="quoteBtn">✦ Citação</button><button id="noteBtn">✎ Anotar</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-go="home"><span>⌂</span>Início</button>
+    <button class="nav-item" data-go="library"><span>▤</span>Biblioteca</button>
+    <button class="nav-item" data-go="stats"><span>▥</span>Estatísticas</button>
+    <button class="nav-item" data-go="notes"><span>✎</span>Caderno</button>
+    <button class="nav-item" data-go="settings"><span>⚙</span>Ajustes</button>
+  </nav>
+  <div id="toast" class="toast" role="status"></div>
+  <dialog id="noteDialog">
+    <form method="dialog" id="noteForm">
+      <div class="dialog-head"><h3 id="noteDialogTitle">Nova anotação</h3><button class="icon-btn" value="cancel">×</button></div>
+      <label for="noteKind">Tipo</label><select id="noteKind"><option value="note">Adendo / anotação</option><option value="quote">Citação</option><option value="marker">Marcador</option></select>
+      <label for="noteText">Sua anotação</label><textarea id="noteText" rows="5" placeholder="Escreva aqui..."></textarea>
+      <button id="saveNote" class="primary-btn full-btn" value="default">Salvar anotação</button>
+    </form>
+  </dialog>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

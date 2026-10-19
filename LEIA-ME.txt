@@ -1,0 +1,24 @@
+BIBLIOTHECA — PROTÓTIPO INICIAL
+
+O QUE JÁ ESTÁ PREPARADO
+- Interface adaptável para celular.
+- Biblioteca local com importação de PDF, EPUB e TXT.
+- Tentativa de leitura de PDF e EPUB usando bibliotecas externas.
+- Organização básica por situação: quero ler, lendo e concluídos.
+- Temas claro, sépia e escuro, com cor de destaque.
+- Caderno de citações, marcadores e adendos.
+- Estatísticas simples de tempo por dia/semana e meta diária.
+- Exportação de backup de anotações e estatísticas.
+
+LIMITAÇÕES IMPORTANTES
+- MOBI ainda não é aberto diretamente. Para esta versão, converta legalmente o arquivo para EPUB usando uma ferramenta compatível.
+- O leitor PDF/EPUB carrega bibliotecas externas pela internet na primeira utilização.
+- Para o app funcionar corretamente, estes arquivos precisam ser publicados em um endereço HTTPS; abrir index.html diretamente como arquivo pode impedir algumas funções do navegador.
+- Os dados ficam no armazenamento local deste navegador. Limpar os dados do site pode apagá-los; exporte backups.
+- Esta é uma base experimental, não um produto final. Teste com cópias de arquivos antes de confiar nela.
+- A importação de arquivos protegidos por DRM não é garantida.
+- O tempo de leitura é aproximado e ainda precisa de refinamento para pausas, suspensão do navegador e mudanças de data.
+- O progresso EPUB é aproximado nesta versão.
+
+PRÓXIMO PASSO
+Publique a pasta em um serviço de hospedagem estática HTTPS que tenha plano gratuito (por exemplo, GitHub Pages). Depois abra o endereço no Chrome do Android e use o menu do navegador > Adicionar à tela inicial.
