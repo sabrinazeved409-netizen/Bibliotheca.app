@@ -35,3 +35,32 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}.t
   color: #e5d9c6;
   line-height: 1.7;
 }
+/* Jardim dos Romances */
+.romance-world {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  margin: 18px 0;
+  background:
+    radial-gradient(ellipse at 15% 100%, #8c405566, transparent 45%),
+    radial-gradient(ellipse at 85% 0%, #a58a554d, transparent 45%),
+    linear-gradient(145deg, #293d2d, #18231d 70%, #38232b);
+}
+
+.romance-world .eyebrow {
+  color: #d7b978;
+  letter-spacing: 2px;
+  font-size: 11px;
+}
+
+.romance-world h2 {
+  font-size: 30px;
+  margin: 0;
+}
+
+.romance-world .world-description {
+  max-width: 300px;
+  margin: 0;
+}
