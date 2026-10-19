@@ -299,6 +299,37 @@ function ensureGardenSection() {
   `;
 
   home.appendChild(section);
+} {
+  const home = $('#home');
+
+  if (!home || $('#gardenSection')) return;
+
+  const section = document.createElement('section');
+
+  section.id = 'gardenSection';
+  section.className = 'garden-section';
+
+  section.innerHTML = `
+    <div class="section-head">
+      <h2>🌷 Jardim dos Romances</h2>
+      <button type="button" class="text-btn" id="gardenManage">
+        Escolher livros
+      </button>
+    </div>
+
+    <p class="muted small">
+      Seu cantinho especial para os romances escolhidos por você.
+    </p>
+
+    <div id="gardenList" class="book-grid compact-grid"></div>
+
+    <p id="gardenEmpty" class="muted">
+      Seu jardim está vazio. Entre na biblioteca e toque em
+      “Jardim dos Romances” no livro que deseja adicionar.
+    </p>
+  `;
+
+  home.appendChild(section);
 
   const manageButton = $('#gardenManage');
 
