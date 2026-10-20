@@ -719,11 +719,12 @@ async function openBook(bookId) {
 
   go('reader');
   document.body.classList.add('reading-mode');
-  toggleReaderControls(true);
   readerScreenLocked = false;
   clearTimeout(lockIconTimer);
+  // Limpar o estado antigo antes de mostrar os controles; a ordem importa.
   $('#reader')?.classList.remove('screen-locked', 'reader-controls-visible');
   $('#readerLockIndicator')?.classList.remove('visible');
+  toggleReaderControls(true);
   $('#readerSettings')?.classList.remove('open');
   applyReaderPreferences();
   startSession();
@@ -1566,7 +1567,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=32', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=33', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
