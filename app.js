@@ -986,12 +986,14 @@ function applyReaderPreferences() {
     content.style.fontSize = (17 * readerFontSize / 100) + 'px';
     content.style.lineHeight = String(readerLineSpacing);
     content.style.fontFamily = readerFontFamily;
-    content.style.fontWeight = String(readerFontWeight);
+    content.style.fontWeight = String(Math.max(500, readerFontWeight));
+    content.style.color = 'var(--text)';
     content.querySelectorAll('.reader-page').forEach(page => {
       page.style.fontSize = (17 * readerFontSize / 100) + 'px';
       page.style.lineHeight = String(readerLineSpacing);
       page.style.fontFamily = readerFontFamily;
-      page.style.fontWeight = String(readerFontWeight);
+      page.style.fontWeight = String(Math.max(500, readerFontWeight));
+      page.style.color = 'var(--text)';
     });
     content.querySelectorAll('.reader-page p, p').forEach(paragraph => {
       paragraph.style.marginBottom = readerParagraphSpacing + 'em';
@@ -1013,6 +1015,8 @@ function applyReaderPreferences() {
   if ($('#paragraphValue')) $('#paragraphValue').textContent = readerParagraphSpacing.toLocaleString('pt-BR', {maximumFractionDigits:1});
   if ($('#brightnessValue')) $('#brightnessValue').textContent = readerBrightness + '%';
   if ($('#quickBrightnessValue')) $('#quickBrightnessValue').textContent = readerBrightness + '%';
+  const quickBrightness = $('#readerQuickBrightness');
+  if (quickBrightness) quickBrightness.setAttribute('aria-hidden', String(!$('#reader')?.classList.contains('reader-controls-visible')));
   if (epubRendition) {
     try {
       epubRendition.themes.default({
@@ -1021,10 +1025,11 @@ function applyReaderPreferences() {
           'line-height': readerLineSpacing + ' !important',
           'font-family': readerFontFamily + ' !important',
           'font-weight': readerFontWeight + ' !important',
-          'color': readerFontWeight >= 600 ? '#111111 !important' : '',
+          'color': (getComputedStyle(document.body).getPropertyValue('--text').trim() || '#302b27') + ' !important',
+          'background-color': (getComputedStyle(document.body).getPropertyValue('--panel').trim() || '#fffdf9') + ' !important',
           'paragraph-margin-bottom': readerParagraphSpacing + 'em !important'
         },
-        p: { 'margin-bottom': readerParagraphSpacing + 'em !important', 'font-weight': readerFontWeight + ' !important' }
+        p: { 'margin-bottom': readerParagraphSpacing + 'em !important', 'font-weight': Math.max(500, readerFontWeight) + ' !important', 'color': (getComputedStyle(document.body).getPropertyValue('--text').trim() || '#302b27') + ' !important' }
       });
       epubRendition.settings.axis = readerAxis;
       epubRendition.resize();
@@ -1080,7 +1085,7 @@ function updateFontPreview() {
   const preview = $('#readerFontPreview');
   if (!preview) return;
   preview.style.fontFamily = readerFontFamily;
-  preview.style.fontWeight = String(readerFontWeight);
+  preview.style.fontWeight = String(Math.max(500, readerFontWeight));
   preview.style.fontSize = (17 * readerFontSize / 100) + 'px';
   preview.textContent = 'A leitura fica assim: Era uma vez, entre páginas e sonhos.';
 }
