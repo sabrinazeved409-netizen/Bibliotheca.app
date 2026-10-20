@@ -1090,3 +1090,107 @@ body.romance-room-open #emptyLibrary{display:none!important}
  body.romance-room-open #shelfList .book-cover{height:clamp(78px,25vw,110px)!important}
  body.romance-room-open #shelfList .book-meta strong,body.romance-room-open #shelfList .book-title{font-size:9px!important}
 }
+
+
+/* v63 — Romance: portal cinematográfico em CSS, não painel de fundo */
+body.romance-room-open #library.active{
+ --portal-gold:#d8ad69;--portal-wine:#47121f;--portal-rose:#a62e48;
+ position:relative!important;isolation:isolate!important;overflow:hidden!important;
+ background:
+  radial-gradient(ellipse at 50% 20%,rgba(255,189,119,.2),transparent 27%),
+  linear-gradient(180deg,#18090d 0%,#261016 35%,#12080b 100%)!important;
+}
+body.romance-room-open #library.active:before{
+ content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+ background:
+  radial-gradient(ellipse at 50% 24%,rgba(255,190,121,.28) 0,rgba(170,69,65,.14) 18%,transparent 43%),
+  radial-gradient(ellipse at 5% 48%,rgba(130,27,49,.55),transparent 35%),
+  radial-gradient(ellipse at 96% 52%,rgba(130,27,49,.5),transparent 36%),
+  repeating-linear-gradient(90deg,transparent 0 9%,rgba(228,174,103,.06) 9.1% 9.3%,transparent 9.5% 19%),
+  linear-gradient(180deg,#18090c 0%,#3b1720 38%,#1b0b10 76%,#0c0709 100%)!important;
+}
+body.romance-room-open #library.active:after{
+ content:"";position:fixed;z-index:-1;pointer-events:none;
+ left:50%;top:9vh;width:min(88vw,560px);height:64vh;transform:translateX(-50%);
+ border:2px solid rgba(219,174,106,.55);border-bottom:0;
+ border-radius:48% 48% 0 0/27% 27% 0 0;
+ box-shadow:0 0 0 7px rgba(20,7,10,.8),0 0 0 10px rgba(196,144,81,.28),0 0 45px rgba(238,158,101,.16),inset 0 0 35px rgba(244,174,113,.08);
+ background:
+  radial-gradient(ellipse at 50% 24%,rgba(255,208,144,.15),transparent 48%),
+  linear-gradient(90deg,rgba(20,7,10,.78),transparent 17% 83%,rgba(20,7,10,.78)),
+  repeating-linear-gradient(90deg,transparent 0 22%,rgba(222,176,105,.11) 22.2% 22.7%,transparent 23% 45%);
+}
+body.romance-room-open #library .page-heading{
+ position:relative;z-index:3;margin:0 -10px!important;padding:10px 14px 8px!important;
+ background:linear-gradient(180deg,rgba(15,6,8,.9),rgba(15,6,8,.15))!important;
+}
+body.romance-room-open #selectedGenrePanel{
+ position:relative!important;z-index:2;display:flex!important;flex-direction:column!important;
+ margin:0 -10px 8px!important;padding:0 10px 8px!important;overflow:visible!important;
+ border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body.romance-room-open #selectedGenrePanel .room-atmosphere{
+ position:relative!important;isolation:isolate!important;
+ display:grid!important;grid-template-columns:minmax(0,1fr) 92px!important;align-items:end!important;
+ min-height:31vh!important;height:31vh!important;max-height:280px!important;
+ margin:0 -10px 7px!important;padding:14px 12px 12px!important;overflow:hidden!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ background:
+  radial-gradient(ellipse at 50% 12%,rgba(255,203,139,.48),transparent 35%),
+  linear-gradient(180deg,rgba(28,8,13,.05),rgba(19,6,10,.55)),
+  repeating-linear-gradient(90deg,transparent 0 18%,rgba(226,179,106,.13) 18.2% 18.7%,transparent 19% 38%),
+  linear-gradient(90deg,#1a080d 0%,#662333 17%,#8e4143 50%,#662333 83%,#1a080d 100%)!important;
+}
+body.romance-room-open #selectedGenrePanel .room-atmosphere:before{
+ content:"";position:absolute;z-index:-1;inset:0;opacity:1!important;pointer-events:none;
+ background:
+  radial-gradient(ellipse at 50% 34%,rgba(255,214,155,.36),transparent 23%),
+  linear-gradient(90deg,rgba(10,5,7,.8),transparent 20% 80%,rgba(10,5,7,.8)),
+  linear-gradient(0deg,rgba(13,6,8,.85),transparent 55%);
+}
+body.romance-room-open #selectedGenrePanel .room-atmosphere:after{
+ content:"";position:absolute;z-index:-1;left:50%;top:8%;width:44%;height:105%;transform:translateX(-50%);
+ border:2px solid rgba(235,193,123,.75);border-bottom:0;
+ border-radius:50% 50% 0 0/32% 32% 0 0;
+ box-shadow:0 0 0 5px rgba(20,7,10,.7),0 0 0 8px rgba(211,158,90,.3),inset 0 0 24px rgba(255,210,148,.18),0 0 28px rgba(255,177,113,.15);
+ background:linear-gradient(180deg,rgba(244,190,130,.13),rgba(41,9,19,.08) 70%,rgba(15,6,8,.6));
+}
+body.romance-room-open #selectedGenrePanel .world-sky-symbol{display:none!important}
+body.romance-room-open #selectedGenrePanel .world-scene-copy{
+ position:relative;z-index:2;align-self:end!important;max-width:none!important;margin:0!important;
+ padding:10px 9px!important;background:linear-gradient(145deg,rgba(42,9,18,.94),rgba(14,6,9,.96))!important;
+ border:1px solid #d7aa68!important;border-radius:3px 3px 12px 12px!important;
+ box-shadow:0 8px 24px #0009,inset 0 0 0 3px rgba(218,166,94,.13)!important;
+}
+body.romance-room-open #selectedGenrePanel .world-kicker{font-size:7px!important;letter-spacing:1px!important;color:#e8bc79!important}
+body.romance-room-open #selectedGenrePanel .world-scene-copy strong{font-size:clamp(18px,5vw,26px)!important;color:#f5dfc3!important}
+body.romance-room-open #selectedGenrePanel .world-scene-copy small{font-size:9px!important;color:#e3c4b1!important}
+body.romance-room-open #selectedGenrePanel .romance-quote{
+ position:relative;z-index:2;align-self:center!important;max-width:92px!important;margin:0!important;padding:10px 6px!important;
+ color:#f4d9b8!important;background:linear-gradient(150deg,rgba(38,9,16,.97),rgba(17,6,9,.97))!important;
+ border:1px solid #d7aa68!important;border-radius:3px 3px 16px 16px!important;
+ box-shadow:0 8px 22px #0009,inset 0 0 0 3px rgba(218,166,94,.12)!important;
+ font-size:10px!important;line-height:1.42!important;
+}
+body.romance-room-open #selectedGenrePanel .back-rooms{order:2;align-self:center;margin:4px 0 8px!important;background:rgba(23,8,12,.9)!important}
+body.romance-room-open #selectedGenreTitle{order:3;text-align:center!important;margin:0!important;color:#f2d2a7!important;font:clamp(24px,7vw,35px)/1.15 Georgia,serif!important;text-shadow:0 2px 15px #000}
+body.romance-room-open #selectedGenreDescription{order:4;text-align:center!important;margin:5px 0 0!important;color:#e4c7b2!important;font-size:12px!important}
+body.romance-room-open #library .search-wrap{position:relative;z-index:3;margin:10px 0 9px!important;background:rgba(22,9,10,.94)!important;border:1px solid #b98b58!important;box-shadow:0 4px 18px #0008!important}
+body.romance-room-open #library .shelf-row{position:relative;z-index:3;gap:6px!important;flex-wrap:nowrap!important;overflow-x:auto;padding:2px 0 8px!important}
+body.romance-room-open #library .filter-chip{flex:0 0 auto!important;padding:8px 12px!important;font-size:12px!important;background:rgba(22,9,10,.92)!important}
+body.romance-room-open #shelfList{position:relative;z-index:3;margin:0 -4px!important}
+body.romance-room-open #shelfList .book-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important}
+body.romance-room-open #shelfList .book-card{min-width:0!important;padding:5px 4px 6px!important;background:linear-gradient(180deg,rgba(55,22,23,.97),rgba(15,7,8,.98))!important;border:1px solid #c29153!important;border-radius:4px!important;box-shadow:inset 0 0 0 2px rgba(218,170,98,.13),0 5px 12px #0008!important}
+body.romance-room-open #shelfList .book-cover{height:clamp(86px,26vw,142px)!important;min-height:0!important;border-radius:2px!important}
+body.romance-room-open #shelfList .book-meta{padding:5px 1px 0!important;min-width:0!important}
+body.romance-room-open #shelfList .book-meta strong,body.romance-room-open #shelfList .book-title{font-size:10px!important;line-height:1.2!important;overflow-wrap:anywhere!important}
+body.romance-room-open #shelfList .book-meta small{font-size:8px!important}
+body.romance-room-open #shelfList .book-progress,body.romance-room-open #shelfList .progress-row{font-size:9px!important}
+@media(max-width:390px){
+ body.romance-room-open #selectedGenrePanel .room-atmosphere{grid-template-columns:minmax(0,1fr) 82px!important;min-height:29vh!important;height:29vh!important}
+ body.romance-room-open #selectedGenrePanel .romance-quote{font-size:9px!important;max-width:82px!important}
+ body.romance-room-open #shelfList .book-grid{gap:5px!important}
+ body.romance-room-open #shelfList .book-card{padding:4px 3px!important}
+ body.romance-room-open #shelfList .book-cover{height:clamp(78px,25vw,110px)!important}
+ body.romance-room-open #shelfList .book-meta strong,body.romance-room-open #shelfList .book-title{font-size:9px!important}
+}
