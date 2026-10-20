@@ -306,7 +306,7 @@ function renderGenreRooms() {
   container.innerHTML = rooms.map(genre => {
     const count = books.filter(book => (book.genre || 'Não classificado') === genre.name).length;
     return `<button type="button" class="genre-room room-${esc(genre.style)}" data-open-genre="${esc(genre.name)}">
-      <span class="room-icon">${genre.icon}</span>
+      <span class="genre-book-art" aria-hidden="true"><span class="genre-book-ornament">${genre.icon}</span></span>
       <span class="room-name">${esc(genre.name)}</span>
       <span class="room-desc">${esc(genre.desc)}</span>
       <span class="room-count">${count} livro(s) <span aria-hidden="true">→</span></span>
