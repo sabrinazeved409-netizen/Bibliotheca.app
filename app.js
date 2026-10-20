@@ -726,6 +726,7 @@ async function openBook(bookId) {
   $('#readerLockIndicator')?.classList.remove('visible');
   toggleReaderControls(true);
   updateReaderProgress(Number(book.progress) || 0);
+  if ($('#readerChapterSelect')) { $('#readerChapterSelect').hidden = true; $('#readerChapterSelect').innerHTML = '<option value="">Ir para capítulo</option>'; }
   $('#readerSettings')?.classList.remove('open');
   applyReaderPreferences();
   startSession();
@@ -1665,7 +1666,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=34', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=35', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
