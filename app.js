@@ -989,6 +989,7 @@ async function loadEpub(file, book) {
     rendition.on('relocated', location => {
       if (!location?.start) return;
       const percentage = Math.round((location.start.percentage || 0) * 100);
+      if (location.start.cfi) book.epubCfi = location.start.cfi;
       const position = $('#readerPosition');
       if (position) position.textContent = 'EPUB · ' + percentage + '%';
       book.progress = percentage;
@@ -998,6 +999,19 @@ async function loadEpub(file, book) {
     });
 
     await rendition.display();
+    // Restaurar o ponto exato salvo; se ainda não houver CFI, usar o percentual guardado.
+    if (book.epubCfi) {
+      await rendition.display(book.epubCfi);
+    } else if (Number(book.progress) > 0) {
+      try {
+        if (!epubBook.locations?.length?.()) await epubBook.locations.generate(1000);
+        const savedCfi = epubBook.locations?.cfiFromPercentage?.(Math.min(1, Math.max(0, Number(book.progress) / 100)));
+        if (savedCfi) {
+          book.epubCfi = savedCfi;
+          await rendition.display(savedCfi);
+        }
+      } catch (restoreError) { console.warn('Não foi possível restaurar o ponto de leitura:', restoreError); }
+    }
     fillReaderChapters();
     // Recalcular depois que o leitor estiver visível, já com a tela cheia aplicada.
     const finalHeight = Math.max(320, (content.clientHeight || window.innerHeight) - 8);
@@ -1018,12 +1032,9 @@ async function loadEpub(file, book) {
           const restoreControls = event => {
             if (event.target?.closest?.('a, button, input, select')) return;
             if ($('#readerSettings')?.classList.contains('open')) return;
-            // A primeira batida no texto sempre traz os comandos de volta.
-            if (!$('#reader')?.classList.contains('reader-controls-visible')) {
-              toggleReaderControls(true);
-            } else {
-              toggleReaderControls(false);
-            }
+            if (readerScreenLocked) { showLockIndicator(); return; }
+            // Um toque alterna entre leitura limpa e controles.
+            toggleReaderControls();
           };
           frameDoc.addEventListener('click', restoreControls, true);
         }
@@ -1032,10 +1043,6 @@ async function loadEpub(file, book) {
     const loading = $('#epubLoading');
     if (loading) loading.remove();
 
-    // Garantir que o primeiro capítulo seja posicionado no centro do leitor.
-    if (epubRendition && !book.progress) {
-      try { await epubRendition.display(); } catch (_) {}
-    }
   } catch (error) {
     try { epubBook?.destroy(); } catch (_) {}
     epubBook = null;
@@ -1216,10 +1223,14 @@ function setReaderFlow(value) {
         saveData('books', books).catch(console.warn);
       });
       rendition.display().then(async () => {
-        if (percentage > 0 && epubBook.locations?.length?.() > 0) {
-          const cfi = epubBook.locations.cfiFromPercentage(percentage);
-          if (cfi) await rendition.display(cfi);
-        }
+        try {
+          if (currentBook?.epubCfi) await rendition.display(currentBook.epubCfi);
+          else if (percentage > 0) {
+            if (!epubBook.locations?.length?.()) await epubBook.locations.generate(1000);
+            const cfi = epubBook.locations?.cfiFromPercentage?.(percentage);
+            if (cfi) await rendition.display(cfi);
+          }
+        } catch (restoreError) { console.warn('Não foi possível restaurar a posição após mudar o modo:', restoreError); }
         rendition.resize('100%', height);
       }).catch(console.warn);
     } catch (error) { console.warn('Não foi possível mudar o movimento EPUB:', error); }
@@ -1283,14 +1294,17 @@ function setReaderScreenLock(locked) {
   $('#readerSettings')?.classList.remove('open');
   if (readerScreenLocked) {
     $('#reader')?.classList.remove('reader-controls-visible');
+    $('#readerQuickBrightness')?.setAttribute('hidden', '');
     showLockIndicator();
-    toast('Tela travada. Toque no cadeado para destravar.');
+    toast('Tela travada. A leitura continua no modo escolhido.');
   } else {
     clearTimeout(lockIconTimer);
     $('#readerLockIndicator')?.classList.remove('visible');
     $('#reader')?.classList.remove('screen-locked');
     toggleReaderControls(false);
+    applyReaderPreferences();
     toast('Tela destravada.');
+    return;
   }
   applyReaderPreferences();
 }
@@ -1358,10 +1372,10 @@ if ($('#readerBrightness')) $('#readerBrightness').addEventListener('input', eve
 if ($('#readerBrightnessQuick')) $('#readerBrightnessQuick').addEventListener('input', event => updateReaderBrightness(event.target.value));
 if ($('#readerContent')) {
   $('#readerContent').addEventListener('click', event => {
-    if (event.target.closest('button, input, select, a')) return;
+    if (event.target.closest('button, input, select, a, #epubView')) return;
     if (readerScreenLocked) { showLockIndicator(); return; }
     if ($('#readerSettings')?.classList.contains('open')) return;
-    toggleReaderControls(true);
+    toggleReaderControls();
   });
   let touchStartX = 0, touchStartY = 0;
   const navigateReaderSwipe = (dx, dy, startX = touchStartX) => {
