@@ -107,3 +107,35 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}.t
 .add-genre-toggle small{margin-left:auto;font-size:10px;font-weight:500;color:var(--muted)}
 .add-genre-options{padding-top:12px}
 .add-genre-options>p{font-size:12px;color:var(--muted);margin:0 0 10px}
+
+
+/* Início: continuar lendo compacto, com uma prévia visual da estante */
+#continueList.compact-grid{display:flex;flex-direction:column;gap:10px;margin:10px 0 24px}
+.continue-card{display:flex;align-items:stretch;gap:12px;min-width:0;padding:10px;border:1px solid var(--line);border-radius:16px;background:var(--panel);box-shadow:0 4px 14px #0000000a;cursor:pointer;overflow:hidden}
+.continue-cover{width:62px;min-width:62px;height:88px;border-radius:7px;padding:7px 5px;display:flex;flex-direction:column;justify-content:space-between;color:#fff5e4;box-shadow:2px 3px 5px #0003;overflow:hidden}
+.continue-cover>span{font-size:6px;letter-spacing:1px;opacity:.8}
+.continue-cover>strong{font-family:Georgia,serif;font-size:10px;line-height:1.15;overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical}
+.continue-cover>small{font-size:6px;line-height:1.1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.continue-details{display:flex;flex:1;min-width:0;flex-direction:column;justify-content:center;gap:3px}
+.continue-eyebrow{font-size:8px;letter-spacing:1.1px;color:var(--muted);font-weight:700}
+.continue-title{font-family:Georgia,serif;font-size:14px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.continue-author{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.continue-progress{height:3px;border-radius:9px;background:var(--line);overflow:hidden;margin:3px 0 4px}
+.continue-progress span{display:block;height:100%;background:var(--accent);border-radius:9px}
+.continue-world{position:relative;isolation:isolate;display:flex;align-items:center;gap:7px;min-height:34px;padding:5px 8px;border-radius:9px;overflow:hidden;color:#fff7e8;background:linear-gradient(120deg,#354c37,#39232e)}
+.continue-world::after{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 90% 10%,#ffffff35,transparent 40%),linear-gradient(135deg,transparent 45%,#0003)}
+.continue-world-art{font-size:19px;line-height:1}
+.continue-world-label{display:none}
+.continue-world strong{font-family:Georgia,serif;font-size:11px;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.continue-world.room-fantasia{background:radial-gradient(circle at 85% 10%,#b5a1ef99,transparent 48%),linear-gradient(120deg,#30284e,#171c32)}
+.continue-world.room-terror{background:radial-gradient(circle at 85% 10%,#9b344c99,transparent 48%),linear-gradient(120deg,#38232b,#171619)}
+.continue-world.room-ficcao{background:radial-gradient(circle at 85% 10%,#5faeb499,transparent 48%),linear-gradient(120deg,#183f4a,#17232f)}
+.continue-world.room-misterio{background:radial-gradient(circle at 85% 10%,#8394a099,transparent 48%),linear-gradient(120deg,#34424a,#171e25)}
+.continue-world.room-classicos{background:radial-gradient(circle at 85% 10%,#c6a66c99,transparent 48%),linear-gradient(120deg,#6a5239,#30271f)}
+.continue-world.room-drama{background:radial-gradient(circle at 85% 10%,#c0786599,transparent 48%),linear-gradient(120deg,#69413f,#2d252b)}
+.continue-world.room-aventura{background:radial-gradient(circle at 85% 10%,#a6a35d99,transparent 48%),linear-gradient(120deg,#53613a,#233329)}
+.continue-world.room-poesia{background:radial-gradient(circle at 85% 10%,#d4b0d999,transparent 48%),linear-gradient(120deg,#684e70,#30263f)}
+.continue-world.room-nao-ficcao{background:radial-gradient(circle at 85% 10%,#9bba9999,transparent 48%),linear-gradient(120deg,#355747,#1e302b)}
+.continue-world.room-juvenil{background:radial-gradient(circle at 85% 10%,#dfb86b99,transparent 48%),linear-gradient(120deg,#8b623e,#3b3828)}
+.continue-world.room-outros{background:radial-gradient(circle at 85% 10%,#b6a99b99,transparent 48%),linear-gradient(120deg,#665b52,#302b27)}
+@media(min-width:600px){#continueList.compact-grid{max-width:620px}}
