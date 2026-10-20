@@ -448,64 +448,45 @@ async function extractBookExcerpt(book) {
   return '';
 }
 
-const ONLINE_READING_EXCERPTS = [
-  {
-    text: 'Uma noite destas, vindo da cidade para o Engenho Novo, encontrei no trem da Central um rapaz aqui do bairro, que eu conheço de vista e de chapéo.',
-    title: 'Dom Casmurro',
-    author: 'Machado de Assis',
-    url: 'https://pt.wikisource.org/wiki/Dom_Casmurro/I'
-  },
-  {
-    text: 'Os visinhos, que não gostam dos meus hábitos reclusos e calados, deram curso á alcunha, que afinal pegou.',
-    title: 'Dom Casmurro',
-    author: 'Machado de Assis',
-    url: 'https://pt.wikisource.org/wiki/Dom_Casmurro/I'
-  },
-  {
-    text: 'Não consultes diccionarios. Casmurro não está aqui no sentido que elles lhe dão, mas no que lhe poz o vulgo de homem calado e mettido comsigo.',
-    title: 'Dom Casmurro',
-    author: 'Machado de Assis',
-    url: 'https://pt.wikisource.org/wiki/Dom_Casmurro/I'
-  },
-  {
-    text: 'Algum tempo hesitei se devia abrir estas memorias pelo principio ou pelo fim, isto é, se poria em primeiro logar o meu nascimento ou a minha morte.',
-    title: 'Memorias Posthumas de Braz Cubas',
-    author: 'Machado de Assis',
-    url: 'https://pt.wikisource.org/wiki/Mem%C3%B3rias_P%C3%B3stumas_de_Br%C3%A1s_Cubas/I'
-  },
-  {
-    text: 'Eu não sou propriamente um autor defunto, mas um defunto autor, para quem a campa foi outro berço.',
-    title: 'Memorias Posthumas de Braz Cubas',
-    author: 'Machado de Assis',
-    url: 'https://pt.wikisource.org/wiki/Mem%C3%B3rias_P%C3%B3stumas_de_Br%C3%A1s_Cubas/I'
-  },
-  {
-    text: 'Ha livros que apenas terão isso dos seus autores; alguns nem tanto.',
-    title: 'Dom Casmurro',
-    author: 'Machado de Assis',
-    url: 'https://pt.wikisource.org/wiki/Dom_Casmurro/I'
-  }
-];
-let lastOnlineExcerptIndex = -1;
+let lastReadingBookId = null;
 
-function renderReadingQuote() {
+async function renderReadingQuote() {
   const quote = $('#readingQuote');
   const source = $('#quoteSource');
   if (!quote || !source) return;
 
-  let index = Math.floor(Math.random() * ONLINE_READING_EXCERPTS.length);
-  if (ONLINE_READING_EXCERPTS.length > 1 && index === lastOnlineExcerptIndex) {
-    index = (index + 1) % ONLINE_READING_EXCERPTS.length;
-  }
-  lastOnlineExcerptIndex = index;
-  const excerpt = ONLINE_READING_EXCERPTS[index];
+  // Só usar arquivos adicionados à biblioteca e marcados como "Lendo".
+  const readingBooks = books.filter(book =>
+    book.status === 'reading' && ['txt', 'pdf', 'epub'].includes(String(book.ext || '').toLowerCase())
+  );
 
-  quote.textContent = '“' + excerpt.text + '”';
-  source.textContent = '— ' + excerpt.title + ', ' + excerpt.author + ' · Ler na fonte ↗';
-  source.href = excerpt.url;
-  source.target = '_blank';
-  source.rel = 'noopener noreferrer';
-  source.setAttribute('aria-label', 'Ler ' + excerpt.title + ' de ' + excerpt.author + ' no Wikisource');
+  if (!readingBooks.length) {
+    quote.textContent = 'Quando você começar a ler um livro da sua estante, uma passagem dele aparecerá aqui.';
+    source.textContent = 'Trechos dos seus livros em andamento';
+    return;
+  }
+
+  const shuffled = [...readingBooks].sort(() => Math.random() - 0.5);
+  if (shuffled.length > 1 && shuffled[0].id === lastReadingBookId) {
+    [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
+  }
+
+  for (const book of shuffled) {
+    const excerpt = await extractBookExcerpt(book);
+    if (!excerpt) continue;
+
+    lastReadingBookId = book.id;
+    quote.textContent = '“' + excerpt + '”';
+    source.textContent = '— ' + (book.title || 'Seu livro') +
+      (book.author ? ', ' + book.author : '') + ' · do seu arquivo';
+    source.removeAttribute('href');
+    source.removeAttribute('target');
+    source.removeAttribute('rel');
+    return;
+  }
+
+  quote.textContent = 'Não consegui ler o texto dos seus livros em andamento.';
+  source.textContent = 'Confira se o arquivo EPUB, PDF ou TXT está disponível na biblioteca';
 }
 function renderBooks() {
   const search = $('#searchInput');
