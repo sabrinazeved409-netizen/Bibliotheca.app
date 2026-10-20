@@ -355,6 +355,32 @@ function bindGenrePickers(container) {
   });
 }
 
+function renderContinueCard(book) {
+  const genreName = book.genre || 'Não classificado';
+  const genre = GENRE_CONFIG.find(item => item.name === genreName) || GENRE_CONFIG.find(item => item.name === 'Outros');
+  const style = genre?.style || 'outros';
+  return `
+    <article class="continue-card" data-open="${esc(book.id)}">
+      <div class="continue-cover" style="background:linear-gradient(155deg,${coverColor(book)},#211c19)">
+        <span>${esc((book.ext || 'LIVRO').toUpperCase())}</span>
+        <strong>${esc(book.title)}</strong>
+        <small>${esc(book.author || 'Autor desconhecido')}</small>
+      </div>
+      <div class="continue-details">
+        <span class="continue-eyebrow">CONTINUAR LENDO</span>
+        <strong class="continue-title">${esc(book.title)}</strong>
+        <small class="continue-author">${esc(book.author || 'Autor desconhecido')}</small>
+        <div class="continue-progress"><span style="width:${Math.max(0, Math.min(100, Number(book.progress) || 0))}%"></span></div>
+        <div class="continue-world room-${esc(style)}">
+          <span class="continue-world-art" aria-hidden="true">${genre?.icon || '📚'}</span>
+          <span class="continue-world-label">SUA ESTANTE</span>
+          <strong>${esc(genreName)}</strong>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 function renderBooks() {
   const search = $('#searchInput');
   const query = search ? search.value.toLowerCase() : '';
@@ -404,9 +430,8 @@ function renderBooks() {
   const continueList = $('#continueList');
   if (continueList) {
     const reading = books.filter(book => book.status === 'reading').slice(0, 4);
-    continueList.innerHTML = reading.map(card).join('') || '<p class="muted">Seus livros em andamento aparecerão aqui.</p>';
+    continueList.innerHTML = reading.map(renderContinueCard).join('') || '<p class="muted">Seus livros em andamento aparecerão aqui.</p>';
     bindBookCards(continueList);
-    bindGenrePickers(continueList);
   }
 }
 
