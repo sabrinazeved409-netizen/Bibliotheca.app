@@ -7,7 +7,7 @@
   <meta name="description" content="Sua biblioteca digital pessoal">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" href="ChatGPT%20Image%2019%20de%20out.%20de%202026,%2016_03_23.png">
-  <link rel="stylesheet" href="style.css?v=66">
+  <link rel="stylesheet" href="style.css?v=67">
   <title>Bibliotheca — sua biblioteca</title>
 </head>
 <body>
@@ -60,6 +60,11 @@
   <h2 id="selectedGenreTitle"></h2>
   <p id="selectedGenreDescription" class="world-description"></p>
 </section>
+      <div class="romance-action-pill" id="romanceActionPill" style="display:none">
+        <button type="button" class="romance-add" id="romanceAddBtn">＋ Adicionar</button>
+        <a class="romance-source" href="https://www.gutenberg.org/ebooks/subjects/search/?query=romance" target="_blank" rel="noopener noreferrer">◎ Ir para a fonte</a>
+        <button type="button" class="romance-count" id="romanceCountBtn">0 livros ›</button>
+      </div>
       <div class="search-wrap"><span>⌕</span><input id="searchInput" type="search" placeholder="Buscar por título ou autor"></div>
       <div class="shelf-row">
         <button class="filter-chip selected" data-filter="all">Todos</button>
@@ -171,6 +176,6 @@
     </form>
   </dialog>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="app.js?v=66"></script>
+    <script src="app.js?v=67"></script>
 </body>
 </html>
