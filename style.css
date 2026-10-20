@@ -184,3 +184,16 @@ body.reading-mode .reader-content p{margin-bottom:1.2em}
 /* v22: manter o botão de opções sempre acessível mesmo quando os controles de leitura somem */
 body.reading-mode .reader-screen:not(.reader-controls-visible) #readerMenuBtn{opacity:1!important;pointer-events:auto!important;transform:none!important;visibility:visible!important}
 body.reading-mode .reader-screen:not(.reader-controls-visible) .reader-top{opacity:1!important;pointer-events:auto!important;transform:none!important;visibility:visible!important}
+
+/* v23: leitor ocupa a tela inteira e oferece tipografia personalizada */
+body.reading-mode{padding:0!important;overflow:hidden!important}
+body.reading-mode .topbar,body.reading-mode .bottom-nav{display:none!important}
+body.reading-mode main{margin:0!important;padding:0!important;max-width:none!important;width:100%!important}
+body.reading-mode #reader.reader-screen.active{position:fixed!important;inset:0!important;z-index:100!important;display:flex!important;flex-direction:column!important;width:100vw!important;height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;max-width:none!important;margin:0!important;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)!important;background:var(--bg)!important;overflow:hidden!important}
+body.reading-mode #reader .reader-top{flex:0 0 auto;padding:8px 12px!important;margin:0!important;background:var(--bg)!important}
+body.reading-mode #readerContent{flex:1 1 auto;min-height:0!important;height:auto!important;max-height:none!important;width:100%!important;margin:0!important;border:0!important;border-radius:0!important;padding:18px 20px calc(22px + env(safe-area-inset-bottom))!important;overflow:auto!important;overscroll-behavior:contain!important}
+body.reading-mode #readerContent #epubView{height:100%!important;min-height:0!important}
+body.reading-mode #readerContent #pdfCanvas{display:block;width:100%!important;height:auto!important;max-width:100%!important;margin:0 auto!important}
+body.reading-mode #readerSettings{z-index:110!important;max-height:calc(100dvh - 24px)!important;overflow:auto!important}
+body.reading-mode #readerMenuBtn,body.reading-mode #reader .reader-top{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+#readerSettings select{font-size:13px}
