@@ -457,3 +457,84 @@ body.reading-mode #readerContent #epubView iframe {
 .room-outros{--book-cover:#39332e;--book-edge:#9b8b79;--book-glow:#37302b}
 .genre-room:active .genre-book-art{transform:perspective(160px) rotateY(-7deg) translateY(2px)}
 @media(max-width:360px){.genre-rooms{grid-template-columns:repeat(2,minmax(0,1fr))}.genre-room{padding:12px 8px!important}.genre-book-art{width:58px;height:74px}.room-desc{font-size:9px!important}}
+
+
+/* v43 — cada estante abre um universo literário próprio */
+.selected-genre-panel{
+  position:relative;isolation:isolate;overflow:hidden;
+  min-height:270px!important;margin:18px 0 14px!important;
+  padding:0 17px 20px!important;border-radius:20px!important;
+  border:1px solid var(--world-edge,#92765b)!important;
+  background:linear-gradient(180deg,#171617 0%,#121313 100%)!important;
+  box-shadow:inset 0 0 55px #0008,0 14px 30px #0003!important;
+}
+.selected-genre-panel::before{
+  content:"";position:absolute;z-index:-1;inset:0 0 auto;height:245px;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 5%,var(--world-light,#54303a) 0%,transparent 70%),
+    linear-gradient(180deg,#ffffff04,transparent);
+}
+.selected-genre-panel::after{
+  content:"";position:absolute;z-index:-1;left:-12%;right:-12%;top:165px;height:100px;
+  pointer-events:none;opacity:.55;
+  background:radial-gradient(ellipse at 20% 100%,var(--world-light,#54303a),transparent 60%),
+    radial-gradient(ellipse at 80% 100%,#111 0%,transparent 65%);
+  filter:blur(12px);
+}
+.room-atmosphere{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:176px;margin:0 -17px 16px;padding:20px 12px 24px;overflow:hidden;
+  text-align:center;isolation:isolate;
+  background:linear-gradient(180deg,transparent 0%,#10101155 70%,#121313 100%);
+}
+.room-atmosphere::before{
+  content:"";position:absolute;z-index:-1;inset:-25%;opacity:.75;
+  background:
+    radial-gradient(ellipse at 18% 75%,var(--world-light,#54303a) 0%,transparent 36%),
+    radial-gradient(ellipse at 83% 48%,#b7a07820 0%,transparent 25%),
+    radial-gradient(ellipse at 50% 110%,#000 0%,transparent 58%);
+  filter:blur(3px);
+}
+.room-atmosphere::after{
+  content:"";position:absolute;z-index:-1;left:0;right:0;bottom:0;height:50px;
+  background:linear-gradient(0deg,#121313,transparent);
+}
+.world-sky-symbol{
+  display:grid;place-items:center;width:75px;height:75px;margin:0 auto 12px;
+  border-radius:50%;font-size:38px;color:var(--world-edge,#c2a078);
+  text-shadow:0 0 16px var(--world-light,#54303a),0 0 35px var(--world-light,#54303a);
+  background:radial-gradient(circle,#ffffff0b 0%,#00000008 58%,transparent 70%);
+  animation:world-arrive .8s ease-out both;
+}
+.world-scene-copy{display:flex;flex-direction:column;align-items:center;gap:6px;max-width:100%}
+.world-kicker{font-size:8px;letter-spacing:2.5px;color:var(--world-edge,#c2a078);font-weight:700}
+.world-scene-copy strong{font:normal 20px/1.15 Georgia,serif;letter-spacing:.6px;color:#f0e3cf;text-shadow:0 2px 12px #000}
+.world-scene-copy small{font-size:9px;letter-spacing:.6px;color:#c5b8a6}
+.selected-genre-panel h2{position:relative;margin:0 0 8px!important;font:normal 25px/1.2 Georgia,serif!important;letter-spacing:.2px;color:#f1dfbf!important;text-align:center}
+.selected-genre-panel .world-description{position:relative;margin:0 auto 20px;max-width:420px;text-align:center;color:#c6b9a9!important;font-size:12px;line-height:1.7}
+.selected-genre-panel .back-rooms{
+  position:relative;z-index:2;display:block;margin:0 auto 12px;
+  border-color:#ffffff25!important;background:#ffffff08!important;color:#d8c9b3!important;
+  border-radius:999px!important;font-size:10px!important;letter-spacing:.3px;
+}
+#shelfList{transition:background .25s ease}
+#shelfList .book-grid{position:relative;padding:4px 0 20px}
+#shelfList .room-empty{background:linear-gradient(145deg,#ffffff05,#00000018);border-color:var(--world-edge,#92765b);color:#c6b9a9}
+#shelfList .room-empty h3{font-family:Georgia,serif;color:#e8d8bd}
+.room-romance.selected-genre-panel{--world-light:#54212f;--world-edge:#b17c83;background:linear-gradient(180deg,#211319,#121313 80%)!important}
+.room-romance .room-atmosphere{background-image:radial-gradient(ellipse at 50% 10%,#762f43a8,transparent 65%),linear-gradient(180deg,transparent,#121313)}
+.room-fantasia.selected-genre-panel{--world-light:#392c65;--world-edge:#a99ad1;background:linear-gradient(180deg,#171526,#111217 80%)!important}
+.room-misterio.selected-genre-panel{--world-light:#344651;--world-edge:#94a4a9;background:linear-gradient(180deg,#151c21,#111314 80%)!important}
+.room-ficcao.selected-genre-panel{--world-light:#1b4650;--world-edge:#73b0b3;background:linear-gradient(180deg,#111f28,#101314 80%)!important}
+.room-terror.selected-genre-panel{--world-light:#4b1726;--world-edge:#a55e68;background:linear-gradient(180deg,#201116,#101011 80%)!important}
+.room-classicos.selected-genre-panel{--world-light:#514027;--world-edge:#c2a36a;background:linear-gradient(180deg,#211b13,#121211 80%)!important}
+.room-drama.selected-genre-panel{--world-light:#512b30;--world-edge:#ba8276;background:linear-gradient(180deg,#241518,#121313 80%)!important}
+.room-aventura.selected-genre-panel{--world-light:#35452b;--world-edge:#a1a06b;background:linear-gradient(180deg,#171d16,#111311 80%)!important}
+.room-poesia.selected-genre-panel{--world-light:#493151;--world-edge:#b59bb7;background:linear-gradient(180deg,#201625,#121213 80%)!important}
+.room-nao-ficcao.selected-genre-panel{--world-light:#2d4a3a;--world-edge:#91aa8d;background:linear-gradient(180deg,#142019,#111312 80%)!important}
+.room-juvenil.selected-genre-panel{--world-light:#54432a;--world-edge:#c3a66d;background:linear-gradient(180deg,#241d12,#121312 80%)!important}
+.room-outros.selected-genre-panel{--world-light:#403831;--world-edge:#a99b87}
+@keyframes world-arrive{from{opacity:0;transform:translateY(12px) scale(.85);filter:blur(5px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.selected-genre-panel.world-entering .room-atmosphere{opacity:.5;transform:translateY(5px)}
+.room-atmosphere{transition:opacity .35s ease,transform .35s ease}
+@media(prefers-reduced-motion:reduce){.world-sky-symbol{animation:none}.room-atmosphere{transition:none}}
+@media(max-width:360px){.room-atmosphere{min-height:158px}.world-scene-copy strong{font-size:18px}.selected-genre-panel{padding-left:13px!important;padding-right:13px!important}}
