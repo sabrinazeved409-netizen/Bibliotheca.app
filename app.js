@@ -1320,13 +1320,7 @@ if ($('#readerContent')) {
   const navigateReaderSwipe = (dx, dy, startX = touchStartX) => {
     if (readerScreenLocked) { showLockIndicator(); return; }
     if (!currentBook || $('#readerSettings')?.classList.contains('open')) return;
-    // Deslize para cima/baixo na faixa direita para ajustar o brilho sem sair do livro.
-    if (startX >= window.innerWidth * 0.76 && Math.abs(dy) >= 24 && Math.abs(dy) > Math.abs(dx)) {
-      readerBrightness = Math.max(35, Math.min(100, readerBrightness + (dy < 0 ? 5 : -5)));
-      localStorage.setItem('bibliotheca-reader-brightness', readerBrightness);
-      applyReaderPreferences();
-      return;
-    }
+    // Gestos verticais ficam livres para a rolagem contínua; não interceptar o movimento da página.
     if (readerFlow === 'scrolled') return; // A rolagem contínua usa o gesto nativo, sem saltos forçados.
     if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
     if (currentBook.ext === 'epub' && epubRendition) {
@@ -1666,7 +1660,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=35', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=36', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
