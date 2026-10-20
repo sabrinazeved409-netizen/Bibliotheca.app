@@ -306,7 +306,7 @@ function renderGenreRooms() {
   container.innerHTML = rooms.map(genre => {
     const count = books.filter(book => (book.genre || 'Não classificado') === genre.name).length;
     return `<button type="button" class="genre-room room-${esc(genre.style)}" data-open-genre="${esc(genre.name)}">
-      <span class="genre-book-art" aria-hidden="true"><span class="genre-book-ornament">${genre.icon}</span></span>
+      <span class="genre-room-icon" aria-hidden="true">${genre.icon}</span>
       <span class="room-name">${esc(genre.name)}</span>
       <span class="room-desc">${esc(genre.desc)}</span>
       <span class="room-count">${count} livro(s) <span aria-hidden="true">→</span></span>
@@ -1771,7 +1771,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=50', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=51', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
