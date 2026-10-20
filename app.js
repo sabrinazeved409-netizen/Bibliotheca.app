@@ -23,13 +23,6 @@ const colors = [
   '#765c48', '#66506f', '#496d70'
 ];
 
-function $(selector) {
-  return document.querySelector(selector);
-}
-
-function $$(selector) {
-  return [...document.querySelectorAll(selector)];
-}
 
 function makeId() {
   return crypto.randomUUID
@@ -307,6 +300,8 @@ function ensureGardenSection() {
       manageButton.addEventListener('click', () => go('library'));
     }
   }
+}
+
 async function toggleGarden(bookId) {
   if (gardenBookIds.includes(bookId)) {
     gardenBookIds = gardenBookIds.filter(id => id !== bookId);
