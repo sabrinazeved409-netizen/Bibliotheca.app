@@ -18,6 +18,7 @@ let selectedGenre = null;
 let enabledExtraGenres = [];
 let showAddGenreOptions = false;
 let currentPdfPage = 1;
+let currentTextChunkIndex = 0;
 let epubBook = null;
 let epubRendition = null;
 let currentPdfDocument = null;
@@ -769,6 +770,7 @@ async function loadText(file, book) {
 
 async function showTextPart(chunks, index, book) {
   index = Math.max(0, Math.min(chunks.length - 1, index));
+  currentTextChunkIndex = index;
 
   const position = $('#readerPosition');
   const content = $('#readerContent');
@@ -1022,8 +1024,7 @@ function setReaderFlow(value) {
     epubRendition.resize();
   } else if (currentBook?.ext === 'txt' && currentBook._chunks) {
     const chunks = currentBook._chunks;
-    const index = Math.min(chunks.length - 1, Math.floor((currentBook.progress || 0) / 100 * chunks.length));
-    showTextPart(chunks, index, currentBook);
+    showTextPart(chunks, currentTextChunkIndex, currentBook);
   } else if (currentBook?.ext === 'pdf' && currentPdfDocument) {
     $('#readerContent')?.scrollTo({top:0, behavior:'smooth'});
   }
@@ -1058,15 +1059,25 @@ if ($('#readerAxis')) {
     toast(readerAxis === 'horizontal' ? 'Direção horizontal selecionada.' : 'Direção vertical selecionada.');
   });
 }
+function updateFontPreview() {
+  const preview = $('#readerFontPreview');
+  if (!preview) return;
+  preview.style.fontFamily = readerFontFamily;
+  preview.style.fontWeight = String(readerFontWeight);
+  preview.style.fontSize = (17 * readerFontSize / 100) + 'px';
+  preview.textContent = 'A leitura fica assim: Era uma vez, entre páginas e sonhos.';
+}
 if ($('#readerFontFamily')) $('#readerFontFamily').addEventListener('change', event => {
   readerFontFamily = event.target.value;
   localStorage.setItem('bibliotheca-reader-font-family', readerFontFamily);
   applyReaderPreferences();
+  updateFontPreview();
 });
 if ($('#readerFontWeight')) $('#readerFontWeight').addEventListener('change', event => {
   readerFontWeight = Number(event.target.value) || 400;
   localStorage.setItem('bibliotheca-reader-font-weight', readerFontWeight);
   applyReaderPreferences();
+  updateFontPreview();
 });
 if ($('#readerFont')) $('#readerFont').addEventListener('input', event => {
   readerFontSize = Number(event.target.value) || 100;
@@ -1095,15 +1106,14 @@ if ($('#readerContent')) {
     toggleReaderControls();
   });
   let touchStartX = 0, touchStartY = 0;
-  $('#readerContent').addEventListener('touchstart', event => {
-    touchStartX = event.changedTouches[0]?.clientX || 0;
-    touchStartY = event.changedTouches[0]?.clientY || 0;
-  }, {passive:true});
-  $('#readerContent').addEventListener('touchend', event => {
-    if (readerFlow !== 'paginated' || !currentBook) return;
-    const dx = (event.changedTouches[0]?.clientX || 0) - touchStartX;
-    const dy = (event.changedTouches[0]?.clientY || 0) - touchStartY;
-    if (Math.abs(dx) < 65 || Math.abs(dx) < Math.abs(dy)) return;
+  const navigateReaderSwipe = (dx, dy) => {
+    if (!currentBook || $('#readerSettings')?.classList.contains('open')) return;
+    if (readerFlow === 'scrolled') {
+      if (Math.abs(dy) < 55 || Math.abs(dy) < Math.abs(dx)) return;
+      $('#readerContent')?.scrollBy({top: dy < 0 ? window.innerHeight * 0.72 : -window.innerHeight * 0.72, behavior:'smooth'});
+      return;
+    }
+    if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
     if (currentBook.ext === 'epub' && epubRendition) {
       (dx < 0 ? epubRendition.next() : epubRendition.prev()).catch(() => {});
     } else if (currentBook.ext === 'pdf' && currentPdfDocument) {
@@ -1113,11 +1123,36 @@ if ($('#readerContent')) {
         renderPdfPage(currentPdfDocument, target).then(() => updatePdfNav(currentPdfDocument, currentBook));
       }
     } else if (currentBook.ext === 'txt' && currentBook._chunks) {
-      const chunks = currentBook._chunks;
-      const index = Math.min(chunks.length - 1, Math.floor((currentBook.progress || 0) / 100 * chunks.length));
-      showTextPart(chunks, index + (dx < 0 ? 1 : -1), currentBook);
+      showTextPart(currentBook._chunks, currentTextChunkIndex + (dx < 0 ? 1 : -1), currentBook);
     }
+  };
+  $('#readerContent').addEventListener('touchstart', event => {
+    touchStartX = event.changedTouches[0]?.clientX || 0;
+    touchStartY = event.changedTouches[0]?.clientY || 0;
   }, {passive:true});
+  $('#readerContent').addEventListener('touchend', event => {
+    navigateReaderSwipe((event.changedTouches[0]?.clientX || 0) - touchStartX, (event.changedTouches[0]?.clientY || 0) - touchStartY);
+  }, {passive:true});
+  // EPUB aparece dentro de iframe, então escutamos o gesto dentro dele também.
+  const bindEpubSwipe = () => {
+    const frame = $('#epubView iframe');
+    try {
+      const doc = frame?.contentDocument;
+      if (!doc || doc.documentElement.dataset.swipeBound === 'yes') return;
+      doc.documentElement.dataset.swipeBound = 'yes';
+      let sx = 0, sy = 0;
+      doc.addEventListener('touchstart', event => {
+        sx = event.changedTouches[0]?.clientX || 0;
+        sy = event.changedTouches[0]?.clientY || 0;
+      }, {passive:true});
+      doc.addEventListener('touchend', event => {
+        navigateReaderSwipe((event.changedTouches[0]?.clientX || 0) - sx, (event.changedTouches[0]?.clientY || 0) - sy);
+      }, {passive:true});
+    } catch (_) {}
+  };
+  const epubSwipeObserver = new MutationObserver(bindEpubSwipe);
+  epubSwipeObserver.observe($('#readerContent'), {childList:true, subtree:true});
+  setTimeout(bindEpubSwipe, 500);
 }
 
 /* TEMPO DE LEITURA */
@@ -1392,7 +1427,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=20', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=24', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
