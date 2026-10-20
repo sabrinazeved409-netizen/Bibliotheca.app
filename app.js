@@ -978,7 +978,7 @@ async function loadEpub(file, book) {
     const rendition = epubBook.renderTo(view, {
       width: '100%',
       height: availableHeight,
-      flow: readerFlow === 'scrolled' ? 'scrolled-doc' : 'paginated',
+      flow: readerFlow === 'scrolled' ? 'scrolled-continuous' : 'paginated',
       axis: readerAxis,
       spread: 'none',
       manager: 'default',
@@ -1182,7 +1182,7 @@ function setReaderFlow(value) {
   if ($('#readerFlow')) $('#readerFlow').value = readerFlow;
   if (epubRendition) {
     try {
-      epubRendition.flow(readerFlow === 'scrolled' ? 'scrolled-doc' : 'paginated');
+      epubRendition.flow(readerFlow === 'scrolled' ? 'scrolled-continuous' : 'paginated');
       epubRendition.resize();
     } catch (error) { console.warn('Não foi possível mudar o movimento EPUB:', error); }
   } else if (currentBook?.ext === 'txt' && currentBook._chunks) {
@@ -1199,6 +1199,13 @@ function setReaderFlow(value) {
     }
   }
   updateReaderProgress(oldProgress * 100);
+  toggleReaderControls(true);
+  requestAnimationFrame(() => {
+    const target = $('#readerContent');
+    if (target && readerFlow === 'scrolled' && currentBook?.ext !== 'epub') {
+      target.scrollTop = oldProgress * Math.max(0, target.scrollHeight - target.clientHeight);
+    }
+  });
 }
 function toggleReaderControls(force) {
   const reader = $('#reader');
@@ -1338,7 +1345,18 @@ if ($('#readerContent')) {
   $('#readerContent').addEventListener('scroll', () => {
     if (!currentBook || readerFlow !== 'scrolled') return;
     const content = $('#readerContent');
-    const percent = Math.max(0, Math.min(100, Math.round(content.scrollTop / Math.max(1, content.scrollHeight - content.clientHeight) * 100)));
+    let rawPercent = content.scrollTop / Math.max(1, content.scrollHeight - content.clientHeight) * 100;
+    if (currentBook.ext === 'pdf' && currentPdfDocument) {
+      const pages = [...content.querySelectorAll('.pdf-continuous-page')];
+      const visible = pages.find(page => page.offsetTop + page.offsetHeight > content.scrollTop + 2);
+      if (visible) {
+        const pageNumber = Number(visible.dataset.page) || 1;
+        const within = Math.max(0, Math.min(1, (content.scrollTop - visible.offsetTop) / Math.max(1, visible.offsetHeight)));
+        rawPercent = ((pageNumber - 1 + within) / currentPdfDocument.numPages) * 100;
+        currentPdfPage = pageNumber;
+      }
+    }
+    const percent = Math.max(0, Math.min(100, Math.round(rawPercent)));
     if (currentBook.ext !== 'epub') currentBook.progress = percent;
     const position = $('#readerPosition');
     if (position) position.textContent = (currentBook.ext === 'pdf' ? 'PDF · ' : 'Leitura contínua · ') + percent + '%';
@@ -1660,7 +1678,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=36', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=37', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
