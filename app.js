@@ -971,6 +971,14 @@ async function loadEpub(file, book) {
 
     await rendition.display();
     applyReaderPreferences();
+    const epubFrame = $('#epubView iframe');
+    if (epubFrame) {
+      try {
+        epubFrame.contentDocument?.addEventListener('click', () => {
+          if (!$('#readerSettings')?.classList.contains('open')) toggleReaderControls();
+        });
+      } catch (_) {}
+    }
     const loading = $('#epubLoading');
     if (loading) loading.remove();
 
