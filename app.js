@@ -810,6 +810,11 @@ async function loadPdf(file, book) {
   const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
   currentPdfDocument = pdf;
 
+  if (readerFlow === 'scrolled') {
+    await renderPdfContinuous(pdf, book);
+    return;
+  }
+
   currentPdfPage = Math.max(
     1,
     Math.min(
@@ -821,6 +826,36 @@ async function loadPdf(file, book) {
   await renderPdfPage(pdf, currentPdfPage);
 
   await updatePdfNav(pdf, book);
+}
+
+async function renderPdfContinuous(pdf, book) {
+  const content = $('#readerContent');
+  if (!content) return;
+  content.innerHTML = '';
+  const startPage = Math.max(1, Math.min(pdf.numPages, Math.round((Number(book.progress) || 0) / 100 * pdf.numPages) || 1));
+  for (let number = 1; number <= pdf.numPages; number++) {
+    const page = await pdf.getPage(number);
+    const viewport = page.getViewport({ scale: 1.15 });
+    const canvas = document.createElement('canvas');
+    canvas.className = 'pdf-continuous-page';
+    canvas.dataset.page = String(number);
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    canvas.style.width = '100%';
+    canvas.style.height = 'auto';
+    canvas.style.display = 'block';
+    canvas.style.margin = '0 auto 18px';
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    content.appendChild(canvas);
+  }
+  currentPdfPage = startPage;
+  const position = $('#readerPosition');
+  if (position) position.textContent = 'PDF · ' + pdf.numPages + ' páginas';
+  requestAnimationFrame(() => {
+    const target = content.querySelector('[data-page="' + startPage + '"]');
+    if (target) content.scrollTop = target.offsetTop - content.offsetTop;
+  });
+  applyReaderPreferences();
 }
 
 async function renderPdfPage(pdf, number) {
