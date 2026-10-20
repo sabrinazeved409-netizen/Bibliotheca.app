@@ -206,3 +206,12 @@ body.reading-mode #readerContent #epubView,body.reading-mode #readerContent #epu
 /* v25: garantir área de renderização com altura calculável para EPUB em celulares */
 body.reading-mode #readerContent #epubView{display:block;width:100%!important;min-height:320px!important;max-height:none!important;overflow:hidden!important;flex:none!important}
 body.reading-mode #readerContent #epubView iframe{display:block;width:100%!important;height:100%!important;min-height:320px!important;border:0!important;background:var(--panel)!important}
+
+/* v26: controle rápido de brilho e navegação por gesto mais confiável */
+.reader-quick-brightness{position:absolute;z-index:105;left:16px;right:16px;bottom:calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:10px;padding:10px 13px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--text);box-shadow:0 5px 24px #0003;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px);transition:opacity .18s ease,transform .18s ease,visibility .18s ease;box-sizing:border-box}
+body.reading-mode #reader.reader-controls-visible .reader-quick-brightness{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.reader-quick-brightness span{font-size:18px;color:var(--accent);line-height:1}
+.reader-quick-brightness input{flex:1;min-width:0;width:100%;accent-color:var(--accent)}
+.reader-quick-brightness strong{min-width:38px;text-align:right;font-size:11px;color:var(--accent)}
+body.reading-mode #readerContent{touch-action:pan-y pinch-zoom}
+body.reading-mode #epubView iframe{touch-action:pan-y pinch-zoom}
