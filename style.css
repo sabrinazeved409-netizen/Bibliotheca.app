@@ -90,3 +90,11 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}.t
 .room-empty{text-align:center;padding:28px 18px;border:1px dashed var(--line);border-radius:18px;color:var(--muted)}.room-empty span{font-size:36px}.room-empty h3{color:var(--text);margin:10px 0}.room-empty p{font-size:12px}
 .genre-picker-label,.genre-picker{position:relative;z-index:2}
 @media(max-width:360px){.genre-rooms{grid-template-columns:1fr}.genre-room{min-height:150px}}
+
+/* Opções de gênero ficam disponíveis para adicionar sob demanda. */
+.add-genre-area{grid-column:1/-1;margin:10px 0 18px;padding:17px 0;border-top:1px solid var(--line)}
+.add-genre-area h3{font-family:Georgia,serif;font-size:19px;margin:0 0 5px}
+.add-genre-area>p{font-size:12px;color:var(--muted);margin:0 0 12px}
+.add-genre-list{display:flex;flex-direction:column;gap:8px}
+.add-genre-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 13px;border:1px dashed var(--line);border-radius:13px;background:var(--panel);color:var(--text);text-align:left;font-size:12px}
+.add-genre-btn strong{font-size:10px;color:var(--accent);white-space:nowrap}
