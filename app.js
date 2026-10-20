@@ -1434,7 +1434,7 @@ if ($('#exportBtn')) {
   };
 }
 
-/* INICIALIZAÇÃO */
+/* INICIALIZAÇÃO — versão 30 */
 
 async function init() {
   try {
@@ -1471,7 +1471,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=29', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=30', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
