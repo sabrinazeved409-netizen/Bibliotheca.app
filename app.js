@@ -28,6 +28,9 @@ let readerFontSize = Number(localStorage.getItem('bibliotheca-reader-font') || 1
 let readerLineSpacing = Number(localStorage.getItem('bibliotheca-reader-line') || 1.8);
 let readerParagraphSpacing = Number(localStorage.getItem('bibliotheca-reader-paragraph') || 1.2);
 let readerBrightness = Number(localStorage.getItem('bibliotheca-reader-brightness') || 100);
+let showQuickBrightness = localStorage.getItem('bibliotheca-show-quick-brightness') !== 'false';
+let readerScreenLocked = false;
+let lockIconTimer = null;
 let readerFontFamily = localStorage.getItem('bibliotheca-reader-font-family') || 'Georgia, serif';
 let readerFontWeight = Number(localStorage.getItem('bibliotheca-reader-font-weight') || 400);
 let awaitlessReadGoal = 30;
@@ -716,7 +719,10 @@ async function openBook(bookId) {
 
   go('reader');
   document.body.classList.add('reading-mode');
-  $('#reader')?.classList.remove('reader-controls-visible');
+  readerScreenLocked = false;
+  clearTimeout(lockIconTimer);
+  $('#reader')?.classList.remove('screen-locked', 'reader-controls-visible');
+  $('#readerLockIndicator')?.classList.remove('visible');
   $('#readerSettings')?.classList.remove('open');
   applyReaderPreferences();
   startSession();
@@ -790,7 +796,7 @@ async function showTextPart(chunks, index, book) {
   }
 
 
-  book.progress = Math.round((index + 1) / chunks.length * 100);
+  if (readerFlow !== 'scrolled') book.progress = Math.round((index + 1) / chunks.length * 100);
 
   await saveData('books', books);
   renderBooks();
@@ -1051,7 +1057,14 @@ function applyReaderPreferences() {
   if ($('#brightnessValue')) $('#brightnessValue').textContent = readerBrightness + '%';
   if ($('#quickBrightnessValue')) $('#quickBrightnessValue').textContent = readerBrightness + '%';
   const quickBrightnessPanel = $('#readerQuickBrightness');
-  if (quickBrightnessPanel) quickBrightnessPanel.setAttribute('aria-hidden', String(!$('#reader')?.classList.contains('reader-controls-visible')));
+  if (quickBrightnessPanel) {
+    quickBrightnessPanel.hidden = !showQuickBrightness;
+    quickBrightnessPanel.setAttribute('aria-hidden', String(!showQuickBrightness || !$('#reader')?.classList.contains('reader-controls-visible')));
+  }
+  const brightnessToggle = $('#showQuickBrightness');
+  if (brightnessToggle) brightnessToggle.checked = showQuickBrightness;
+  const lockToggle = $('#readerLockToggle');
+  if (lockToggle) lockToggle.textContent = readerScreenLocked ? '🔓 Destravar tela' : '🔒 Travar tela';
   if (epubRendition) {
     try {
       epubRendition.themes.default({
@@ -1089,6 +1102,7 @@ function setReaderFlow(value) {
 function toggleReaderControls(force) {
   const reader = $('#reader');
   if (!reader) return;
+  if (readerScreenLocked) { showLockIndicator(); return; }
   const show = typeof force === 'boolean' ? force : !reader.classList.contains('reader-controls-visible');
   reader.classList.toggle('reader-controls-visible', show);
   if (!show) $('#readerSettings')?.classList.remove('open');
@@ -1100,6 +1114,42 @@ if ($('#readerMenuBtn')) $('#readerMenuBtn').addEventListener('click', event => 
 });
 if ($('#readerSettingsClose')) $('#readerSettingsClose').addEventListener('click', () => {
   $('#readerSettings')?.classList.remove('open');
+  toggleReaderControls(false);
+});
+if ($('#showQuickBrightness')) $('#showQuickBrightness').addEventListener('change', event => {
+  showQuickBrightness = event.target.checked;
+  localStorage.setItem('bibliotheca-show-quick-brightness', String(showQuickBrightness));
+  applyReaderPreferences();
+  toast(showQuickBrightness ? 'Atalho de brilho ativado.' : 'Atalho de brilho oculto.');
+});
+function showLockIndicator() {
+  const indicator = $('#readerLockIndicator');
+  if (!indicator || !readerScreenLocked) return;
+  indicator.classList.add('visible');
+  clearTimeout(lockIconTimer);
+  lockIconTimer = setTimeout(() => indicator.classList.remove('visible'), 1800);
+}
+function setReaderScreenLock(locked) {
+  readerScreenLocked = !!locked;
+  $('#reader')?.classList.toggle('screen-locked', readerScreenLocked);
+  $('#readerSettings')?.classList.remove('open');
+  if (readerScreenLocked) {
+    $('#reader')?.classList.remove('reader-controls-visible');
+    showLockIndicator();
+    toast('Tela travada. Toque no cadeado para destravar.');
+  } else {
+    clearTimeout(lockIconTimer);
+    $('#readerLockIndicator')?.classList.remove('visible');
+    $('#reader')?.classList.remove('screen-locked');
+    toggleReaderControls(false);
+    toast('Tela destravada.');
+  }
+  applyReaderPreferences();
+}
+if ($('#readerLockToggle')) $('#readerLockToggle').addEventListener('click', () => setReaderScreenLock(!readerScreenLocked));
+if ($('#readerLockIndicator')) $('#readerLockIndicator').addEventListener('click', event => {
+  event.stopPropagation();
+  setReaderScreenLock(false);
 });
 if ($('#readerFlow')) {
   $('#readerFlow').value = readerFlow;
@@ -1161,6 +1211,7 @@ if ($('#readerBrightnessQuick')) $('#readerBrightnessQuick').addEventListener('i
 if ($('#readerContent')) {
   $('#readerContent').addEventListener('click', event => {
     if (event.target.closest('button, input, select, a')) return;
+    if (readerScreenLocked) { showLockIndicator(); return; }
     if ($('#readerSettings')?.classList.contains('open')) return;
     toggleReaderControls();
   });
@@ -1174,11 +1225,7 @@ if ($('#readerContent')) {
       applyReaderPreferences();
       return;
     }
-    if (readerFlow === 'scrolled') {
-      if (Math.abs(dy) < 55 || Math.abs(dy) < Math.abs(dx)) return;
-      $('#readerContent')?.scrollBy({top: dy < 0 ? window.innerHeight * 0.72 : -window.innerHeight * 0.72, behavior:'smooth'});
-      return;
-    }
+    if (readerFlow === 'scrolled') return; // A rolagem contínua usa o gesto nativo, sem saltos forçados.
     if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
     if (currentBook.ext === 'epub' && epubRendition) {
       (dx < 0 ? epubRendition.next() : epubRendition.prev()).catch(() => {});
@@ -1192,7 +1239,18 @@ if ($('#readerContent')) {
       showTextPart(currentBook._chunks, currentTextChunkIndex + (dx < 0 ? 1 : -1), currentBook);
     }
   };
+  $('#readerContent').addEventListener('scroll', () => {
+    if (readerFlow !== 'scrolled' || !currentBook) return;
+    const content = $('#readerContent');
+    const max = Math.max(1, content.scrollHeight - content.clientHeight);
+    const percent = Math.max(0, Math.min(100, Math.round(content.scrollTop / max * 100)));
+    currentBook.progress = percent;
+    const position = $('#readerPosition');
+    if (position) position.textContent = 'Leitura contínua · ' + percent + '%';
+    saveData('books', books).catch(console.warn);
+  }, {passive:true});
   $('#readerContent').addEventListener('touchstart', event => {
+    if (readerScreenLocked) showLockIndicator();
     touchStartX = event.changedTouches[0]?.clientX || 0;
     touchStartY = event.changedTouches[0]?.clientY || 0;
   }, {passive:true});
@@ -1469,7 +1527,7 @@ if ($('#exportBtn')) {
   };
 }
 
-/* INICIALIZAÇÃO — versão 30 */
+/* INICIALIZAÇÃO — versão 31 */
 
 async function init() {
   try {
