@@ -543,6 +543,17 @@ async function renderReadingQuote() {
   source.textContent = 'Confira se o arquivo EPUB, PDF ou TXT está disponível na biblioteca';
 }
 function renderBooks() {
+  const romancePill = document.getElementById('romanceActionPill');
+  if (romancePill) romancePill.style.display = selectedGenre === 'Romance' ? 'flex' : 'none';
+  const romanceAdd = document.getElementById('romanceAddBtn');
+  if (romanceAdd) romanceAdd.onclick = () => document.getElementById('fileInput')?.click();
+  const romanceCount = document.getElementById('romanceCountBtn');
+  if (romanceCount) {
+    const romanceTotal = books.filter(book => (book.genre || 'Não classificado') === 'Romance').length;
+    romanceCount.textContent = romanceTotal + (romanceTotal === 1 ? ' livro ›' : ' livros ›');
+    romanceCount.onclick = () => { const input = document.getElementById('searchInput'); if (input) { input.value = ''; activeFilter = 'all'; renderBooks(); } };
+  }
+
   document.body.classList.toggle('romance-room-open', selectedGenre === 'Romance');
   const search = $('#searchInput');
   const query = search ? search.value.toLowerCase() : '';
@@ -1809,7 +1820,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=66', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=67', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
