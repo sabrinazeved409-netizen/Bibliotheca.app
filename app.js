@@ -884,7 +884,7 @@ async function loadExternalScript(src, readyCheck, label) {
   throw lastError || new Error('Não foi possível carregar ' + label + '.');
 }
 
-async async function ensureEpubLibrary() {
+async function ensureEpubLibrary() {
   // epub.js usa JSZip para descompactar os arquivos internos do EPUB.
   await loadExternalScript([
     'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
