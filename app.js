@@ -789,18 +789,18 @@ async function showTextPart(chunks, index, book) {
   }
 
   if (!content) return;
+  const savedProgress = Math.max(0, Math.min(100, Number(book.progress) || 0));
 
   const textToShow = readerFlow === 'scrolled' ? (book._fullText || chunks.join('')) : (chunks[index] || '');
   content.innerHTML = `<div class="reader-page">${esc(textToShow)}</div>`;
   applyReaderPreferences();
   if (readerFlow === 'scrolled') {
-    const percent = Math.round(content.scrollTop / Math.max(1, content.scrollHeight - content.clientHeight) * 100);
-    book.progress = Math.max(0, Math.min(100, percent));
-    updateReaderProgress(percent);
+    book.progress = savedProgress;
+    updateReaderProgress(savedProgress);
     requestAnimationFrame(() => {
       const max = Math.max(0, content.scrollHeight - content.clientHeight);
-      content.scrollTop = (Number(book.progress) / 100) * max;
-      updateReaderProgress(book.progress);
+      content.scrollTop = (savedProgress / 100) * max;
+      updateReaderProgress(savedProgress);
     });
   } else {
     book.progress = Math.round((index + 1) / chunks.length * 100);
@@ -904,6 +904,7 @@ async function updatePdfNav(pdf, book) {
   }
 
   book.progress = Math.round(currentPdfPage / pdf.numPages * 100);
+  updateReaderProgress(book.progress);
 
   await saveData('books', books);
   renderBooks();
