@@ -1,4 +1,4 @@
-const CACHE = 'bibliotheca-shell-v12';
+const CACHE = 'bibliotheca-shell-v13';
 const FILES = ['./', './index.html', './style.css', './app.js', './manifest.webmanifest'];
 
 self.addEventListener('install', event => {
