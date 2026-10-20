@@ -361,3 +361,58 @@ body.reading-mode #reader.reader-screen:not(.reader-controls-visible) #readerMen
 body.reading-mode #reader.reader-screen:not(.reader-controls-visible) .reader-footer { display:block!important; }
 body.reading-mode #readerContent #epubView { height:100%!important; min-height:320px!important; overflow:hidden!important; }
 body.reading-mode #readerContent #epubView iframe { height:100%!important; min-height:320px!important; overflow:auto!important; }
+
+
+/* v41 — regras finais consistentes para leitura, rolagem e bloqueio */
+body.reading-mode #reader.reader-screen.active {
+  display:flex!important; position:fixed!important; inset:0!important; z-index:100!important;
+  width:100vw!important; height:100dvh!important; min-height:0!important; max-height:100dvh!important;
+  margin:0!important; padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)!important;
+  flex-direction:column!important; overflow:hidden!important; box-sizing:border-box!important;
+}
+body.reading-mode #reader .reader-top {
+  display:flex!important; flex:0 0 auto!important; min-height:56px; box-sizing:border-box;
+}
+body.reading-mode #readerContent {
+  display:block!important; position:relative!important; flex:1 1 auto!important;
+  min-height:0!important; height:auto!important; max-height:none!important; width:100%!important;
+  margin:0!important; border:0!important; border-radius:0!important;
+  padding:18px 20px calc(22px + env(safe-area-inset-bottom))!important;
+  overflow:auto!important; overscroll-behavior:contain!important; box-sizing:border-box!important;
+}
+body.reading-mode #reader:not(.reader-controls-visible) .reader-top,
+body.reading-mode #reader:not(.reader-controls-visible) .reader-footer,
+body.reading-mode #reader:not(.reader-controls-visible) #readerQuickBrightness {
+  opacity:0!important; visibility:hidden!important; pointer-events:none!important;
+  transform:translateY(-8px)!important;
+}
+body.reading-mode #reader:not(.reader-controls-visible) .reader-footer { display:none!important; }
+body.reading-mode #reader.reader-controls-visible .reader-top,
+body.reading-mode #reader.reader-controls-visible .reader-footer {
+  opacity:1!important; visibility:visible!important; pointer-events:auto!important; transform:none!important;
+}
+body.reading-mode #reader.reader-controls-visible .reader-footer { display:block!important; }
+body.reading-mode #readerQuickBrightness {
+  display:flex; position:fixed; z-index:108; right:10px;
+  top:50%; transform:translateY(-50%); max-width:calc(100vw - 20px);
+}
+body.reading-mode #readerQuickBrightness[hidden] { display:none!important; }
+body.reading-mode #reader.screen-locked .reader-top,
+body.reading-mode #reader.screen-locked .reader-footer,
+body.reading-mode #reader.screen-locked #readerMenuBtn,
+body.reading-mode #reader.screen-locked #readerQuickBrightness,
+body.reading-mode #reader.screen-locked .reader-settings {
+  display:none!important; opacity:0!important; visibility:hidden!important; pointer-events:none!important;
+}
+body.reading-mode #reader.screen-locked #readerLockIndicator.visible {
+  display:grid!important; visibility:visible!important; opacity:1!important; pointer-events:auto!important;
+}
+body.reading-mode #readerContent #epubView {
+  display:block!important; position:relative!important; width:100%!important;
+  min-height:0!important; max-height:none!important; overflow:hidden!important;
+  background:var(--panel)!important; color:var(--text)!important;
+}
+body.reading-mode #readerContent #epubView iframe {
+  display:block!important; width:100%!important; border:0!important;
+  background:var(--panel)!important; touch-action:pan-y pinch-zoom!important;
+}
