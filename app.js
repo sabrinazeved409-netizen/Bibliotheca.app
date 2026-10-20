@@ -15,6 +15,7 @@ let timer = null;
 let sessionStarted = null;
 let activeFilter = 'all';
 let selectedGenre = null;
+let enabledExtraGenres = [];
 let currentPdfPage = 1;
 let epubBook = null;
 let awaitlessReadGoal = 30;
@@ -283,6 +284,7 @@ function renderGenreRooms() {
   if (!container) return;
   const enabledGenres = new Set([
     ...MAIN_GENRES,
+    ...enabledExtraGenres,
     ...books.map(book => book.genre || 'Não classificado').filter(name => !MAIN_GENRES.includes(name))
   ]);
   const rooms = GENRE_CONFIG.filter(genre => enabledGenres.has(genre.name));
@@ -304,8 +306,11 @@ function renderGenreRooms() {
     });
   });
   container.querySelectorAll('[data-add-genre]').forEach(button => {
-    button.addEventListener('click', () => {
-      selectedGenre = button.dataset.addGenre;
+    button.addEventListener('click', async () => {
+      const genre = button.dataset.addGenre;
+      if (!enabledExtraGenres.includes(genre)) enabledExtraGenres.push(genre);
+      await saveData('enabledExtraGenres', enabledExtraGenres);
+      selectedGenre = genre;
       renderBooks();
       toast('Sala adicionada à sua biblioteca.');
       $('#searchInput')?.scrollIntoView({behavior:'smooth', block:'start'});
@@ -1006,6 +1011,7 @@ async function init() {
     notes = await readData('notes', []);
     sessions = await readData('sessions', []);
     gardenBookIds = await readData('gardenBookIds', []);
+    enabledExtraGenres = await readData('enabledExtraGenres', []);
     awaitlessReadGoal = await readData('goal', 30);
 
     setTheme(localStorage.getItem('bibliotheca-theme') || 'light');
