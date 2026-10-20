@@ -651,3 +651,12 @@ body.reading-mode #readerContent #epubView iframe {
 
 /* v50 — contagem aparece apenas dentro da estante aberta */
 .genre-rooms .genre-room .room-count{display:none!important;visibility:hidden!important;height:0!important;margin:0!important;padding:0!important;border:0!important}
+
+
+/* v51 — janelas menores com ícones próprios para cada gênero */
+.genre-rooms{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;margin:10px 0 15px!important}
+.genre-room{min-height:94px!important;height:auto!important;padding:10px 4px 8px!important;gap:6px!important;border-radius:36% 36% 8px 8px / 18% 18% 8px 8px!important}
+.genre-room-icon{display:block!important;font-size:23px!important;line-height:1!important;min-height:25px!important;filter:drop-shadow(0 2px 4px #0008);margin:1px auto 0!important}
+.genre-room.room-romance .genre-room-icon{filter:drop-shadow(0 0 5px #e66a7b99)}
+.genre-room .room-name{font-size:10px!important;line-height:1.15!important;text-wrap:balance!important}
+@media(max-width:360px){.genre-rooms{gap:6px!important}.genre-room{min-height:88px!important;padding:8px 3px 7px!important}.genre-room-icon{font-size:21px!important;min-height:23px!important}.genre-room .room-name{font-size:9px!important}}
