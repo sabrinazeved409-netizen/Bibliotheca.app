@@ -725,6 +725,7 @@ async function openBook(bookId) {
   $('#reader')?.classList.remove('screen-locked', 'reader-controls-visible');
   $('#readerLockIndicator')?.classList.remove('visible');
   toggleReaderControls(true);
+  updateReaderProgress(Number(book.progress) || 0);
   $('#readerSettings')?.classList.remove('open');
   applyReaderPreferences();
   startSession();
@@ -793,12 +794,18 @@ async function showTextPart(chunks, index, book) {
   content.innerHTML = `<div class="reader-page">${esc(textToShow)}</div>`;
   applyReaderPreferences();
   if (readerFlow === 'scrolled') {
-    const percent = Math.round((content.scrollTop + content.clientHeight) / Math.max(content.scrollHeight, 1) * 100);
-    book.progress = Math.max(book.progress || 0, percent);
+    const percent = Math.round(content.scrollTop / Math.max(1, content.scrollHeight - content.clientHeight) * 100);
+    book.progress = Math.max(0, Math.min(100, percent));
+    updateReaderProgress(percent);
+    requestAnimationFrame(() => {
+      const max = Math.max(0, content.scrollHeight - content.clientHeight);
+      content.scrollTop = (Number(book.progress) / 100) * max;
+      updateReaderProgress(book.progress);
+    });
+  } else {
+    book.progress = Math.round((index + 1) / chunks.length * 100);
+    updateReaderProgress(book.progress);
   }
-
-
-  if (readerFlow !== 'scrolled') book.progress = Math.round((index + 1) / chunks.length * 100);
 
   await saveData('books', books);
   renderBooks();
@@ -983,11 +990,13 @@ async function loadEpub(file, book) {
       const position = $('#readerPosition');
       if (position) position.textContent = 'EPUB · ' + percentage + '%';
       book.progress = percentage;
+      updateReaderProgress(percentage);
       saveData('books', books).catch(console.warn);
       renderBooks();
     });
 
     await rendition.display();
+    fillReaderChapters();
     // Recalcular depois que o leitor estiver visível, já com a tela cheia aplicada.
     const finalHeight = Math.max(320, content.clientHeight - 8);
     view.style.height = finalHeight + 'px';
@@ -1021,6 +1030,81 @@ async function loadEpub(file, book) {
   }
 }
 
+/* PROGRESSO E NAVEGAÇÃO RÁPIDA */
+function updateReaderProgress(value) {
+  const content = $('#readerContent');
+  let percent = Number(value);
+  if (!Number.isFinite(percent) && content) percent = content.scrollHeight > content.clientHeight
+    ? content.scrollTop / (content.scrollHeight - content.clientHeight) * 100 : 0;
+  percent = Math.max(0, Math.min(100, Math.round(percent || 0)));
+  const fill = $('#readerProgressFill');
+  const track = $('#readerProgressTrack');
+  const progressText = $('#readerProgressText');
+  const remainingText = $('#readerRemainingText');
+  if (fill) fill.style.width = percent + '%';
+  if (track) track.setAttribute('aria-valuenow', String(percent));
+  if (progressText) progressText.textContent = percent + '% lido';
+  if (remainingText) remainingText.textContent = percent >= 100 ? 'Livro concluído' : percent >= 85 ? 'Quase no fim' : percent >= 60 ? 'Falta pouco' : percent >= 25 ? 'Em andamento' : 'Ainda no começo';
+}
+function fillReaderChapters() {
+  const select = $('#readerChapterSelect');
+  if (!select) return;
+  select.innerHTML = '<option value="">Ir para capítulo</option>';
+  const flatten = (items, depth = 0) => (items || []).forEach(item => {
+    if (item?.href) {
+      const option = document.createElement('option');
+      option.value = item.href;
+      option.textContent = '　'.repeat(Math.min(depth, 4)) + (item.label || 'Capítulo');
+      select.appendChild(option);
+    }
+    if (Array.isArray(item?.subitems)) flatten(item.subitems, depth + 1);
+  });
+  flatten(epubBook?.navigation?.toc || []);
+  select.hidden = select.options.length <= 1;
+}
+async function navigateReader(delta) {
+  if (!currentBook) return;
+  const content = $('#readerContent');
+  if (currentBook.ext === 'epub' && epubRendition) {
+    try {
+      if (delta < 0) await epubRendition.prev();
+      else await epubRendition.next();
+    } catch (error) { console.warn('Navegação EPUB:', error); }
+    return;
+  }
+  if (currentBook.ext === 'pdf' && currentPdfDocument) {
+    if (readerFlow === 'scrolled') {
+      const pages = [...(content?.querySelectorAll('.pdf-continuous-page') || [])];
+      if (!pages.length || !content) return;
+      let visible = pages.findIndex(page => page.offsetTop + page.offsetHeight > content.scrollTop + 12);
+      if (visible < 0) visible = pages.length - 1;
+      const targetIndex = Math.max(0, Math.min(pages.length - 1, visible + delta));
+      currentPdfPage = targetIndex + 1;
+      pages[targetIndex].scrollIntoView({behavior:'smooth', block:'start'});
+      updateReaderProgress((currentPdfPage / currentPdfDocument.numPages) * 100);
+    } else {
+      const target = Math.max(1, Math.min(currentPdfDocument.numPages, currentPdfPage + delta));
+      if (target !== currentPdfPage) {
+        currentPdfPage = target;
+        await renderPdfPage(currentPdfDocument, target);
+        await updatePdfNav(currentPdfDocument, currentBook);
+      }
+    }
+    return;
+  }
+  if (currentBook.ext === 'txt' && content) {
+    if (readerFlow === 'scrolled') content.scrollBy({top: delta * Math.max(240, content.clientHeight * 0.82), behavior:'smooth'});
+    else await showTextPart(currentBook._chunks || [], currentTextChunkIndex + delta, currentBook);
+  }
+}
+if ($('#readerPrevBtn')) $('#readerPrevBtn').addEventListener('click', () => navigateReader(-1));
+if ($('#readerNextBtn')) $('#readerNextBtn').addEventListener('click', () => navigateReader(1));
+if ($('#readerChapterSelect')) $('#readerChapterSelect').addEventListener('change', async event => {
+  const href = event.target.value;
+  if (!href || !epubRendition) return;
+  try { await epubRendition.display(href); }
+  catch (error) { console.warn('Não foi possível abrir o capítulo:', error); }
+});
 /* CONTROLES DO MODO DE LEITURA */
 function applyReaderPreferences() {
   const content = $('#readerContent');
@@ -1088,18 +1172,31 @@ function applyReaderPreferences() {
   updateFontPreview();
 }
 function setReaderFlow(value) {
+  const content = $('#readerContent');
+  const oldProgress = content && content.scrollHeight > content.clientHeight
+    ? content.scrollTop / (content.scrollHeight - content.clientHeight) : (Number(currentBook?.progress) || 0) / 100;
   readerFlow = value === 'scrolled' ? 'scrolled' : 'paginated';
   localStorage.setItem('bibliotheca-reader-flow', readerFlow);
   if ($('#readerFlow')) $('#readerFlow').value = readerFlow;
   if (epubRendition) {
-    epubRendition.flow(readerFlow === 'scrolled' ? 'scrolled-doc' : 'paginated');
-    epubRendition.resize();
+    try {
+      epubRendition.flow(readerFlow === 'scrolled' ? 'scrolled-doc' : 'paginated');
+      epubRendition.resize();
+    } catch (error) { console.warn('Não foi possível mudar o movimento EPUB:', error); }
   } else if (currentBook?.ext === 'txt' && currentBook._chunks) {
-    const chunks = currentBook._chunks;
-    showTextPart(chunks, currentTextChunkIndex, currentBook);
+    showTextPart(currentBook._chunks, currentTextChunkIndex, currentBook);
+    requestAnimationFrame(() => {
+      const target = $('#readerContent');
+      if (target && readerFlow === 'scrolled') target.scrollTop = oldProgress * Math.max(0, target.scrollHeight - target.clientHeight);
+    });
   } else if (currentBook?.ext === 'pdf' && currentPdfDocument) {
-    $('#readerContent')?.scrollTo({top:0, behavior:'smooth'});
+    if (readerFlow === 'scrolled') renderPdfContinuous(currentPdfDocument, currentBook);
+    else {
+      currentPdfPage = Math.max(1, Math.min(currentPdfDocument.numPages, currentPdfPage || 1));
+      renderPdfPage(currentPdfDocument, currentPdfPage).then(() => updatePdfNav(currentPdfDocument, currentBook));
+    }
   }
+  updateReaderProgress(oldProgress * 100);
 }
 function toggleReaderControls(force) {
   const reader = $('#reader');
@@ -1243,14 +1340,14 @@ if ($('#readerContent')) {
     }
   };
   $('#readerContent').addEventListener('scroll', () => {
-    if (readerFlow !== 'scrolled' || !currentBook) return;
+    if (!currentBook || readerFlow !== 'scrolled') return;
     const content = $('#readerContent');
-    const max = Math.max(1, content.scrollHeight - content.clientHeight);
-    const percent = Math.max(0, Math.min(100, Math.round(content.scrollTop / max * 100)));
-    currentBook.progress = percent;
+    const percent = Math.max(0, Math.min(100, Math.round(content.scrollTop / Math.max(1, content.scrollHeight - content.clientHeight) * 100)));
+    if (currentBook.ext !== 'epub') currentBook.progress = percent;
     const position = $('#readerPosition');
-    if (position) position.textContent = 'Leitura contínua · ' + percent + '%';
-    saveData('books', books).catch(console.warn);
+    if (position) position.textContent = (currentBook.ext === 'pdf' ? 'PDF · ' : 'Leitura contínua · ') + percent + '%';
+    updateReaderProgress(percent);
+    if (currentBook.ext !== 'epub') saveData('books', books).catch(console.warn);
   }, {passive:true});
   $('#readerContent').addEventListener('touchstart', event => {
     if (readerScreenLocked) showLockIndicator();
@@ -1567,7 +1664,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=33', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=34', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
