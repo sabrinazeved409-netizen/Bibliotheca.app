@@ -678,3 +678,131 @@ body.reading-mode #readerContent #epubView iframe {
 .world-sky-symbol svg{display:block;width:100%;height:100%;filter:drop-shadow(0 0 8px #a51f2d55)}
 .room-terror .world-sky-symbol svg{filter:drop-shadow(0 0 9px #c3263588)}
 @media(max-width:360px){.genre-rooms{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.genre-room{padding:6px 5px 9px!important}.genre-cover-art{max-width:132px}.genre-room .room-name{font-size:11px!important}.genre-room .room-desc{font-size:8px!important}}
+
+
+
+/* v55 — direção visual cinematográfica Bibliotheca */
+:root{
+  --bg:#100d0b;--panel:#1b1511;--text:#f4e8d2;--muted:#b9a58a;
+  --line:#5d452e;--accent:#d8a45f;--soft:#2a1e17;
+  --shadow:0 12px 32px #0008;
+}
+body[data-theme="dark"]{
+  --bg:#0b0b0c;--panel:#171413;--text:#f4e8d2;--muted:#b9a58a;
+  --line:#5d452e;--accent:#d8a45f;--soft:#241a15;
+}
+body[data-theme="sepia"]{
+  --bg:#1c1510;--panel:#2b2018;--text:#f4e5ca;--muted:#c5ad8d;
+  --line:#765b3b;--accent:#dfb777;--soft:#39291d;
+}
+body{background:radial-gradient(ellipse at 50% -10%,#4c2a1a 0%,transparent 42%),var(--bg);color:var(--text)}
+.topbar{
+  position:relative;isolation:isolate;overflow:hidden;
+  padding:30px 20px 22px!important;
+  border-bottom:1px solid #8f693d55;
+  background:linear-gradient(180deg,#21150fdd,#100d0bee);
+}
+.topbar::before{
+  content:"";position:absolute;inset:0;z-index:-1;opacity:.38;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 0%,#d69c4d55,transparent 60%),
+    repeating-linear-gradient(90deg,transparent 0 38px,#d8a45f0a 39px 40px);
+}
+.topbar .eyebrow{color:#c9a56c;letter-spacing:2.2px}
+.topbar h1{font-size:32px;letter-spacing:.2px;color:#f3dfb8;text-shadow:0 2px 15px #d89b4b44}
+.topbar h1 span{color:#d9ad69}
+.icon-btn{background:linear-gradient(145deg,#2d2118,#17110d)!important;border-color:#87613b!important;color:#f0d6a5!important;border-radius:50%!important;box-shadow:inset 0 0 0 2px #0004}
+.screen{padding-top:15px!important;padding-bottom:110px!important}
+h2,h3{color:#f2e1c4}
+.eyebrow{color:#c49a5d!important}
+.panel,.stat-card,.note-card,.search-wrap,.filter-chip{
+  background:linear-gradient(145deg,#211811,#15110e)!important;
+  border-color:#63482d!important;box-shadow:inset 0 1px #d4ac6b12,0 9px 25px #0004!important;
+}
+.welcome{
+  position:relative;isolation:isolate;min-height:210px!important;
+  border-radius:18px!important;padding:22px!important;
+  background:
+    radial-gradient(ellipse at 75% 20%,#9a582c66,transparent 45%),
+    linear-gradient(135deg,#28170f,#120e0c 72%)!important;
+  border:1px solid #a17a4b!important;
+}
+.welcome::after{
+  content:"";position:absolute;z-index:-1;inset:9px;border:1px solid #c5a16b55;border-radius:12px;pointer-events:none;
+}
+.welcome blockquote{font:italic 19px/1.55 Georgia,serif;color:#f0dfc1;margin:12px 0}
+.book-illustration{color:#d5a15c!important;font-size:76px!important;opacity:.8}
+.section-head{margin-top:26px!important}
+.section-head h2{font-size:21px!important}
+.text-btn{color:#e2b773!important}
+.stat-card{border-radius:14px!important;padding:14px!important}
+.stat-card strong{color:#f0d2a0!important}
+.primary-btn{background:linear-gradient(135deg,#e4b773,#a66d35)!important;color:#21140b!important;border:1px solid #f2d49b!important;box-shadow:0 4px 12px #0005}
+.secondary-btn{background:#21170f!important;color:#e8c993!important;border-color:#8b653a!important}
+.page-heading h2{font-size:25px!important}
+#genreIntro.genre-world{
+  position:relative;isolation:isolate;overflow:hidden;
+  padding:22px 18px!important;margin:14px 0 16px!important;
+  border:1px solid #88633c!important;border-radius:16px!important;
+  background:
+    radial-gradient(ellipse at 50% 0%,#6b3c3455,transparent 70%),
+    linear-gradient(145deg,#241710,#100d0b 78%)!important;
+  box-shadow:inset 0 0 0 3px #1a120d,inset 0 0 0 4px #74533255,0 10px 25px #0005!important;
+}
+#genreIntro.genre-world::after{
+  content:"";position:absolute;z-index:-1;inset:7px;border:1px solid #c49a5d44;border-radius:11px;pointer-events:none;
+}
+#genreIntro .eyebrow{text-align:center;font-size:9px!important;letter-spacing:1.5px!important}
+#genreIntro h2{text-align:center;font:normal 23px/1.2 Georgia,serif!important;color:#f0d7aa!important;margin:8px 0!important}
+#genreIntro .world-description{max-width:330px;margin:0 auto!important;text-align:center;color:#c2b09a!important;font-size:12px!important;line-height:1.6!important}
+.genre-rooms{gap:12px!important;margin:14px 0 22px!important}
+.genre-room{
+  min-height:0!important;padding:10px 9px 13px!important;gap:7px!important;
+  border:1px solid #8e693f!important;border-radius:13px!important;
+  background:
+    linear-gradient(180deg,#1a120d10,#100c0b99),
+    radial-gradient(ellipse at 50% 20%,var(--book-glow,#5a2d2b),transparent 75%),
+    linear-gradient(145deg,#39261a,#17110d 78%)!important;
+  box-shadow:inset 0 0 0 3px #100c09,inset 0 0 0 4px #c09a5b33,inset 0 0 25px #0009,0 8px 20px #0006!important;
+}
+.genre-room::before{
+  inset:5px!important;border:1px solid #d7b57455!important;border-radius:8px!important;
+  background:linear-gradient(180deg,#fff2 0%,transparent 40%,#0005 100%)!important;opacity:1!important;
+}
+.genre-room::after{inset:2px!important;border:1px solid #a9854b77!important;border-radius:10px!important}
+.genre-cover-art{max-width:none!important;width:100%!important;aspect-ratio:1.08/1!important;object-fit:cover;filter:drop-shadow(0 4px 5px #0009)!important}
+.genre-room .room-name{font-size:15px!important;color:#f4dfbb!important;margin-top:2px!important;text-shadow:0 2px 8px #000}
+.genre-room .room-desc{display:block!important;font-size:10px!important;line-height:1.45!important;color:#c8b59b!important}
+.genre-room .room-count{display:flex!important;visibility:visible!important;height:auto!important;margin-top:2px!important;padding-top:7px!important;border-top:1px solid #d0a96b44!important;color:#d8b77d!important;font-size:9px!important}
+.room-romance{--book-cover:#552431;--book-edge:#c49a76;--book-glow:#7a2839}
+.room-fantasia{--book-cover:#1b4540;--book-edge:#a7b68a;--book-glow:#145d58}
+.room-terror{--book-cover:#32151b;--book-edge:#bd6557;--book-glow:#761b27}
+.room-misterio{--book-cover:#26313b;--book-edge:#a5a0a0;--book-glow:#2e4552}
+.room-ficcao{--book-cover:#183845;--book-edge:#83b7c4;--book-glow:#145267}
+.room-classicos{--book-cover:#4a321b;--book-edge:#d5b77b;--book-glow:#6a4b22}
+.search-wrap{border-radius:13px!important}
+.search-wrap input{color:#f4e8d2!important}
+.shelf-row{scrollbar-width:none}
+.filter-chip{color:#d4c1a4!important}
+.filter-chip.selected{background:#4a3020!important;border-color:#d5a45e!important;color:#f6d6a0!important}
+.book-cover{border:1px solid #9a7648;box-shadow:inset 0 0 0 3px #0005,0 8px 20px #0007!important;border-radius:7px!important}
+.book-meta strong{color:#f1dfc2}
+.book-meta small{color:#b9a58a!important}
+.bottom-nav{
+  background:linear-gradient(180deg,#1b130f,#0c0908)!important;
+  border-top:1px solid #8e693e!important;
+  box-shadow:0 -8px 25px #0008;
+  padding-top:11px!important;
+}
+.nav-item{color:#ad9a80!important;font-size:9px!important}
+.nav-item span{color:#d1a66a;font-size:20px!important}
+.nav-item.active{color:#f2c783!important}
+.nav-item.active span{color:#f2c783!important;filter:drop-shadow(0 0 5px #e5a75b55)}
+.reader-content{background:#f1e5cd!important;color:#30251a!important;border-color:#a88a5d!important;box-shadow:inset 0 0 30px #9a764422!important}
+.reader-content p{color:#30251a}
+@media(max-width:360px){
+ .genre-rooms{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ .genre-room .room-name{font-size:13px!important}
+ .genre-room .room-desc{font-size:9px!important}
+ .topbar{padding:25px 16px 18px!important}
+}
