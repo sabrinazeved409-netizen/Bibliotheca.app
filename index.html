@@ -7,7 +7,7 @@
   <meta name="description" content="Sua biblioteca digital pessoal">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" href="ChatGPT%20Image%2019%20de%20out.%20de%202026,%2016_03_23.png">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
   <title>Bibliotheca — sua biblioteca</title>
 </head>
 <body>
@@ -21,19 +21,14 @@
 
   <main>
     <section id="home" class="screen active">
-      <div class="welcome panel">
-        <div>
-          <p class="eyebrow">UM CAPÍTULO DE CADA VEZ</p>
-          <h2>Seu próximo mundo<br>espera por você.</h2>
-          <p class="muted">Leia no seu ritmo. Guarde o que importa.</p>
+      <div class="welcome panel quote-panel">
+        <div class="quote-copy">
+          <p class="eyebrow">UMA FRASE PARA TE LEVAR MAIS LONGE</p>
+          <blockquote id="readingQuote">Seus livros guardam mundos inteiros. Vamos descobrir uma frase de cada vez.</blockquote>
+          <p class="muted" id="quoteSource">Trechos dos livros da sua biblioteca</p>
         </div>
-        <div class="book-illustration" aria-hidden="true">📚</div>
+        <div class="book-illustration" aria-hidden="true">❝</div>
       </div>
-      <div class="section-head">
-        <h2>Continuar lendo</h2>
-        <button class="text-btn" data-go="library">Ver biblioteca</button>
-      </div>
-      <div id="continueList" class="book-grid compact-grid"></div>
       <div class="section-head">
         <h2>Seu ritmo</h2>
         <button class="text-btn" data-go="stats">Detalhes</button>
@@ -42,6 +37,11 @@
         <div class="stat-card"><span>Hoje</span><strong id="todayTime">0 min</strong><small>tempo de leitura</small></div>
         <div class="stat-card"><span>Esta semana</span><strong id="weekTime">0 min</strong><small>tempo de leitura</small></div>
       </div>
+      <div class="section-head">
+        <h2>Continuar lendo</h2>
+        <button class="text-btn" data-go="library">Ver biblioteca</button>
+      </div>
+      <div id="continueList" class="book-grid compact-grid"></div>
     </section>
 
     <section id="library" class="screen">
@@ -142,6 +142,6 @@
   </dialog>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"></script>
-  <script src="app.js?v=9"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>
