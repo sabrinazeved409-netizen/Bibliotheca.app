@@ -906,8 +906,8 @@ async function loadEpub(file, book) {
   if (!content) throw new Error('A área de leitura não foi encontrada.');
 
   content.innerHTML = `
-    <div id="epubLoading" class="muted" style="padding:16px 0">Preparando o EPUB…</div>
-    <div id="epubView" style="width:100%;height:100%;min-height:0;overflow:hidden;background:var(--panel);color:var(--text)"></div>
+    <div id="epubLoading" class="muted" role="status" style="padding:16px 0">Preparando o EPUB…</div>
+    <div id="epubView" style="width:100%;min-height:320px;overflow:hidden;background:var(--panel);color:var(--text)"></div>
   `;
 
   const buffer = await file.arrayBuffer();
@@ -916,17 +916,21 @@ async function loadEpub(file, book) {
   }
 
   try {
-    epubBook = window.ePub(buffer);
-    await epubBook.ready;
+    // Definir uma altura real evita que epub.js crie páginas com altura zero
+    // em leitores móveis com layout flexível e viewport dinâmica.
+    const view = $('#epubView');
+    const availableHeight = Math.max(320, content.clientHeight - 8);
+    view.style.height = availableHeight + 'px';
 
-    const rendition = epubBook.renderTo('epubView', {
+    epubBook = window.ePub(buffer);
+    const rendition = epubBook.renderTo(view, {
       width: '100%',
-      height: '100%',
+      height: availableHeight,
       flow: readerFlow === 'scrolled' ? 'scrolled-doc' : 'paginated',
       axis: readerAxis,
       spread: 'none',
       manager: 'default',
-      allowScriptedContent: true
+      allowScriptedContent: false
     });
 
     epubRendition = rendition;
@@ -941,8 +945,17 @@ async function loadEpub(file, book) {
     });
 
     await rendition.display();
+    // Recalcular depois que o leitor estiver visível, já com a tela cheia aplicada.
+    const finalHeight = Math.max(320, content.clientHeight - 8);
+    view.style.height = finalHeight + 'px';
+    rendition.resize('100%', finalHeight);
     applyReaderPreferences();
     const epubFrame = $('#epubView iframe');
+    if (epubFrame) {
+      epubFrame.addEventListener('load', () => {
+        try { epubRendition?.resize('100%', Math.max(320, content.clientHeight - 8)); } catch (_) {}
+      });
+    }
     if (epubFrame) {
       try {
         epubFrame.contentDocument?.addEventListener('click', () => {
@@ -953,9 +966,9 @@ async function loadEpub(file, book) {
     const loading = $('#epubLoading');
     if (loading) loading.remove();
 
-    // Algumas obras levam um instante extra para montar o primeiro capítulo.
-    if (!$('#epubView iframe')) {
-      await new Promise(resolve => setTimeout(resolve, 250));
+    // Garantir que o primeiro capítulo seja posicionado no centro do leitor.
+    if (epubRendition && !book.progress) {
+      try { await epubRendition.display(); } catch (_) {}
     }
   } catch (error) {
     try { epubBook?.destroy(); } catch (_) {}
@@ -1428,7 +1441,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=24', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=25', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
