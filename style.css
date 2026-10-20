@@ -333,3 +333,20 @@ body.reading-mode #readerContent #epubView iframe {
   height:auto!important; min-height:100%!important; max-height:none!important;
   overflow:visible!important; touch-action:pan-y pinch-zoom!important;
 }
+
+
+/* v38 — restaurar rolagem interna do EPUB e controles do leitor */
+body.reading-mode #reader.reader-screen.active { min-height:0!important; }
+body.reading-mode #readerContent { position:relative!important; }
+body.reading-mode #readerContent #epubView {
+  display:block!important; width:100%!important; height:100%!important; min-height:320px!important;
+  max-height:none!important; overflow:hidden!important; flex:none!important;
+}
+body.reading-mode #readerContent #epubView iframe {
+  display:block!important; width:100%!important; height:100%!important; min-height:320px!important;
+  max-height:none!important; border:0!important; overflow:auto!important; touch-action:pan-y pinch-zoom!important;
+}
+body.reading-mode #reader:not(.reader-controls-visible) .reader-top { display:flex!important; }
+body.reading-mode #reader:not(.reader-controls-visible) .reader-footer { display:none!important; }
+body.reading-mode #reader.reader-controls-visible .reader-top { display:flex!important; opacity:1!important; visibility:visible!important; pointer-events:auto!important; transform:none!important; }
+body.reading-mode #reader.reader-controls-visible .reader-footer { display:block!important; visibility:visible!important; opacity:1!important; pointer-events:auto!important; }
