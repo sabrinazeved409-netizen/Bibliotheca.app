@@ -884,7 +884,7 @@ async function loadExternalScript(src, readyCheck, label) {
   throw lastError || new Error('Não foi possível carregar ' + label + '.');
 }
 
-async function ensureEpubLibrary() {
+async async function ensureEpubLibrary() {
   // epub.js usa JSZip para descompactar os arquivos internos do EPUB.
   await loadExternalScript([
     'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
@@ -1471,7 +1471,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=25', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=28', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
