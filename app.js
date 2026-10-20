@@ -399,7 +399,7 @@ async function loadScriptOnce(src, readyCheck) {
 }
 
 function chooseReadableExcerpt(rawText) {
-  const text = String(rawText || '').replace(/\\s+/g, ' ').trim();
+  const text = String(rawText || '').replace(/\s+/g, ' ').trim();
   if (text.length < 80) return '';
   const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
   const usable = sentences.map(s => s.trim()).filter(s => s.length >= 45 && s.length <= 320);
