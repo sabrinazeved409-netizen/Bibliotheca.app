@@ -1315,12 +1315,17 @@ body.romance-room-open #library .shelf-row,body.romance-room-open #shelfList{pos
 }
 
 
-/* v66 — cena ilustrada SVG como cenário real da sala Romance */
+/* v68 — sala Romance com fotografia de arquitetura e flores realistas */
 body.romance-room-open #library.active{
  position:relative!important;isolation:isolate!important;
- background-color:#14080d!important;
- background-image:linear-gradient(180deg,rgba(13,5,9,.05) 0%,rgba(13,5,9,.04) 35%,rgba(13,5,9,.68) 73%,#10070b 100%),url("./images/romance-portal.svg")!important;
- background-repeat:no-repeat!important;background-position:center top!important;background-size:100% auto!important;
+ background-color:#10070b!important;
+ background-image:
+ linear-gradient(180deg,rgba(12,5,8,.08) 0%,rgba(20,7,13,.04) 24%,rgba(20,7,13,.18) 42%,rgba(13,5,9,.72) 67%,#10070b 100%),
+ url("https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1000&q=85"),
+ url("https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1600&q=90")!important;
+ background-repeat:no-repeat,no-repeat,no-repeat!important;
+ background-position:center top,left top,center top!important;
+ background-size:100% 100%,38% 62%,100% auto!important;
 }
 body.romance-room-open #library.active:before,
 body.romance-room-open #library.active:after{content:none!important;display:none!important}
@@ -1366,7 +1371,7 @@ body.romance-room-open #shelfList .book-card{
 }
 
 
-/* v67 — refinamento mobile de Romance baseado no prompt */
+/* v68 — refinamento mobile de Romance com cenário fotográfico */
 body.romance-room-open #library.active{
  background-size:100% auto!important;background-position:center top!important;
  padding-bottom:82px!important;
