@@ -246,7 +246,6 @@ const GENRE_CONFIG = [
 ];
 const GENRES = GENRE_CONFIG.map(item => item.name);
 const MAIN_GENRES = GENRE_CONFIG.filter(item => item.core).map(item => item.name);
-const GENRES = GENRE_CONFIG.map(item => item.name);
 
 function card(book) {
   const progress = book.progress || 0;
