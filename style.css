@@ -197,3 +197,8 @@ body.reading-mode #readerContent #pdfCanvas{display:block;width:100%!important;h
 body.reading-mode #readerSettings{z-index:110!important;max-height:calc(100dvh - 24px)!important;overflow:auto!important}
 body.reading-mode #readerMenuBtn,body.reading-mode #reader .reader-top{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
 #readerSettings select{font-size:13px}
+
+/* v24: amostra de fonte e gestos de navegação */
+.reader-font-preview{padding:13px 12px;margin:-4px 0 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);line-height:1.5;overflow-wrap:anywhere}
+body.reading-mode #readerContent{touch-action:pan-y pinch-zoom}
+body.reading-mode #readerContent #epubView,body.reading-mode #readerContent #epubView iframe{touch-action:pan-y pinch-zoom}
