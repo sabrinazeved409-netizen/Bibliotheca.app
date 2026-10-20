@@ -429,7 +429,7 @@ function renderBooks() {
   renderGenreRooms();
   const continueList = $('#continueList');
   if (continueList) {
-    const reading = books.filter(book => book.status === 'reading').slice(0, 4);
+    const reading = books.filter(book => book.status === 'reading').slice(0, 2);
     continueList.innerHTML = reading.map(renderContinueCard).join('') || '<p class="muted">Seus livros em andamento aparecerão aqui.</p>';
     bindBookCards(continueList);
   }
