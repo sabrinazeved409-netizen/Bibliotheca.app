@@ -229,11 +229,11 @@ function coverColor(book) {
 }
 
 const GENRE_CONFIG = [
-  { name: 'Romance', icon: '🌹', desc: 'Jardins secretos, cartas de amor e histórias que florescem.', style: 'romance' },
-  { name: 'Fantasia', icon: '✨', desc: 'Reinos encantados, magia antiga e mundos impossíveis.', style: 'fantasia' },
+  { name: 'Romance', icon: '🌹', desc: 'Jardins secretos, cartas de amor e histórias que florescem.', style: 'romance', core: true },
+  { name: 'Fantasia', icon: '✨', desc: 'Reinos encantados, magia antiga e mundos impossíveis.', style: 'fantasia', core: true },
+  { name: 'Terror', icon: '🕯️', desc: 'Sombras, casas assombradas e arrepios na noite.', style: 'terror', core: true },
+  { name: 'Ficção científica', icon: '🚀', desc: 'Galáxias distantes, tecnologia e futuros extraordinários.', style: 'ficcao', core: true },
   { name: 'Mistério e suspense', icon: '🔎', desc: 'Passagens ocultas, pistas e segredos por desvendar.', style: 'misterio' },
-  { name: 'Ficção científica', icon: '🚀', desc: 'Galáxias distantes, tecnologia e futuros extraordinários.', style: 'ficcao' },
-  { name: 'Terror', icon: '🕯️', desc: 'Sombras, casas assombradas e arrepios na noite.', style: 'terror' },
   { name: 'Clássicos', icon: '🏛️', desc: 'Salões históricos e obras que atravessam gerações.', style: 'classicos' },
   { name: 'Drama', icon: '🎭', desc: 'Sentimentos intensos, escolhas difíceis e vidas cruzadas.', style: 'drama' },
   { name: 'Aventura', icon: '🧭', desc: 'Mapas, jornadas e descobertas além do horizonte.', style: 'aventura' },
@@ -243,6 +243,8 @@ const GENRE_CONFIG = [
   { name: 'Não classificado', icon: '📖', desc: 'Livros que ainda estão esperando seu lugar.', style: 'outros' },
   { name: 'Outros', icon: '🗂️', desc: 'Um espaço para todos os outros estilos.', style: 'outros' }
 ];
+const GENRES = GENRE_CONFIG.map(item => item.name);
+const MAIN_GENRES = GENRE_CONFIG.filter(item => item.core).map(item => item.name);
 const GENRES = GENRE_CONFIG.map(item => item.name);
 
 function card(book) {
@@ -279,7 +281,13 @@ function card(book) {
 function renderGenreRooms() {
   const container = $('#genreRooms');
   if (!container) return;
-  container.innerHTML = GENRE_CONFIG.map(genre => {
+  const enabledGenres = new Set([
+    ...MAIN_GENRES,
+    ...books.map(book => book.genre || 'Não classificado').filter(name => !MAIN_GENRES.includes(name))
+  ]);
+  const rooms = GENRE_CONFIG.filter(genre => enabledGenres.has(genre.name));
+  const addable = GENRE_CONFIG.filter(genre => !enabledGenres.has(genre.name));
+  container.innerHTML = rooms.map(genre => {
     const count = books.filter(book => (book.genre || 'Não classificado') === genre.name).length;
     return `<button type="button" class="genre-room room-${esc(genre.style)}" data-open-genre="${esc(genre.name)}">
       <span class="room-icon">${genre.icon}</span>
@@ -287,11 +295,19 @@ function renderGenreRooms() {
       <span class="room-desc">${esc(genre.desc)}</span>
       <span class="room-count">${count} livro(s) <span aria-hidden="true">→</span></span>
     </button>`;
-  }).join('');
+  }).join('') + (addable.length ? `<section class="add-genre-area"><h3>Outras salas</h3><p>Adicione somente os gêneros que quiser na sua biblioteca.</p><div class="add-genre-list">${addable.map(genre => `<button type="button" class="add-genre-btn" data-add-genre="${esc(genre.name)}"><span>${genre.icon} ${esc(genre.name)}</span><strong>＋ Adicionar sala</strong></button>`).join('')}</div></section>` : '');
   container.querySelectorAll('[data-open-genre]').forEach(button => {
     button.addEventListener('click', () => {
       selectedGenre = button.dataset.openGenre;
       renderBooks();
+      $('#searchInput')?.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  container.querySelectorAll('[data-add-genre]').forEach(button => {
+    button.addEventListener('click', () => {
+      selectedGenre = button.dataset.addGenre;
+      renderBooks();
+      toast('Sala adicionada à sua biblioteca.');
       $('#searchInput')?.scrollIntoView({behavior:'smooth', block:'start'});
     });
   });
