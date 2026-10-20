@@ -981,7 +981,7 @@ async function loadEpub(file, book) {
       flow: readerFlow === 'scrolled' ? 'scrolled-continuous' : 'paginated',
       axis: readerAxis,
       spread: 'none',
-      manager: 'default',
+      manager: readerFlow === 'scrolled' ? 'continuous' : 'default',
       allowScriptedContent: false
     });
 
@@ -1180,11 +1180,36 @@ function setReaderFlow(value) {
   readerFlow = value === 'scrolled' ? 'scrolled' : 'paginated';
   localStorage.setItem('bibliotheca-reader-flow', readerFlow);
   if ($('#readerFlow')) $('#readerFlow').value = readerFlow;
-  if (epubRendition) {
+  if (epubRendition && epubBook && currentBook?.ext === 'epub') {
+    const view = $('#epubView');
+    const height = Math.max(320, (content?.clientHeight || window.innerHeight) - 8);
+    const percentage = Math.max(0, Math.min(1, Number(currentBook.progress || 0) / 100));
     try {
-      epubRendition.flow(readerFlow === 'scrolled' ? 'scrolled-continuous' : 'paginated');
-      epubRendition.resize('100%', Math.max(320, ($('#readerContent')?.clientHeight || window.innerHeight) - 8));
-      epubRendition.resize();
+      epubRendition.destroy();
+      epubRendition = epubBook.renderTo(view, {
+        width: '100%', height,
+        flow: readerFlow === 'scrolled' ? 'scrolled-continuous' : 'paginated',
+        axis: readerAxis, spread: 'none',
+        manager: readerFlow === 'scrolled' ? 'continuous' : 'default',
+        allowScriptedContent: false
+      });
+      const rendition = epubRendition;
+      rendition.on('relocated', location => {
+        if (!location?.start || !currentBook) return;
+        const percent = Math.round((location.start.percentage || 0) * 100);
+        currentBook.progress = percent;
+        const position = $('#readerPosition');
+        if (position) position.textContent = 'EPUB · ' + percent + '%';
+        updateReaderProgress(percent);
+        saveData('books', books).catch(console.warn);
+      });
+      rendition.display().then(async () => {
+        if (percentage > 0 && epubBook.locations?.length?.() > 0) {
+          const cfi = epubBook.locations.cfiFromPercentage(percentage);
+          if (cfi) await rendition.display(cfi);
+        }
+        rendition.resize('100%', height);
+      }).catch(console.warn);
     } catch (error) { console.warn('Não foi possível mudar o movimento EPUB:', error); }
   } else if (currentBook?.ext === 'txt' && currentBook._chunks) {
     showTextPart(currentBook._chunks, currentTextChunkIndex, currentBook);
@@ -1324,7 +1349,7 @@ if ($('#readerContent')) {
     if (event.target.closest('button, input, select, a')) return;
     if (readerScreenLocked) { showLockIndicator(); return; }
     if ($('#readerSettings')?.classList.contains('open')) return;
-    toggleReaderControls();
+    toggleReaderControls(true);
   });
   let touchStartX = 0, touchStartY = 0;
   const navigateReaderSwipe = (dx, dy, startX = touchStartX) => {
