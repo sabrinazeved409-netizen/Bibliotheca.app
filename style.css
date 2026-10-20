@@ -225,3 +225,6 @@ body.reading-mode #readerContent #epubView{color:var(--text)!important;backgroun
 .reader-quick-brightness{background:var(--panel)!important;color:var(--text)!important;border-color:var(--accent)!important}
 .reader-quick-brightness strong{color:var(--text)!important;font-weight:800}
 .reader-quick-brightness input{min-height:24px}
+
+.reader-quick-brightness[hidden]{display:none!important}
+body.reading-mode #readerContent .pdf-continuous-page{max-width:100%;height:auto!important}
