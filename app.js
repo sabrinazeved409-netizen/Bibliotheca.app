@@ -291,7 +291,10 @@ function renderBooks() {
       grouped.get(genre).push(book);
     });
 
-    const genreOrder = GENRES.filter(genre => grouped.has(genre));
+    const genreOrder = [
+      ...GENRES.filter(genre => grouped.has(genre)),
+      ...[...grouped.keys()].filter(genre => !GENRES.includes(genre))
+    ];
     shelf.innerHTML = genreOrder.map(genre => `
       <section class="genre-shelf">
         <div class="genre-shelf-heading">
@@ -330,6 +333,7 @@ function renderBooks() {
     }
 
     bindBookCards(continueList);
+    bindGenrePickers(continueList);
   }
 
 }
