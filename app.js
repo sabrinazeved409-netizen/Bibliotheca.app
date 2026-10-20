@@ -27,6 +27,8 @@ let readerFontSize = Number(localStorage.getItem('bibliotheca-reader-font') || 1
 let readerLineSpacing = Number(localStorage.getItem('bibliotheca-reader-line') || 1.8);
 let readerParagraphSpacing = Number(localStorage.getItem('bibliotheca-reader-paragraph') || 1.2);
 let readerBrightness = Number(localStorage.getItem('bibliotheca-reader-brightness') || 100);
+let readerFontFamily = localStorage.getItem('bibliotheca-reader-font-family') || 'Georgia, serif';
+let readerFontWeight = Number(localStorage.getItem('bibliotheca-reader-font-weight') || 400);
 let awaitlessReadGoal = 30;
 
 const colors = [
@@ -778,18 +780,13 @@ async function showTextPart(chunks, index, book) {
   if (!content) return;
 
   const textToShow = readerFlow === 'scrolled' ? (book._fullText || chunks.join('')) : (chunks[index] || '');
-  content.innerHTML = `
-    <div class="reader-page">${esc(textToShow)}</div>
-    ${readerFlow === 'scrolled' ? '' : `<div class="reader-page-nav"><button class="secondary-btn" id="prevPart">← Anterior</button><button class="secondary-btn" id="nextPart">Próximo →</button></div>`}
-  `;
+  content.innerHTML = `<div class="reader-page">${esc(textToShow)}</div>`;
   applyReaderPreferences();
   if (readerFlow === 'scrolled') {
     const percent = Math.round((content.scrollTop + content.clientHeight) / Math.max(content.scrollHeight, 1) * 100);
     book.progress = Math.max(book.progress || 0, percent);
   }
 
-  if ($('#prevPart')) $('#prevPart').onclick = () => showTextPart(chunks, index - 1, book);
-  if ($('#nextPart')) $('#nextPart').onclick = () => showTextPart(chunks, index + 1, book);
 
   book.progress = Math.round((index + 1) / chunks.length * 100);
 
@@ -820,29 +817,6 @@ async function loadPdf(file, book) {
   );
 
   await renderPdfPage(pdf, currentPdfPage);
-
-  $('#readerContent').insertAdjacentHTML('beforeend', `
-    <div style="display:flex;gap:8px;margin-top:18px">
-      <button class="secondary-btn" id="prevPdf">← Anterior</button>
-      <button class="secondary-btn" id="nextPdf">Próxima →</button>
-    </div>
-  `);
-
-  $('#prevPdf').onclick = async () => {
-    if (currentPdfPage > 1) {
-      currentPdfPage--;
-      await renderPdfPage(pdf, currentPdfPage);
-      await updatePdfNav(pdf, book);
-    }
-  };
-
-  $('#nextPdf').onclick = async () => {
-    if (currentPdfPage < pdf.numPages) {
-      currentPdfPage++;
-      await renderPdfPage(pdf, currentPdfPage);
-      await updatePdfNav(pdf, book);
-    }
-  };
 
   await updatePdfNav(pdf, book);
 }
@@ -931,11 +905,7 @@ async function loadEpub(file, book) {
 
   content.innerHTML = `
     <div id="epubLoading" class="muted" style="padding:16px 0">Preparando o EPUB…</div>
-    <div id="epubView" style="width:100%;height:65vh;min-height:360px;overflow:hidden;background:var(--panel);color:var(--text)"></div>
-    <div style="display:flex;gap:8px;margin-top:18px">
-      <button type="button" class="secondary-btn" id="prevEpub">← Anterior</button>
-      <button type="button" class="secondary-btn" id="nextEpub">Próxima →</button>
-    </div>
+    <div id="epubView" style="width:100%;height:100%;min-height:0;overflow:hidden;background:var(--panel);color:var(--text)"></div>
   `;
 
   const buffer = await file.arrayBuffer();
@@ -967,9 +937,6 @@ async function loadEpub(file, book) {
       saveData('books', books).catch(console.warn);
       renderBooks();
     });
-
-    $('#prevEpub').onclick = () => rendition.prev().catch(error => console.warn('EPUB anterior:', error));
-    $('#nextEpub').onclick = () => rendition.next().catch(error => console.warn('EPUB próxima:', error));
 
     await rendition.display();
     applyReaderPreferences();
@@ -1003,9 +970,13 @@ function applyReaderPreferences() {
     content.style.filter = 'brightness(' + (readerBrightness / 100) + ')';
     content.style.fontSize = (17 * readerFontSize / 100) + 'px';
     content.style.lineHeight = String(readerLineSpacing);
+    content.style.fontFamily = readerFontFamily;
+    content.style.fontWeight = String(readerFontWeight);
     content.querySelectorAll('.reader-page').forEach(page => {
       page.style.fontSize = (17 * readerFontSize / 100) + 'px';
       page.style.lineHeight = String(readerLineSpacing);
+      page.style.fontFamily = readerFontFamily;
+      page.style.fontWeight = String(readerFontWeight);
     });
     content.querySelectorAll('.reader-page p, p').forEach(paragraph => {
       paragraph.style.marginBottom = readerParagraphSpacing + 'em';
@@ -1013,7 +984,10 @@ function applyReaderPreferences() {
   }
   const font = $('#readerFont'), line = $('#readerLine'), paragraph = $('#readerParagraph');
   const brightness = $('#readerBrightness');
+  const fontFamily = $('#readerFontFamily'), fontWeight = $('#readerFontWeight');
   if (font) font.value = readerFontSize;
+  if (fontFamily) fontFamily.value = readerFontFamily;
+  if (fontWeight) fontWeight.value = String(readerFontWeight);
   if (line) line.value = readerLineSpacing;
   if (paragraph) paragraph.value = readerParagraphSpacing;
   if (brightness) brightness.value = readerBrightness;
@@ -1027,9 +1001,12 @@ function applyReaderPreferences() {
         body: {
           'font-size': readerFontSize + '% !important',
           'line-height': readerLineSpacing + ' !important',
+          'font-family': readerFontFamily + ' !important',
+          'font-weight': readerFontWeight + ' !important',
+          'color': readerFontWeight >= 600 ? '#111111 !important' : '',
           'paragraph-margin-bottom': readerParagraphSpacing + 'em !important'
         },
-        p: { 'margin-bottom': readerParagraphSpacing + 'em !important' }
+        p: { 'margin-bottom': readerParagraphSpacing + 'em !important', 'font-weight': readerFontWeight + ' !important' }
       });
       epubRendition.settings.axis = readerAxis;
       epubRendition.resize();
@@ -1081,6 +1058,16 @@ if ($('#readerAxis')) {
     toast(readerAxis === 'horizontal' ? 'Direção horizontal selecionada.' : 'Direção vertical selecionada.');
   });
 }
+if ($('#readerFontFamily')) $('#readerFontFamily').addEventListener('change', event => {
+  readerFontFamily = event.target.value;
+  localStorage.setItem('bibliotheca-reader-font-family', readerFontFamily);
+  applyReaderPreferences();
+});
+if ($('#readerFontWeight')) $('#readerFontWeight').addEventListener('change', event => {
+  readerFontWeight = Number(event.target.value) || 400;
+  localStorage.setItem('bibliotheca-reader-font-weight', readerFontWeight);
+  applyReaderPreferences();
+});
 if ($('#readerFont')) $('#readerFont').addEventListener('input', event => {
   readerFontSize = Number(event.target.value) || 100;
   localStorage.setItem('bibliotheca-reader-font', readerFontSize);
