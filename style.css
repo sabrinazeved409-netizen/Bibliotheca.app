@@ -660,3 +660,5 @@ body.reading-mode #readerContent #epubView iframe {
 .genre-room.room-romance .genre-room-icon{filter:drop-shadow(0 0 5px #e66a7b99)}
 .genre-room .room-name{font-size:10px!important;line-height:1.15!important;text-wrap:balance!important}
 @media(max-width:360px){.genre-rooms{gap:6px!important}.genre-room{min-height:88px!important;padding:8px 3px 7px!important}.genre-room-icon{font-size:21px!important;min-height:23px!important}.genre-room .room-name{font-size:9px!important}}
+
+/* v52 — atualização forçada dos ícones e janelas compactas */
