@@ -297,3 +297,39 @@ body.reading-mode #readerContent .pdf-continuous-page {
 }
 body.reading-mode #readerContent #epubView,
 body.reading-mode #readerContent #epubView iframe { touch-action:pan-y pinch-zoom!important; }
+
+
+/* v37 — correção definitiva de fluxo contínuo, controles e progresso */
+body.reading-mode #reader.reader-screen.active {
+  display:flex!important; flex-direction:column!important; align-items:stretch!important;
+}
+body.reading-mode #readerContent {
+  display:block!important; flex:1 1 0!important; width:100%!important;
+  min-height:0!important; height:0!important; max-height:none!important;
+  overflow-y:auto!important; overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important; touch-action:pan-y pinch-zoom!important;
+}
+body.reading-mode #readerContent > .reader-page,
+body.reading-mode #readerContent > .pdf-continuous-page {
+  flex:none!important; touch-action:pan-y pinch-zoom!important;
+}
+body.reading-mode #reader:not(.reader-controls-visible) .reader-top {
+  display:none!important;
+}
+body.reading-mode #reader.reader-controls-visible .reader-top {
+  display:flex!important; visibility:visible!important; opacity:1!important; pointer-events:auto!important;
+}
+body.reading-mode #reader:not(.reader-controls-visible) #readerFooter {
+  display:none!important;
+}
+body.reading-mode #reader.reader-controls-visible #readerFooter {
+  display:block!important; flex:0 0 auto!important;
+}
+body.reading-mode #readerContent #epubView {
+  height:auto!important; min-height:100%!important; max-height:none!important;
+  overflow:visible!important; flex:none!important;
+}
+body.reading-mode #readerContent #epubView iframe {
+  height:auto!important; min-height:100%!important; max-height:none!important;
+  overflow:visible!important; touch-action:pan-y pinch-zoom!important;
+}
