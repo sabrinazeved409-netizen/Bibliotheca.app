@@ -806,3 +806,35 @@ h2,h3{color:#f2e1c4}
  .genre-room .room-desc{font-size:9px!important}
  .topbar{padding:25px 16px 18px!important}
 }
+
+
+/* v56 — janelas de gêneros mais compactas */
+.genre-rooms{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin:10px 0 18px!important;
+}
+.genre-room{
+  padding:7px 5px 9px!important;
+  gap:5px!important;
+  border-radius:10px!important;
+  box-shadow:inset 0 0 0 2px #100c09,inset 0 0 0 3px #c09a5b33,inset 0 0 16px #0009,0 5px 12px #0006!important;
+}
+.genre-room::before{inset:4px!important;border-radius:6px!important}
+.genre-room::after{inset:2px!important;border-radius:8px!important}
+.genre-cover-art{
+  width:100%!important;
+  aspect-ratio:1.12/1!important;
+  max-height:104px!important;
+  object-fit:cover!important;
+}
+.genre-room .room-name{font-size:12px!important;line-height:1.15!important;margin-top:1px!important}
+.genre-room .room-desc{display:none!important}
+.genre-rooms .genre-room .room-count{font-size:8px!important;padding-top:5px!important;margin-top:1px!important}
+@media(max-width:360px){
+  .genre-rooms{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  .genre-room{padding:6px 3px 7px!important}
+  .genre-cover-art{max-height:88px!important}
+  .genre-room .room-name{font-size:10px!important}
+  .genre-rooms .genre-room .room-count{font-size:7px!important}
+}
