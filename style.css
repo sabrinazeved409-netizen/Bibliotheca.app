@@ -891,3 +891,57 @@ h2,h3{color:#f2e1c4}
 .room-aventura{--book-cover:#263321;--book-edge:#c3b27b;--book-glow:#50663b}
 .room-poesia{--book-cover:#30243a;--book-edge:#c8a8d6;--book-glow:#62466f}
 .room-juvenil{--book-cover:#263b2a;--book-edge:#c5d19a;--book-glow:#526e43}
+
+
+/* v59 — cenário imersivo da sala Romance */
+.room-romance.selected-genre-panel{
+  --world-light:#70283d;--world-edge:#d0a06c;
+  background:
+    radial-gradient(ellipse at 50% 0%,#743044 0%,transparent 57%),
+    linear-gradient(180deg,#261219 0%,#171011 64%,#100e0d 100%)!important;
+}
+.room-romance .room-atmosphere{
+  background:
+    radial-gradient(ellipse at 16% 65%,#a33b4b55,transparent 27%),
+    radial-gradient(ellipse at 84% 64%,#a33b4b44,transparent 27%),
+    linear-gradient(180deg,#27101800 0%,#1b1013aa 72%,#121011 100%)!important;
+}
+.room-romance .room-atmosphere::before{
+  inset:0!important;opacity:1!important;filter:none!important;
+  background:
+    radial-gradient(ellipse at 12% 76%,#c14b5b66 0 2%,transparent 3%),
+    radial-gradient(ellipse at 17% 83%,#81283d 0 4%,transparent 4.5%),
+    radial-gradient(ellipse at 23% 72%,#a5374c 0 3%,transparent 3.5%),
+    radial-gradient(ellipse at 88% 76%,#c14b5b55 0 2%,transparent 3%),
+    radial-gradient(ellipse at 82% 84%,#81283d 0 4%,transparent 4.5%),
+    radial-gradient(ellipse at 76% 72%,#a5374c 0 3%,transparent 3.5%),
+    linear-gradient(90deg,transparent 7%,#b78a5b55 7.5%,transparent 8.5%,transparent 91%,#b78a5b55 91.5%,transparent 92.5%),
+    radial-gradient(ellipse at 50% 24%,#f0c98722,transparent 36%),
+    linear-gradient(180deg,transparent 60%,#0e0b0c 100%)!important;
+}
+.room-romance .room-atmosphere::after{
+  height:62px!important;
+  background:linear-gradient(0deg,#121011 5%,#12101166 45%,transparent)!important;
+}
+.room-romance .world-sky-symbol{
+  position:relative;width:104px;height:112px;margin:0 auto 10px;
+  border-radius:52px 52px 8px 8px;
+  border:1px solid #d0a06c88;
+  background:
+    radial-gradient(ellipse at 50% 35%,#d7a45c22,transparent 62%),
+    linear-gradient(180deg,#100b0dcc,#251018aa);
+  box-shadow:inset 0 0 0 4px #1b101355,inset 0 0 0 5px #d0a06c33,0 0 28px #a23c4b22;
+}
+.room-romance .world-sky-symbol::before{
+  content:"";position:absolute;inset:7px 7px 0;border:1px solid #d0a06c55;
+  border-radius:48px 48px 4px 4px;pointer-events:none;
+}
+.room-romance .world-sky-symbol svg{width:58px;height:58px;filter:drop-shadow(0 0 10px #c44c5c77)}
+.room-romance .world-kicker{letter-spacing:2px;color:#dfb879!important}
+.room-romance .world-scene-copy strong{font-size:22px;color:#f4dfc3!important}
+.room-romance .world-scene-copy small{color:#d7bba9!important}
+.room-romance.selected-genre-panel::after{
+  background:
+    radial-gradient(ellipse at 10% 100%,#7d263b66,transparent 60%),
+    radial-gradient(ellipse at 90% 100%,#7d263b55,transparent 60%)!important;
+}
