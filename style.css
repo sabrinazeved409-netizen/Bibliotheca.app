@@ -147,3 +147,36 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}.t
 .quote-panel blockquote{font-family:Georgia,serif;font-size:clamp(17px,4.6vw,22px);line-height:1.42;margin:12px 0;color:var(--text);overflow-wrap:anywhere}
 .quote-panel .muted{font-size:11px;line-height:1.45;margin:0}
 .quote-panel .book-illustration{font-family:Georgia,serif;font-size:76px;color:var(--accent);opacity:.72;align-self:flex-start;padding:0;line-height:1}
+
+/* Leitor imersivo v18 */
+body.reading-mode{overflow:hidden}
+body.reading-mode .topbar,body.reading-mode .bottom-nav{display:none!important}
+body.reading-mode main{margin:0;padding:0;max-width:none}
+body.reading-mode .screen.reader-screen{display:none}
+body.reading-mode .screen.reader-screen.active{display:flex;position:fixed;inset:0;z-index:100;max-width:none;width:100%;height:100dvh;min-height:0;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);margin:0;flex-direction:column;background:var(--bg);box-sizing:border-box}
+.reader-screen .reader-top{flex-shrink:0;padding:8px 12px;gap:9px;min-height:56px;box-sizing:border-box}
+.reader-screen .reader-content{flex:1;min-height:0;max-height:none;height:auto;width:100%;box-sizing:border-box;border:0;border-radius:0;padding:22px clamp(18px,5vw,42px) 50px;overflow:auto;overscroll-behavior:contain;background:var(--panel);font-size:17px;line-height:1.8}
+.reader-content .reader-page{white-space:pre-wrap;overflow-wrap:anywhere;max-width:780px;margin:0 auto}
+.reader-content .reader-page-nav{display:flex;gap:10px;margin:24px auto;max-width:780px}
+.reader-content .reader-page-nav button{flex:1}
+.reader-screen .reader-chrome{transition:opacity .18s ease,transform .18s ease}
+.reader-screen:not(.reader-controls-visible) .reader-chrome:not(.reader-settings){opacity:0;pointer-events:none;transform:translateY(-8px)}
+.reader-screen:not(.reader-controls-visible) .reader-content{padding-top:12px}
+.reader-settings{display:none;position:absolute;z-index:4;top:calc(env(safe-area-inset-top) + 64px);right:10px;width:min(340px,calc(100vw - 20px));max-height:calc(100dvh - 90px);overflow:auto;padding:16px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:18px;box-shadow:0 16px 50px #0004;box-sizing:border-box}
+.reader-settings.open{display:block}
+.reader-settings-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.reader-settings-head strong{font-family:Georgia,serif;font-size:19px}
+.reader-settings-head .icon-btn{width:34px;height:34px}
+.reader-settings label{display:block;font-size:12px;font-weight:700;margin:13px 0;color:var(--text)}
+.reader-settings label span{float:right;color:var(--accent);font-weight:800}
+.reader-settings select{display:block;width:100%;margin-top:7px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
+.reader-settings input[type=range]{display:block;width:100%;margin-top:9px;accent-color:var(--accent)}
+.reader-tools{display:grid;grid-template-columns:1fr;gap:8px;margin-top:16px}
+.reader-tools button{border:1px solid var(--line);background:var(--soft);color:var(--text);border-radius:11px;padding:11px;text-align:left}
+.reader-settings-note{font-size:11px;line-height:1.5;color:var(--muted);margin:12px 0 0}
+#epubView{height:100%!important;min-height:0!important;background:var(--panel)!important}
+#epubView iframe{border:0}
+body.reading-mode #readerContent #epubView{height:100%!important}
+body.reading-mode #pdfCanvas{display:block;max-width:100%;height:auto;margin:0 auto}
+body.reading-mode .reader-content p{margin-bottom:1.2em}
+@media(max-width:480px){.reader-screen .reader-content{padding-left:19px;padding-right:19px}.reader-settings{right:8px}}
