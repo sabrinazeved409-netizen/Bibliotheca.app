@@ -1478,3 +1478,12 @@ body.romance-room-open #library.active{
   background-position:center top,center 20%!important;
  }
 }
+
+
+/* v71 — imagem original preenchendo todo o fundo da estante Romance */
+body.romance-room-open #library.active{
+ background-size:100% 100%,cover!important;
+ background-position:center center,center center!important;
+ background-repeat:no-repeat,no-repeat!important;
+ background-color:#10070b!important;
+}
