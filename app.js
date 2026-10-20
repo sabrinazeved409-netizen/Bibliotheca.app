@@ -386,13 +386,14 @@ async function loadScriptOnce(src, readyCheck) {
   await new Promise((resolve, reject) => {
     const existing = [...document.scripts].find(script => script.src === src);
     if (existing) {
+      if (existing.dataset.loaded === 'true' || readyCheck()) { resolve(); return; }
       existing.addEventListener('load', resolve, { once: true });
-      existing.addEventListener('error', reject, { once: true });
+      existing.addEventListener('error', () => reject(new Error('Não foi possível carregar o leitor do arquivo.')), { once: true });
       return;
     }
     const script = document.createElement('script');
     script.src = src;
-    script.onload = resolve;
+    script.onload = () => { script.dataset.loaded = 'true'; resolve(); };
     script.onerror = () => reject(new Error('Não foi possível carregar o leitor do arquivo.'));
     document.head.appendChild(script);
   });
@@ -411,9 +412,9 @@ async function extractBookExcerpt(book) {
   const file = await getFile(book.id);
   if (!file) return '';
   try {
-    if (book.ext === 'txt') return chooseReadableExcerpt(await file.text());
+    if (String(book.ext).toLowerCase() === 'txt') return chooseReadableExcerpt(await file.text());
 
-    if (book.ext === 'pdf') {
+    if (String(book.ext).toLowerCase() === 'pdf') {
       await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', () => !!window.pdfjsLib);
       const pdf = await window.pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
       const pages = [];
@@ -425,15 +426,15 @@ async function extractBookExcerpt(book) {
       return chooseReadableExcerpt(pages.join(' '));
     }
 
-    if (book.ext === 'epub') {
-      await loadScriptOnce('https://unpkg.com/epubjs@0.3.93/dist/epub.min.js', () => typeof window.ePub === 'function');
+    if (String(book.ext).toLowerCase() === 'epub') {
+      await loadScriptOnce('https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js', () => typeof window.ePub === 'function');
       const epub = window.ePub(await file.arrayBuffer());
       try {
         const spine = await epub.loaded.spine;
         for (const item of (spine.items || []).slice(0, 4)) {
           try {
             const doc = await item.load(epub.load.bind(epub));
-            const excerpt = chooseReadableExcerpt(doc?.body?.innerText || doc?.body?.textContent || '');
+            const excerpt = chooseReadableExcerpt(doc?.body?.innerText || doc?.body?.textContent || doc?.documentElement?.textContent || '');
             item.unload?.();
             if (excerpt) return excerpt;
           } catch (_) {}
