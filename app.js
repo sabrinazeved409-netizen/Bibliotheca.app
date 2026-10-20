@@ -1012,9 +1012,21 @@ async function loadEpub(file, book) {
     }
     if (epubFrame) {
       try {
-        epubFrame.contentDocument?.addEventListener('click', () => {
-          if (!$('#readerSettings')?.classList.contains('open')) toggleReaderControls();
-        });
+        const frameDoc = epubFrame.contentDocument;
+        if (frameDoc && frameDoc.documentElement.dataset.readerControlsBound !== 'yes') {
+          frameDoc.documentElement.dataset.readerControlsBound = 'yes';
+          const restoreControls = event => {
+            if (event.target?.closest?.('a, button, input, select')) return;
+            if ($('#readerSettings')?.classList.contains('open')) return;
+            // A primeira batida no texto sempre traz os comandos de volta.
+            if (!$('#reader')?.classList.contains('reader-controls-visible')) {
+              toggleReaderControls(true);
+            } else {
+              toggleReaderControls(false);
+            }
+          };
+          frameDoc.addEventListener('click', restoreControls, true);
+        }
       } catch (_) {}
     }
     const loading = $('#epubLoading');
@@ -1403,6 +1415,18 @@ if ($('#readerContent')) {
   const bindEpubSwipe = () => {
     const frame = $('#epubView iframe');
     if (!frame) return;
+    try {
+      const frameDoc = frame.contentDocument;
+      if (frameDoc?.documentElement && frameDoc.documentElement.dataset.readerControlsBound !== 'yes') {
+        frameDoc.documentElement.dataset.readerControlsBound = 'yes';
+        frameDoc.addEventListener('click', event => {
+          if (event.target?.closest?.('a, button, input, select')) return;
+          if ($('#readerSettings')?.classList.contains('open')) return;
+          if (!$('#reader')?.classList.contains('reader-controls-visible')) toggleReaderControls(true);
+          else toggleReaderControls(false);
+        }, true);
+      }
+    } catch (_) {}
     // O iframe do epub.js pode carregar depois da primeira tentativa; ligar o gesto no evento load.
     if (frame.dataset.swipeLoadBound !== 'yes') {
       frame.dataset.swipeLoadBound = 'yes';
