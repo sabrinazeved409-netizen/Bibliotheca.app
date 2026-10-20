@@ -139,3 +139,11 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}.t
 .continue-world.room-juvenil{background:radial-gradient(circle at 85% 10%,#dfb86b99,transparent 48%),linear-gradient(120deg,#8b623e,#3b3828)}
 .continue-world.room-outros{background:radial-gradient(circle at 85% 10%,#b6a99b99,transparent 48%),linear-gradient(120deg,#665b52,#302b27)}
 @media(min-width:600px){#continueList.compact-grid{max-width:620px}}
+
+
+/* Frase literária na página inicial */
+.quote-panel{min-height:166px;gap:12px}
+.quote-copy{min-width:0;flex:1}
+.quote-panel blockquote{font-family:Georgia,serif;font-size:clamp(17px,4.6vw,22px);line-height:1.42;margin:12px 0;color:var(--text);overflow-wrap:anywhere}
+.quote-panel .muted{font-size:11px;line-height:1.45;margin:0}
+.quote-panel .book-illustration{font-family:Georgia,serif;font-size:76px;color:var(--accent);opacity:.72;align-self:flex-start;padding:0;line-height:1}
