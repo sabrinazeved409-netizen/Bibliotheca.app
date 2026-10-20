@@ -285,7 +285,7 @@ function renderGenreRooms() {
   const enabledGenres = new Set([
     ...MAIN_GENRES,
     ...enabledExtraGenres,
-    ...books.map(book => book.genre || 'Não classificado').filter(name => !MAIN_GENRES.includes(name))
+    ...books.map(book => book.genre || 'Não classificado').filter(name => name !== 'Não classificado' && !MAIN_GENRES.includes(name))
   ]);
   const rooms = GENRE_CONFIG.filter(genre => enabledGenres.has(genre.name));
   const addable = GENRE_CONFIG.filter(genre => !enabledGenres.has(genre.name));
