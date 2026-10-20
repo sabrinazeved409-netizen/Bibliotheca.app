@@ -381,6 +381,96 @@ function renderContinueCard(book) {
   `;
 }
 
+async function loadScriptOnce(src, readyCheck) {
+  if (readyCheck()) return;
+  await new Promise((resolve, reject) => {
+    const existing = [...document.scripts].find(script => script.src === src);
+    if (existing) {
+      existing.addEventListener('load', resolve, { once: true });
+      existing.addEventListener('error', reject, { once: true });
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error('Não foi possível carregar o leitor do arquivo.'));
+    document.head.appendChild(script);
+  });
+}
+
+function chooseReadableExcerpt(rawText) {
+  const text = String(rawText || '').replace(/\\s+/g, ' ').trim();
+  if (text.length < 80) return '';
+  const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
+  const usable = sentences.map(s => s.trim()).filter(s => s.length >= 45 && s.length <= 320);
+  if (usable.length) return usable[Math.floor(Math.random() * Math.min(usable.length, 12))];
+  return text.slice(0, 220).trim() + (text.length > 220 ? '…' : '');
+}
+
+async function extractBookExcerpt(book) {
+  const file = await getFile(book.id);
+  if (!file) return '';
+  try {
+    if (book.ext === 'txt') return chooseReadableExcerpt(await file.text());
+
+    if (book.ext === 'pdf') {
+      await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', () => !!window.pdfjsLib);
+      const pdf = await window.pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+      const pages = [];
+      for (let pageNo = 1; pageNo <= Math.min(pdf.numPages, 3); pageNo++) {
+        const page = await pdf.getPage(pageNo);
+        const content = await page.getTextContent();
+        pages.push(content.items.map(item => item.str || '').join(' '));
+      }
+      return chooseReadableExcerpt(pages.join(' '));
+    }
+
+    if (book.ext === 'epub') {
+      await loadScriptOnce('https://unpkg.com/epubjs@0.3.93/dist/epub.min.js', () => typeof window.ePub === 'function');
+      const epub = window.ePub(await file.arrayBuffer());
+      try {
+        const spine = await epub.loaded.spine;
+        for (const item of (spine.items || []).slice(0, 4)) {
+          try {
+            const doc = await item.load(epub.load.bind(epub));
+            const excerpt = chooseReadableExcerpt(doc?.body?.innerText || doc?.body?.textContent || '');
+            item.unload?.();
+            if (excerpt) return excerpt;
+          } catch (_) {}
+        }
+      } finally {
+        epub.destroy?.();
+      }
+    }
+  } catch (error) {
+    console.warn('Não foi possível extrair um trecho de ' + book.title, error);
+  }
+  return '';
+}
+
+async function renderReadingQuote() {
+  const quote = $('#readingQuote');
+  const source = $('#quoteSource');
+  if (!quote || !source) return;
+  const available = books.filter(book => ['txt', 'pdf', 'epub'].includes(book.ext));
+  if (!available.length) {
+    quote.textContent = 'Cada página é uma nova oportunidade de encontrar algo que fique com você.';
+    source.textContent = 'Adicione um livro em TXT, PDF ou EPUB para ver trechos reais aqui';
+    return;
+  }
+  const shuffled = [...available].sort(() => Math.random() - 0.5);
+  for (const book of shuffled.slice(0, Math.min(5, shuffled.length))) {
+    const excerpt = await extractBookExcerpt(book);
+    if (excerpt) {
+      quote.textContent = '“' + excerpt + '”';
+      source.textContent = '— ' + (book.title || 'Livro da sua biblioteca');
+      return;
+    }
+  }
+  quote.textContent = 'Há uma frase esperando por você entre as páginas dos seus livros.';
+  source.textContent = 'Alguns arquivos não permitem extrair texto automaticamente';
+}
+
 function renderBooks() {
   const search = $('#searchInput');
   const query = search ? search.value.toLowerCase() : '';
@@ -1061,6 +1151,7 @@ async function init() {
     renderBooks();
     renderNotes();
     renderStats();
+    renderReadingQuote();
   } catch (error) {
     toast('Não foi possível iniciar o armazenamento local.');
     console.error(error);
