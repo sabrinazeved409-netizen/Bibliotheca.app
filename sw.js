@@ -1,5 +1,9 @@
-const CACHE = 'bibliotheca-shell-v18';
+const CACHE = 'bibliotheca-shell-v19';
 const FILES = ['./', './index.html', './style.css', './app.js', './manifest.webmanifest'];
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
+});
 
 self.addEventListener('install', event => {
   event.waitUntil(
