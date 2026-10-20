@@ -1217,6 +1217,7 @@ if ($('#readerContent')) {
   });
   let touchStartX = 0, touchStartY = 0;
   const navigateReaderSwipe = (dx, dy, startX = touchStartX) => {
+    if (readerScreenLocked) { showLockIndicator(); return; }
     if (!currentBook || $('#readerSettings')?.classList.contains('open')) return;
     // Deslize para cima/baixo na faixa direita para ajustar o brilho sem sair do livro.
     if (startX >= window.innerWidth * 0.76 && Math.abs(dy) >= 24 && Math.abs(dy) > Math.abs(dx)) {
