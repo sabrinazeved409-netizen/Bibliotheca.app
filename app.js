@@ -543,6 +543,7 @@ async function renderReadingQuote() {
   source.textContent = 'Confira se o arquivo EPUB, PDF ou TXT está disponível na biblioteca';
 }
 function renderBooks() {
+  document.body.classList.toggle('romance-room-open', selectedGenre === 'Romance');
   const search = $('#searchInput');
   const query = search ? search.value.toLowerCase() : '';
   const rooms = $('#genreRooms');
@@ -1808,7 +1809,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=61', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=62', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
