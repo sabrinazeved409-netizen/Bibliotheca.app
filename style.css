@@ -647,3 +647,7 @@ body.reading-mode #readerContent #epubView iframe {
 
 /* v49 — ocultar contagem nas janelas; manter contagem dentro de cada estante */
 .genre-rooms .genre-room .room-count{display:none!important}
+
+
+/* v50 — contagem aparece apenas dentro da estante aberta */
+.genre-rooms .genre-room .room-count{display:none!important;visibility:hidden!important;height:0!important;margin:0!important;padding:0!important;border:0!important}
