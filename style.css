@@ -215,3 +215,13 @@ body.reading-mode #reader.reader-controls-visible .reader-quick-brightness{opaci
 .reader-quick-brightness strong{min-width:38px;text-align:right;font-size:11px;color:var(--accent)}
 body.reading-mode #readerContent{touch-action:pan-y pinch-zoom}
 body.reading-mode #epubView iframe{touch-action:pan-y pinch-zoom}
+
+/* v27: barra rápida de brilho aparece somente junto aos controles ao tocar na leitura */
+body.reading-mode #readerQuickBrightness{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transform:translateY(8px)!important}
+body.reading-mode #reader.reader-controls-visible #readerQuickBrightness{opacity:1!important;visibility:visible!important;pointer-events:auto!important;transform:none!important}
+body.reading-mode #readerContent,body.reading-mode #readerContent .reader-page{color:var(--text)!important}
+body.reading-mode #readerContent .reader-page{font-weight:500}
+body.reading-mode #readerContent #epubView{color:var(--text)!important;background:var(--panel)!important}
+.reader-quick-brightness{background:var(--panel)!important;color:var(--text)!important;border-color:var(--accent)!important}
+.reader-quick-brightness strong{color:var(--text)!important;font-weight:800}
+.reader-quick-brightness input{min-height:24px}
