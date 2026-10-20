@@ -719,6 +719,7 @@ async function openBook(bookId) {
 
   go('reader');
   document.body.classList.add('reading-mode');
+  toggleReaderControls(true);
   readerScreenLocked = false;
   clearTimeout(lockIconTimer);
   $('#reader')?.classList.remove('screen-locked', 'reader-controls-visible');
