@@ -637,3 +637,9 @@ body.reading-mode #readerContent #epubView iframe {
 /* v47 — centralizar títulos e contagem nas janelas de gênero */
 .genre-room .room-name{width:100%;text-align:center!important;margin:0 auto!important;text-wrap:balance}
 .genre-room .room-count{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;width:100%!important;margin:0 auto!important;padding-top:5px!important;line-height:1.25!important}
+
+
+/* v48 — posicionar o nome mais ao centro vertical da janela */
+.genre-room{justify-content:center!important}
+.genre-room .room-name{flex:0 0 auto!important}
+.genre-room .room-count{flex:0 0 auto!important}
