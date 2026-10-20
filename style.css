@@ -270,3 +270,30 @@ body.reading-mode #reader:not(.reader-controls-visible) #readerMenuBtn {
 .reader-nav-row button:active{background:var(--soft)}
 body.reading-mode #reader.screen-locked .reader-footer{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
 @media(max-width:360px){.reader-nav-row{grid-template-columns:minmax(68px,1fr) minmax(72px,1fr) minmax(68px,1fr);gap:4px}.reader-nav-row button,.reader-nav-row select{font-size:10px;padding:6px 3px}}
+
+
+/* v36 — controles alternam ao tocar e rolagem contínua confiável no celular */
+body.reading-mode #reader.reader-screen {
+  display:flex!important; flex-direction:column!important; overflow:hidden!important;
+}
+body.reading-mode #reader .reader-top {
+  flex:0 0 auto!important; transition:opacity .18s ease, transform .18s ease!important;
+}
+body.reading-mode #reader:not(.reader-controls-visible) .reader-top,
+body.reading-mode #reader:not(.reader-controls-visible) #readerMenuBtn {
+  opacity:0!important; visibility:hidden!important; pointer-events:none!important; transform:translateY(-8px)!important;
+}
+body.reading-mode #reader:not(.reader-controls-visible) .reader-footer { display:none!important; }
+body.reading-mode #reader.reader-controls-visible .reader-footer { display:block!important; }
+body.reading-mode #readerContent {
+  flex:1 1 0!important; min-height:0!important; height:0!important; max-height:none!important;
+  overflow-x:hidden!important; overflow-y:auto!important; -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-y:contain!important; touch-action:pan-y pinch-zoom!important;
+}
+body.reading-mode #readerContent .reader-page { min-height:0; touch-action:pan-y pinch-zoom!important; }
+body.reading-mode #readerContent .pdf-continuous-page {
+  display:block!important; width:100%!important; max-width:100%!important; height:auto!important;
+  touch-action:pan-y pinch-zoom!important;
+}
+body.reading-mode #readerContent #epubView,
+body.reading-mode #readerContent #epubView iframe { touch-action:pan-y pinch-zoom!important; }
