@@ -1194,3 +1194,44 @@ body.romance-room-open #shelfList .book-progress,body.romance-room-open #shelfLi
  body.romance-room-open #shelfList .book-cover{height:clamp(78px,25vw,110px)!important}
  body.romance-room-open #shelfList .book-meta strong,body.romance-room-open #shelfList .book-title{font-size:9px!important}
 }
+
+
+/* v64 — letreiro Jardim das Promessas em cartela oval vitoriana */
+body.romance-room-open #library .page-heading{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ position:relative!important;min-height:104px!important;margin:0 -10px 8px!important;
+ padding:16px 18px!important;background:linear-gradient(180deg,rgba(15,6,8,.88),rgba(15,6,8,.22))!important;
+}
+body.romance-room-open #library .page-heading>div{
+ position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ flex:1 1 auto!important;min-width:0!important;min-height:76px!important;padding:14px 20px!important;
+ border:1px solid #d7b174!important;border-radius:50% / 48%!important;
+ background:linear-gradient(145deg,rgba(42,15,20,.96),rgba(17,7,10,.96) 60%,rgba(53,19,25,.95))!important;
+ box-shadow:0 0 0 3px rgba(13,6,8,.92),0 0 0 5px rgba(192,145,83,.68),inset 0 0 0 3px rgba(208,164,101,.16),inset 0 0 22px rgba(220,166,103,.10),0 8px 24px #0009!important;
+}
+body.romance-room-open #library .page-heading>div:before,
+body.romance-room-open #library .page-heading>div:after{
+ content:"❧";position:absolute;top:50%;transform:translateY(-50%);color:#e0b873;
+ font:20px/1 Georgia,serif;text-shadow:0 0 10px #d49d5b66;
+}
+body.romance-room-open #library .page-heading>div:before{left:9px}
+body.romance-room-open #library .page-heading>div:after{right:9px;transform:translateY(-50%) scaleX(-1)}
+body.romance-room-open #library .page-heading .eyebrow{display:none!important}
+body.romance-room-open #library .page-heading h2{
+ font:clamp(20px,5.8vw,30px)/1.08 Georgia,"Times New Roman",serif!important;
+ text-align:center!important;color:#f3d7ad!important;letter-spacing:.035em!important;
+ margin:0!important;text-shadow:0 2px 12px #000,0 0 18px #d7a35e33!important;
+}
+body.romance-room-open #library .page-heading h2{font-size:0!important}
+body.romance-room-open #library .page-heading h2:after{
+ content:"Jardim das Promessas";display:block;
+ font:clamp(20px,5.8vw,30px)/1.08 Georgia,"Times New Roman",serif!important;
+ letter-spacing:.025em;color:#f3d7ad;text-align:center;white-space:normal;
+}
+body.romance-room-open #library .import-btn{position:absolute!important;right:12px!important;bottom:-42px!important;z-index:5!important;opacity:.94!important;padding:8px 10px!important;font-size:10px!important}
+@media(max-width:390px){
+ body.romance-room-open #library .page-heading{min-height:94px!important;padding:12px 15px!important}
+ body.romance-room-open #library .page-heading>div{min-height:66px!important;padding:12px 19px!important}
+ body.romance-room-open #library .page-heading>div:before,body.romance-room-open #library .page-heading>div:after{font-size:16px!important}
+ body.romance-room-open #library .page-heading h2:after{font-size:clamp(19px,5.6vw,24px)!important}
+}
