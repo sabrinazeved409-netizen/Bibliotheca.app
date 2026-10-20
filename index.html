@@ -7,7 +7,7 @@
   <meta name="description" content="Sua biblioteca digital pessoal">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" href="ChatGPT%20Image%2019%20de%20out.%20de%202026,%2016_03_23.png">
-  <link rel="stylesheet" href="style.css?v=31">
+  <link rel="stylesheet" href="style.css?v=34">
   <title>Bibliotheca — sua biblioteca</title>
 </head>
 <body>
@@ -121,6 +121,15 @@
         <button id="readerMenuBtn" class="icon-btn" aria-label="Opções de leitura">⋮</button>
       </div>
       <div id="readerContent" class="reader-content"><div class="empty-state"><div class="empty-icon">📘</div><h3>Escolha um livro</h3><p>Abra um livro da sua biblioteca para começar.</p></div></div>
+      <footer id="readerFooter" class="reader-footer" aria-label="Navegação da leitura">
+        <div class="reader-progress-row"><span id="readerProgressText">0% lido</span><span id="readerRemainingText">Ainda no começo</span></div>
+        <div class="reader-progress-track" role="progressbar" aria-label="Progresso do livro" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="readerProgressTrack"><span id="readerProgressFill"></span></div>
+        <div class="reader-nav-row">
+          <button id="readerPrevBtn" type="button" aria-label="Voltar">‹ Anterior</button>
+          <select id="readerChapterSelect" aria-label="Ir para capítulo"><option value="">Ir para capítulo</option></select>
+          <button id="readerNextBtn" type="button" aria-label="Avançar">Próximo ›</button>
+        </div>
+      </footer>
       <button id="readerLockIndicator" class="reader-lock-indicator" type="button" aria-label="Destravar tela">🔒</button>
       <div id="readerQuickBrightness" class="reader-quick-brightness reader-chrome" aria-label="Atalho de brilho">
         <span aria-hidden="true">☀</span><input id="readerBrightnessQuick" type="range" min="35" max="100" step="5" value="100" aria-label="Brilho da leitura"><strong id="quickBrightnessValue">100%</strong>
@@ -162,6 +171,6 @@
     </form>
   </dialog>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="app.js?v=33"></script>
+    <script src="app.js?v=34"></script>
 </body>
 </html>
