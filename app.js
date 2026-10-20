@@ -448,29 +448,60 @@ async function extractBookExcerpt(book) {
   return '';
 }
 
-async function renderReadingQuote() {
+const ONLINE_READING_EXCERPTS = [
+  {
+    text: 'Uma noite destas, vindo da cidade para o Engenho Novo, encontrei no trem da Central um rapaz aqui do bairro, que eu conheço de vista e de chapéu.',
+    title: 'Dom Casmurro',
+    author: 'Machado de Assis',
+    url: 'https://pt.wikisource.org/wiki/Dom_Casmurro/I'
+  },
+  {
+    text: 'Algum tempo hesitei se devia abrir estas memórias pelo princípio ou pelo fim, isto é, se poria em primeiro lugar o meu nascimento ou a minha morte.',
+    title: 'Memórias Póstumas de Brás Cubas',
+    author: 'Machado de Assis',
+    url: 'https://pt.wikisource.org/wiki/Mem%C3%B3rias_P%C3%B3stumas_de_Br%C3%A1s_Cubas/I'
+  },
+  {
+    text: 'Eu não sou propriamente um autor defunto, mas um defunto autor, para quem a campa foi outro berço.',
+    title: 'Memórias Póstumas de Brás Cubas',
+    author: 'Machado de Assis',
+    url: 'https://pt.wikisource.org/wiki/Mem%C3%B3rias_P%C3%B3stumas_de_Br%C3%A1s_Cubas/I'
+  },
+  {
+    text: 'Morri de uma pneumonia; mas, se lhe disser que foi menos a pneumonia do que uma ideia grandiosa e útil a causa da minha morte, é possível que o leitor me não creia.',
+    title: 'Memórias Póstumas de Brás Cubas',
+    author: 'Machado de Assis',
+    url: 'https://pt.wikisource.org/wiki/Mem%C3%B3rias_P%C3%B3stumas_de_Br%C3%A1s_Cubas/I'
+  },
+  {
+    text: 'Os vizinhos, que não gostam dos meus hábitos reclusos e calados, deram curso à alcunha, que afinal pegou.',
+    title: 'Dom Casmurro',
+    author: 'Machado de Assis',
+    url: 'https://pt.wikisource.org/wiki/Dom_Casmurro/I'
+  }
+];
+
+let lastOnlineExcerptIndex = -1;
+
+function renderReadingQuote() {
   const quote = $('#readingQuote');
   const source = $('#quoteSource');
   if (!quote || !source) return;
-  const available = books.filter(book => ['txt', 'pdf', 'epub'].includes(book.ext));
-  if (!available.length) {
-    quote.textContent = 'Cada página é uma nova oportunidade de encontrar algo que fique com você.';
-    source.textContent = 'Adicione um livro em TXT, PDF ou EPUB para ver trechos reais aqui';
-    return;
-  }
-  const shuffled = [...available].sort(() => Math.random() - 0.5);
-  for (const book of shuffled.slice(0, Math.min(5, shuffled.length))) {
-    const excerpt = await extractBookExcerpt(book);
-    if (excerpt) {
-      quote.textContent = '“' + excerpt + '”';
-      source.textContent = '— ' + (book.title || 'Livro da sua biblioteca');
-      return;
-    }
-  }
-  quote.textContent = 'Há uma frase esperando por você entre as páginas dos seus livros.';
-  source.textContent = 'Alguns arquivos não permitem extrair texto automaticamente';
-}
 
+  let index = Math.floor(Math.random() * ONLINE_READING_EXCERPTS.length);
+  if (ONLINE_READING_EXCERPTS.length > 1 && index === lastOnlineExcerptIndex) {
+    index = (index + 1) % ONLINE_READING_EXCERPTS.length;
+  }
+  lastOnlineExcerptIndex = index;
+  const excerpt = ONLINE_READING_EXCERPTS[index];
+
+  quote.textContent = '“' + excerpt.text + '”';
+  source.textContent = '— ' + excerpt.title + ', ' + excerpt.author + ' · Ler na fonte ↗';
+  source.href = excerpt.url;
+  source.target = '_blank';
+  source.rel = 'noopener noreferrer';
+  source.setAttribute('aria-label', 'Ler ' + excerpt.title + ' de ' + excerpt.author + ' no Wikisource');
+}
 function renderBooks() {
   const search = $('#searchInput');
   const query = search ? search.value.toLowerCase() : '';
