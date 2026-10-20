@@ -228,3 +228,22 @@ body.reading-mode #readerContent #epubView{color:var(--text)!important;backgroun
 
 .reader-quick-brightness[hidden]{display:none!important}
 body.reading-mode #readerContent .pdf-continuous-page{max-width:100%;height:auto!important}
+
+/* v31 reader controls */
+.reader-setting-toggle{display:flex!important;align-items:center;gap:10px;margin:14px 0!important;font-size:12px!important;line-height:1.4}
+.reader-setting-toggle input{accent-color:var(--accent);width:18px;height:18px;flex:none}
+.reader-lock-toggle{width:100%;padding:12px;border:1px solid var(--accent);border-radius:11px;background:var(--soft);color:var(--text);text-align:left;font-weight:700}
+.reader-shortcuts{margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);overflow:hidden}
+.reader-shortcuts summary{padding:12px;font-size:12px;font-weight:700;cursor:pointer}
+.reader-shortcuts-copy{padding:0 12px 10px;font-size:11px;line-height:1.5;color:var(--muted)}
+.reader-shortcuts-copy p{margin:8px 0}
+.reader-shortcuts-copy strong{color:var(--text)}
+.reader-lock-indicator{display:none;position:fixed;z-index:140;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:34px;height:34px;border:1px solid #ffffff55;border-radius:50%;background:#29231fe8;color:#fff;font-size:14px;box-shadow:0 3px 14px #0004;opacity:0;pointer-events:none;transition:opacity .15s}
+.reader-lock-indicator.visible{display:grid;place-items:center;opacity:1;pointer-events:auto}
+.reader-quick-brightness[hidden]{display:none!important}
+body.reading-mode #reader.screen-locked .reader-top,
+body.reading-mode #reader.screen-locked .reader-settings,
+body.reading-mode #reader.screen-locked #readerQuickBrightness{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+body.reading-mode #reader.screen-locked .reader-content{padding-top:12px!important}
+body.reading-mode #reader.screen-locked #readerLockIndicator.visible{visibility:visible!important}
+body.reading-mode #readerContent .pdf-continuous-page{max-width:100%;height:auto!important}
