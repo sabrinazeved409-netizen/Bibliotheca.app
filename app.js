@@ -1014,6 +1014,7 @@ function applyReaderPreferences() {
       epubRendition.resize();
     } catch (error) { console.warn('Não foi possível aplicar todos os ajustes EPUB:', error); }
   }
+  updateFontPreview();
 }
 function setReaderFlow(value) {
   readerFlow = value === 'scrolled' ? 'scrolled' : 'paginated';
