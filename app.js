@@ -729,8 +729,14 @@ async function loadEpub(file, book) {
   const buffer = await file.arrayBuffer();
   epubBook = ePub(buffer);
 
-  $('#readerContent').innerHTML =
-    '<div id="epubView" style="height:60vh;overflow:hidden"></div>';
+  const content = $('#readerContent');
+  content.innerHTML = `
+    <div id="epubView" style="height:60vh;min-height:320px;overflow:hidden"></div>
+    <div style="display:flex;gap:8px;margin-top:18px">
+      <button type="button" class="secondary-btn" id="prevEpub">← Anterior</button>
+      <button type="button" class="secondary-btn" id="nextEpub">Próxima →</button>
+    </div>
+  `;
 
   const rendition = epubBook.renderTo('epubView', {
     width: '100%',
@@ -739,19 +745,23 @@ async function loadEpub(file, book) {
     spread: 'none'
   });
 
-  await rendition.display();
-
   rendition.on('relocated', location => {
     if (!location.start) return;
 
     const position = $('#readerPosition');
+    const percentage = Math.round((location.start.percentage || 0) * 100);
 
-    if (position) position.textContent = 'Leitura EPUB';
+    if (position) position.textContent = `EPUB · ${percentage}%`;
 
-    book.progress = Math.round((location.start.percentage || 0) * 100);
+    book.progress = percentage;
     saveData('books', books);
     renderBooks();
   });
+
+  $('#prevEpub').onclick = () => rendition.prev();
+  $('#nextEpub').onclick = () => rendition.next();
+
+  await rendition.display();
 }
 
 /* TEMPO DE LEITURA */
