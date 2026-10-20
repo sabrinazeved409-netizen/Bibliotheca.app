@@ -227,9 +227,25 @@ function coverColor(book) {
   ];
 }
 
+const GENRES = [
+  'Não classificado',
+  'Romance',
+  'Fantasia',
+  'Mistério e suspense',
+  'Ficção científica',
+  'Clássicos',
+  'Drama',
+  'Terror',
+  'Não ficção',
+  'Outros'
+];
+
 function card(book) {
   const progress = book.progress || 0;
-  const inGarden = gardenBookIds.includes(book.id);
+  const genre = book.genre || 'Não classificado';
+  const options = GENRES.map(item =>
+    '<option value="' + esc(item) + '"' + (item === genre ? ' selected' : '') + '>' + esc(item) + '</option>'
+  ).join('');
 
   return `
     <article class="book-card" data-open="${esc(book.id)}">
@@ -239,101 +255,19 @@ function card(book) {
         <span class="cover-title">${esc(book.title)}</span>
         <span class="cover-author">${esc(book.author || 'Autor desconhecido')}</span>
       </div>
-
       <div class="book-meta">
         <strong>${esc(book.title)}</strong>
         <small>${esc(book.author || 'Arquivo importado')}</small>
-
-        <div class="mini-progress">
-          <span style="width:${progress}%"></span>
-        </div>
-
-        <button type="button"
-                class="secondary-btn garden-toggle"
-                data-garden="${esc(book.id)}"
-                aria-pressed="${inGarden}">
-          ${inGarden ? '♥ No Jardim' : '＋ Jardim dos Romances'}
-        </button>
+        <div class="mini-progress"><span style="width:${progress}%"></span></div>
+        <label class="genre-picker-label">Gênero literário
+          <select class="genre-picker" data-genre-book="${esc(book.id)}">${options}</select>
+        </label>
       </div>
     </article>
   `;
 }
 
-/* JARDIM DOS ROMANCES */
-
- 
-function ensureGardenSection() {
-  const main = document.querySelector('main');
-  if (!main) return;
-
-  let section = $('#gardenSection');
-
-  if (!section) {
-    section = document.createElement('section');
-    section.id = 'gardenSection';
-    section.className = 'screen garden-screen';
-
-    section.innerHTML = `
-      <div class="section-head">
-        <h2>🌷 Jardim dos Romances</h2>
-        <button type="button" class="text-btn" id="gardenManage">
-          Escolher livros
-        </button>
-      </div>
-
-      <p class="muted small">
-        Seu cantinho especial para os romances escolhidos por você.
-      </p>
-
-      <div id="gardenList" class="book-grid compact-grid"></div>
-
-      <p id="gardenEmpty" class="muted">
-        Seu jardim está vazio. Entre na biblioteca e toque em
-        “Jardim dos Romances” no livro que deseja adicionar.
-      </p>
-    `;
-
-    main.appendChild(section);
-
-    const manageButton = $('#gardenManage');
-    if (manageButton) {
-      manageButton.addEventListener('click', () => go('library'));
-    }
-  }
-}
-
-async function toggleGarden(bookId) {
-  if (gardenBookIds.includes(bookId)) {
-    gardenBookIds = gardenBookIds.filter(id => id !== bookId);
-    toast('Livro removido do Jardim dos Romances.');
-  } else {
-    gardenBookIds.push(bookId);
-    toast('Livro adicionado ao Jardim dos Romances! 🌷');
-  }
-
-  await saveData('gardenBookIds', gardenBookIds);
-  renderBooks();
-}
-
-function bindBookCards(container) {
-  if (!container) return;
-
-  container.querySelectorAll('[data-open]').forEach(element => {
-    element.addEventListener('click', event => {
-      if (event.target.closest('[data-garden]')) return;
-      openBook(element.dataset.open);
-    });
-  });
-
-  container.querySelectorAll('[data-garden]').forEach(button => {
-    button.addEventListener('click', async event => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      await toggleGarden(button.dataset.garden);
-    });
-  });
-}
+/* A organização por gênero agora acontece dentro da biblioteca. */
 
 /* BIBLIOTECA */
 
@@ -350,21 +284,35 @@ function renderBooks() {
   const emptyLibrary = $('#emptyLibrary');
 
   if (shelf) {
-    shelf.innerHTML = filtered.map(card).join('');
+    const grouped = new Map();
+    filtered.forEach(book => {
+      const genre = book.genre || 'Não classificado';
+      if (!grouped.has(genre)) grouped.set(genre, []);
+      grouped.get(genre).push(book);
+    });
+
+    const genreOrder = GENRES.filter(genre => grouped.has(genre));
+    shelf.innerHTML = genreOrder.map(genre => `
+      <section class="genre-shelf">
+        <div class="genre-shelf-heading">
+          <h3>${esc(genre)}</h3>
+          <span>${grouped.get(genre).length} livro(s)</span>
+        </div>
+        <div class="book-grid">${grouped.get(genre).map(card).join('')}</div>
+      </section>
+    `).join('');
 
     if (emptyLibrary) {
       emptyLibrary.style.display = books.length ? 'none' : 'block';
     }
 
-    shelf.style.display = filtered.length ? 'grid' : 'none';
-
+    shelf.style.display = filtered.length ? 'block' : 'none';
     if (books.length && !filtered.length) {
-      shelf.innerHTML =
-        '<p class="muted">Nenhum livro encontrado nesta seleção.</p>';
+      shelf.innerHTML = '<p class="muted">Nenhum livro encontrado nesta seleção.</p>';
       shelf.style.display = 'block';
     }
-
     bindBookCards(shelf);
+    bindGenrePickers(shelf);
   }
 
   const continueList = $('#continueList');
@@ -384,24 +332,6 @@ function renderBooks() {
     bindBookCards(continueList);
   }
 
-  ensureGardenSection();
-
-  const gardenList = $('#gardenList');
-  const gardenEmpty = $('#gardenEmpty');
-
-  if (gardenList) {
-    const gardenBooks = books.filter(book =>
-      gardenBookIds.includes(book.id)
-    );
-
-    gardenList.innerHTML = gardenBooks.map(card).join('');
-
-    if (gardenEmpty) {
-      gardenEmpty.style.display = gardenBooks.length ? 'none' : 'block';
-    }
-
-    bindBookCards(gardenList);
-  }
 }
 
 /* ANOTAÇÕES */
@@ -459,7 +389,7 @@ function go(screen) {
   if (screen === 'stats') renderStats();
   if (screen === 'notes') renderNotes();
 
-  if (screen === 'library' || screen === 'home' || screen === 'garden') {
+  if (screen === 'library' || screen === 'home') {
     renderBooks();
   }
 }
@@ -514,6 +444,7 @@ if (fileInput) {
         title: file.name.replace(/\.[^.]+$/, ''),
         author: '',
         ext,
+        genre: 'Não classificado',
         status: 'want',
         progress: 0,
         added: Date.now(),
