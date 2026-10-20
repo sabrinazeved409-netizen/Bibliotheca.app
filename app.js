@@ -331,7 +331,7 @@ function renderGenreRooms() {
 
 function bindBookCards(container) {
   if (!container) return;
-  container.querySelectorAll('.book-card[data-open]').forEach(cardElement => {
+  container.querySelectorAll('.book-card[data-open], .continue-card[data-open]').forEach(cardElement => {
     cardElement.addEventListener('click', event => {
       if (event.target.closest('.genre-picker-label, .genre-picker')) return;
       openBook(cardElement.dataset.open);
