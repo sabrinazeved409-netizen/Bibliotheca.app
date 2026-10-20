@@ -586,7 +586,7 @@ function renderBooks() {
         outros: ['MUNDOS INCLASSIFICÁVEIS', 'histórias à espera de um nome']
       };
       const scene = scenes[style] || scenes.outros;
-      atmosphere.innerHTML = '<div class="world-sky-symbol" aria-hidden="true">' + genreSigilSvg(style) + '</div><div class="world-scene-copy"><span class="world-kicker">VOCÊ ATRAVESSOU A ESTANTE</span><strong>' + scene[0] + '</strong><small>' + scene[1] + '</small></div><span class="world-scene-glint" aria-hidden="true">✧</span>';
+      atmosphere.innerHTML = '<div class="world-sky-symbol" aria-hidden="true">' + genreSigilSvg(style) + '</div><div class="world-scene-copy"><span class="world-kicker">VOCÊ ATRAVESSOU A ESTANTE</span><strong>' + scene[0] + '</strong><small>' + scene[1] + '</small></div>' + (style === 'romance' ? '<blockquote class="romance-quote">Porque não há nada mais perigoso do que um coração apaixonado.</blockquote>' : '') + '<span class="world-scene-glint" aria-hidden="true">✧</span>';
       atmosphere.setAttribute('aria-label', scene[1]);
       requestAnimationFrame(() => roomPanel.classList.remove('world-entering'));
     }
@@ -1808,7 +1808,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=59', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=60', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
