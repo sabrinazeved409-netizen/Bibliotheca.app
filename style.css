@@ -574,3 +574,59 @@ body.reading-mode #readerContent #epubView iframe {
   .genre-book-art{width:38px!important;height:50px!important}
   #genreIntro.genre-world h2{font-size:18px!important}
 }
+
+
+/* v45 — gêneros como pequenas janelas para outros mundos */
+.genre-rooms{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;
+  align-items:stretch;
+}
+.genre-room{
+  position:relative!important;
+  isolation:isolate;
+  min-height:132px!important;
+  padding:13px 5px 9px!important;
+  gap:5px!important;
+  align-items:center!important;
+  text-align:center!important;
+  overflow:hidden;
+  border:1px solid var(--book-edge,#92704f)!important;
+  border-radius:42% 42% 9px 9px / 20% 20% 9px 9px!important;
+  background:
+    linear-gradient(90deg,#090b0c88,transparent 16%,transparent 84%,#090b0c88),
+    radial-gradient(ellipse at 50% 25%,var(--book-glow,#69414a),transparent 75%),
+    linear-gradient(180deg,#242323,#111313 88%)!important;
+  box-shadow:inset 0 0 0 3px #c3a77725,inset 0 0 22px #0008,0 5px 12px #0003!important;
+}
+.genre-room::before{
+  z-index:-1!important;
+  inset:5px 5px 5px!important;
+  border:1px solid #d8bd8955;
+  border-radius:inherit;
+  opacity:1!important;
+  background:
+    linear-gradient(90deg,transparent 48%,#d8bd8933 49%,#d8bd8933 51%,transparent 52%),
+    linear-gradient(180deg,transparent 43%,#d8bd8933 44%,#d8bd8933 46%,transparent 47%),
+    radial-gradient(ellipse at 50% 10%,var(--book-glow,#69414a),transparent 80%)!important;
+}
+.genre-room::after{
+  content:"";position:absolute;z-index:-1;inset:2px;border:1px solid #d8bd8977;
+  border-radius:inherit;pointer-events:none;
+}
+.genre-book-art{
+  width:29px!important;height:38px!important;margin:2px auto 1px!important;
+  box-shadow:inset 2px 0 0 #ffffff12,2px 3px 5px #0008!important;
+}
+.genre-book-art::before{inset:3px!important}
+.genre-book-art::after{height:3px!important;bottom:-3px!important}
+.genre-book-ornament{font-size:15px!important}
+.genre-room .room-name{font-size:11px!important;line-height:1.15!important;max-width:100%;overflow-wrap:anywhere}
+.genre-room .room-desc{display:none!important}
+.genre-room .room-count{justify-content:center!important;width:100%;font-size:8px!important;padding-top:4px!important;border-top:1px solid #ffffff25!important}
+@media(max-width:360px){
+  .genre-rooms{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+  .genre-room{min-height:120px!important;padding:11px 3px 7px!important}
+  .genre-room .room-name{font-size:10px!important}
+  .genre-book-art{width:26px!important;height:34px!important}
+}
