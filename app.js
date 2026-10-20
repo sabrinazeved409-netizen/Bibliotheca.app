@@ -1015,8 +1015,8 @@ function applyReaderPreferences() {
   if ($('#paragraphValue')) $('#paragraphValue').textContent = readerParagraphSpacing.toLocaleString('pt-BR', {maximumFractionDigits:1});
   if ($('#brightnessValue')) $('#brightnessValue').textContent = readerBrightness + '%';
   if ($('#quickBrightnessValue')) $('#quickBrightnessValue').textContent = readerBrightness + '%';
-  const quickBrightness = $('#readerQuickBrightness');
-  if (quickBrightness) quickBrightness.setAttribute('aria-hidden', String(!$('#reader')?.classList.contains('reader-controls-visible')));
+  const quickBrightnessPanel = $('#readerQuickBrightness');
+  if (quickBrightnessPanel) quickBrightnessPanel.setAttribute('aria-hidden', String(!$('#reader')?.classList.contains('reader-controls-visible')));
   if (epubRendition) {
     try {
       epubRendition.themes.default({
@@ -1471,7 +1471,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=28', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=29', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
