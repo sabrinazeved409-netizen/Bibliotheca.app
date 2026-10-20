@@ -293,6 +293,43 @@ function card(book) {
 
 /* BIBLIOTECA */
 
+function genreCoverArt(style) {
+  const art = {
+    romance: '<path d="M80 111 C49 87 59 63 78 68 C89 71 91 82 91 82 C98 62 121 65 123 83 C125 100 103 114 80 129Z" fill="#a91f35" stroke="#e9a0a1" stroke-width="2"/><path d="M89 83 C86 68 78 57 67 52 M96 92 C111 91 120 98 127 109 M84 112 C71 112 64 121 61 131" fill="none" stroke="#68814a" stroke-width="4" stroke-linecap="round"/><path d="M70 54 Q82 47 91 60 M112 108 Q126 106 132 118" fill="none" stroke="#9b6b35" stroke-width="1.5"/>',
+    fantasia: '<path d="M99 48 L108 82 L139 91 L108 100 L99 134 L90 100 L59 91 L90 82Z" fill="#d9c58d" stroke="#f5e8bd" stroke-width="2"/><path d="M126 53 L130 65 L142 69 L130 73 L126 85 L122 73 L110 69 L122 65Z" fill="#a9b8d8"/><circle cx="70" cy="119" r="5" fill="#d9c58d"/><path d="M58 132 Q99 111 140 132" fill="none" stroke="#7d91a9" stroke-width="2"/>',
+    terror: '<path d="M100 56 C76 56 61 74 64 98 L68 119 L80 132 L120 132 L132 119 L136 98 C139 74 124 56 100 56Z" fill="#8d1f28" stroke="#e06a60" stroke-width="2.5"/><path d="M72 82 L88 76 L92 94 L78 99Z M108 76 L126 82 L120 99 L106 94Z" fill="#180f13" stroke="#d78a7a" stroke-width="1.5"/><path d="M87 110 L113 110 L119 125 L81 125Z" fill="#1b1014" stroke="#d78a7a" stroke-width="1.5"/><path d="M94 112 V122 M100 111 V124 M106 112 V122" stroke="#e4c1a0" stroke-width="2"/><path d="M54 65 L63 76 M137 65 L128 76 M57 119 L69 115 M143 119 L131 115" stroke="#a42b35" stroke-width="3"/>',
+    ficcao: '<circle cx="100" cy="92" r="25" fill="#263b53" stroke="#c1d8e2" stroke-width="2"/><ellipse cx="100" cy="92" rx="43" ry="14" fill="none" stroke="#d4b77d" stroke-width="3" transform="rotate(-25 100 92)"/><path d="M91 77 L111 92 L91 107Z" fill="#e3e5d2"/><circle cx="129" cy="73" r="4" fill="#e2c987"/><circle cx="67" cy="112" r="3" fill="#e2c987"/><path d="M100 50 V59 M100 125 V135" stroke="#9ebdcb" stroke-width="2"/>',
+    misterio: '<path d="M100 58 C81 58 67 75 67 94 C67 116 83 130 100 130 C117 130 133 116 133 94 C133 75 119 58 100 58Z" fill="#282a31" stroke="#c7a86d" stroke-width="2"/><circle cx="100" cy="91" r="17" fill="none" stroke="#d9c18d" stroke-width="3"/><path d="M112 104 L131 123" stroke="#d9c18d" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="91" r="6" fill="#8b2930"/><path d="M56 69 L68 81 M132 113 L145 125" stroke="#8b2930" stroke-width="2"/>',
+    classicos: '<path d="M68 126 V72 L84 61 L100 72 L116 61 L132 72 V126Z" fill="#a8895d" stroke="#e2cda2" stroke-width="2"/><path d="M78 126 V83 M91 126 V83 M109 126 V83 M122 126 V83" stroke="#4b3b2b" stroke-width="4"/><path d="M62 79 H138 M62 126 H138" stroke="#e2cda2" stroke-width="4"/><path d="M100 49 L105 59 L117 61 L108 69 L110 81 L100 75 L90 81 L92 69 L83 61 L95 59Z" fill="#d8bf87"/>',
+    drama: '<path d="M66 66 Q83 58 99 70 Q115 58 134 66 L128 112 Q111 125 100 114 Q89 125 72 112Z" fill="#702b35" stroke="#d7a37e" stroke-width="2"/><path d="M79 80 Q88 74 95 82 L91 94 Q84 97 79 90Z M106 82 Q113 74 122 80 L122 90 Q115 97 108 94Z" fill="#e2c7a0"/><path d="M82 103 Q100 94 118 103 Q110 117 100 116 Q90 117 82 103Z" fill="#25191c" stroke="#d7a37e" stroke-width="2"/>',
+    aventura: '<path d="M61 120 L83 75 L97 97 L113 62 L140 120Z" fill="#5e6b4c" stroke="#c6b07c" stroke-width="2"/><path d="M83 75 L88 93 L78 91Z M113 62 L120 91 L107 84Z" fill="#d6c69c"/><path d="M74 124 L127 124 L120 135 L81 135Z" fill="#9a6e3e"/><path d="M100 78 L106 94 L100 107 L94 94Z" fill="#c9a76b"/>',
+    poesia: '<path d="M77 127 C76 95 91 66 124 54 C124 87 111 117 77 127Z" fill="#627957" stroke="#c8d0a1" stroke-width="2"/><path d="M78 126 Q98 94 119 64" fill="none" stroke="#e1d4a7" stroke-width="2"/><path d="M85 108 L72 97 M96 91 L85 78 M105 79 L105 66" stroke="#c8d0a1" stroke-width="2"/><path d="M69 132 Q101 139 132 126" fill="none" stroke="#b18a74" stroke-width="2"/>',
+    'nao-ficcao': '<path d="M64 68 Q82 61 100 74 Q118 61 136 68 V122 Q117 115 100 130 Q83 115 64 122Z" fill="#6e6248" stroke="#e0cba0" stroke-width="2"/><path d="M100 74 V129 M74 83 Q86 80 92 86 M74 96 Q85 93 92 99 M108 86 Q119 80 127 83 M108 99 Q119 93 127 96" fill="none" stroke="#e8d9b8" stroke-width="2"/><circle cx="100" cy="55" r="8" fill="#c5a35e" stroke="#f0dbac" stroke-width="2"/>',
+    juvenil: '<path d="M100 51 L111 76 L139 80 L119 99 L124 128 L100 114 L76 128 L81 99 L61 80 L89 76Z" fill="#8a9a68" stroke="#e4d3a2" stroke-width="2"/><circle cx="100" cy="91" r="12" fill="#e5d7a8"/><path d="M95 88 L99 92 L107 83" fill="none" stroke="#5b704e" stroke-width="3" stroke-linecap="round"/>',
+    outros: '<path d="M100 55 L111 80 L138 91 L111 102 L100 129 L89 102 L62 91 L89 80Z" fill="#70616f" stroke="#d4bd98" stroke-width="2"/><circle cx="100" cy="91" r="14" fill="#28222c" stroke="#d4bd98" stroke-width="2"/><path d="M92 91 H108 M100 83 V99" stroke="#d4bd98" stroke-width="2"/>'
+  };
+  const motif = art[style] || art.outros;
+  return '<svg class="genre-cover-art" viewBox="0 0 200 170" role="img" aria-label="Ilustração ornamental da estante" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cover-'+style+'" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#48332c"/><stop offset=".52" stop-color="#171b1a"/><stop offset="1" stop-color="#382128"/></linearGradient><radialGradient id="shine-'+style+'"><stop stop-color="#92734a" stop-opacity=".35"/><stop offset="1" stop-color="#171b1a" stop-opacity="0"/></radialGradient></defs><rect x="5" y="5" width="190" height="160" rx="8" fill="url(#cover-'+style+')" stroke="#a98a5d" stroke-width="2"/><rect x="11" y="11" width="178" height="148" rx="5" fill="none" stroke="#6e563b" stroke-width="1"/><rect x="16" y="16" width="168" height="138" rx="4" fill="url(#shine-'+style+')"/><path d="M20 38 V20 H38 M162 20 H180 V38 M20 132 V150 H38 M162 150 H180 V132" fill="none" stroke="#c5a36a" stroke-width="2"/><circle cx="100" cy="91" r="49" fill="#151716" fill-opacity=".65" stroke="#b99a66" stroke-width="2"/><circle cx="100" cy="91" r="43" fill="none" stroke="#6f583c" stroke-width="1.5" stroke-dasharray="2 4"/><path d="M100 36 l4 7 -4 7 -4 -7Z M100 132 l4 7 -4 7 -4 -7Z M45 91 l7 -4 7 4 -7 4Z M141 91 l7 -4 7 4 -7 4Z" fill="#d0b27a"/>'+motif+'<path d="M30 30 l5 5 -5 5 -5 -5Z M170 30 l5 5 -5 5 -5 -5Z M30 140 l5 5 -5 5 -5 -5Z M170 140 l5 5 -5 5 -5 -5Z" fill="#a88a5b"/></svg>';
+}
+
+function genreSigilSvg(style) {
+  if (style === 'terror') return '<svg viewBox="0 0 100 100" aria-label="Pentagrama vermelho" role="img"><circle cx="50" cy="50" r="39" fill="none" stroke="#a51f2d" stroke-width="2" opacity=".85"/><path d="M50 11 L59 39 L89 39 L65 57 L74 86 L50 68 L26 86 L35 57 L11 39 L41 39 Z" fill="none" stroke="#c32635" stroke-width="3" stroke-linejoin="round"/><circle cx="50" cy="50" r="3" fill="#d54a4f"/></svg>';
+  if (style === 'romance') return '<svg viewBox="0 0 100 100" aria-label="Rosa vermelha" role="img"><path d="M50 84 C25 69 28 48 44 48 C51 48 54 55 54 55 C61 38 80 44 78 58 C77 72 60 81 50 84Z" fill="#b82138" stroke="#e3a1a2" stroke-width="2"/><path d="M51 82 L50 95 M50 91 L37 83 M50 91 L63 81" fill="none" stroke="#718354" stroke-width="3" stroke-linecap="round"/></svg>';
+  const sigils = {
+    fantasia: '<path d="M50 12 L59 40 L88 50 L59 60 L50 88 L41 60 L12 50 L41 40Z" fill="none" stroke="#c6ad78" stroke-width="3"/>',
+    misterio: '<circle cx="43" cy="42" r="22" fill="none" stroke="#c6ad78" stroke-width="5"/><path d="M59 59 L81 81 M43 31 V53 M32 42 H54" stroke="#c6ad78" stroke-width="4" stroke-linecap="round"/>',
+    ficcao: '<ellipse cx="50" cy="50" rx="37" ry="14" fill="none" stroke="#9cbfd0" stroke-width="3" transform="rotate(-25 50 50)"/><circle cx="50" cy="50" r="14" fill="none" stroke="#c6ad78" stroke-width="3"/>',
+    classicos: '<path d="M20 78 V35 L35 24 L50 35 L65 24 L80 35 V78Z M28 78 V45 M42 78 V45 M58 78 V45 M72 78 V45 M16 80 H84" fill="none" stroke="#c6ad78" stroke-width="3"/>',
+    drama: '<path d="M18 25 Q35 18 49 29 Q65 18 82 25 L77 68 Q61 82 50 70 Q38 82 23 68Z" fill="none" stroke="#b97875" stroke-width="3"/><path d="M30 43 Q39 34 46 45 L42 54Z M55 45 Q63 34 72 43 L60 54Z" fill="none" stroke="#c6ad78" stroke-width="2"/>',
+    aventura: '<path d="M12 77 L40 28 L54 52 L66 20 L90 77Z M48 48 L54 62 L48 70 L42 62Z" fill="none" stroke="#c6ad78" stroke-width="3"/>',
+    poesia: '<path d="M25 82 Q25 35 77 17 Q76 66 25 82Z M27 80 Q52 47 70 26" fill="none" stroke="#9eaf85" stroke-width="3"/>',
+    'nao-ficcao': '<path d="M15 30 Q32 22 50 36 Q68 22 85 30 V78 Q66 70 50 84 Q34 70 15 78Z M50 36 V84" fill="none" stroke="#c6ad78" stroke-width="3"/>',
+    juvenil: '<path d="M50 13 L61 38 L88 41 L68 59 L73 86 L50 72 L27 86 L32 59 L12 41 L39 38Z" fill="none" stroke="#b8c38c" stroke-width="3"/>',
+    outros: '<path d="M50 13 L61 39 L88 50 L61 61 L50 87 L39 61 L12 50 L39 39Z" fill="none" stroke="#c6ad78" stroke-width="3"/>'
+  };
+  return '<svg viewBox="0 0 100 100" role="img" aria-label="Símbolo da estante">'+(sigils[style] || sigils.outros)+'</svg>';
+}
+
 function renderGenreRooms() {
   const container = $('#genreRooms');
   if (!container) return;
@@ -306,7 +343,7 @@ function renderGenreRooms() {
   container.innerHTML = rooms.map(genre => {
     const count = books.filter(book => (book.genre || 'Não classificado') === genre.name).length;
     return `<button type="button" class="genre-room room-${esc(genre.style)}" data-open-genre="${esc(genre.name)}">
-      <span class="genre-room-icon" aria-hidden="true">${genre.icon}</span>
+      ${genreCoverArt(genre.style)}
       <span class="room-name">${esc(genre.name)}</span>
       <span class="room-desc">${esc(genre.desc)}</span>
       <span class="room-count">${count} livro(s) <span aria-hidden="true">→</span></span>
@@ -535,21 +572,21 @@ function renderBooks() {
         roomPanel.prepend(atmosphere);
       }
       const scenes = {
-        romance: ['🌹', 'JARDIM DAS PROMESSAS', 'rosas antigas • cartas seladas • luar'],
-        fantasia: ['☾', 'FLORESTA ENCANTADA', 'runas esquecidas • estrelas • magia'],
-        misterio: ['🗝️', 'ARQUIVO DAS SOMBRAS', 'segredos • névoa • portas proibidas'],
-        ficcao: ['✦', 'FRONTEIRA ESTELAR', 'mundos distantes • sinais • infinito'],
-        terror: ['🕯️', 'MANSÃO ESQUECIDA', 'sussurros • espinhos • meia-noite'],
-        classicos: ['🏛️', 'SALÃO ATEMPORAL', 'veludo antigo • ouro gasto • memórias'],
-        drama: ['🥀', 'TEATRO DAS ALMAS', 'destinos cruzados • paixão • perda'],
-        aventura: ['⚔️', 'TERRAS INDOMADAS', 'mapas secretos • ruínas • jornada'],
-        poesia: ['🪻', 'JARDIM DOS VERSOS', 'flores noturnas • tinta • silêncio'],
-        'nao-ficcao': ['⌘', 'CÂMARA DO CONHECIMENTO', 'ideias • descobertas • verdades'],
-        juvenil: ['🦋', 'REINO DOS POSSÍVEIS', 'maravilhas • coragem • descoberta'],
-        outros: ['✧', 'MUNDOS INCLASSIFICÁVEIS', 'histórias à espera de um nome']
+        romance: ['JARDIM DAS PROMESSAS', 'rosas antigas • cartas seladas • luar'],
+        fantasia: ['FLORESTA ENCANTADA', 'runas esquecidas • estrelas • magia'],
+        misterio: ['ARQUIVO DAS SOMBRAS', 'segredos • névoa • portas proibidas'],
+        ficcao: ['FRONTEIRA ESTELAR', 'mundos distantes • sinais • infinito'],
+        terror: ['MANSÃO ESQUECIDA', 'sussurros • espinhos • meia-noite'],
+        classicos: ['SALÃO ATEMPORAL', 'veludo antigo • ouro gasto • memórias'],
+        drama: ['TEATRO DAS ALMAS', 'destinos cruzados • paixão • perda'],
+        aventura: ['TERRAS INDOMADAS', 'mapas secretos • ruínas • jornada'],
+        poesia: ['JARDIM DOS VERSOS', 'flores noturnas • tinta • silêncio'],
+        'nao-ficcao': ['CÂMARA DO CONHECIMENTO', 'ideias • descobertas • verdades'],
+        juvenil: ['REINO DOS POSSÍVEIS', 'maravilhas • coragem • descoberta'],
+        outros: ['MUNDOS INCLASSIFICÁVEIS', 'histórias à espera de um nome']
       };
       const scene = scenes[style] || scenes.outros;
-      atmosphere.innerHTML = '<div class="world-sky-symbol" aria-hidden="true">' + scene[0] + '</div><div class="world-scene-copy"><span class="world-kicker">VOCÊ ATRAVESSOU A ESTANTE</span><strong>' + scene[1] + '</strong><small>' + scene[2] + '</small></div><span class="world-scene-glint" aria-hidden="true">✧</span>';
+      atmosphere.innerHTML = '<div class="world-sky-symbol" aria-hidden="true">' + genreSigilSvg(style) + '</div><div class="world-scene-copy"><span class="world-kicker">VOCÊ ATRAVESSOU A ESTANTE</span><strong>' + scene[0] + '</strong><small>' + scene[1] + '</small></div><span class="world-scene-glint" aria-hidden="true">✧</span>';
       atmosphere.setAttribute('aria-label', scene[1]);
       requestAnimationFrame(() => roomPanel.classList.remove('world-entering'));
     }
