@@ -7,7 +7,7 @@
   <meta name="description" content="Sua biblioteca digital pessoal">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" href="ChatGPT%20Image%2019%20de%20out.%20de%202026,%2016_03_23.png">
-  <link rel="stylesheet" href="style.css?v=25">
+  <link rel="stylesheet" href="style.css?v=26">
   <title>Bibliotheca — sua biblioteca</title>
 </head>
 <body>
@@ -121,6 +121,9 @@
         <button id="readerMenuBtn" class="icon-btn" aria-label="Opções de leitura">⋮</button>
       </div>
       <div id="readerContent" class="reader-content"><div class="empty-state"><div class="empty-icon">📘</div><h3>Escolha um livro</h3><p>Abra um livro da sua biblioteca para começar.</p></div></div>
+      <div id="readerQuickBrightness" class="reader-quick-brightness reader-chrome" aria-label="Atalho de brilho">
+        <span aria-hidden="true">☀</span><input id="readerBrightnessQuick" type="range" min="35" max="100" step="5" value="100" aria-label="Brilho da leitura"><strong id="quickBrightnessValue">100%</strong>
+      </div>
       <aside id="readerSettings" class="reader-settings reader-chrome" aria-label="Configurações de leitura">
         <div class="reader-settings-head"><strong>Modo de leitura</strong><button id="readerSettingsClose" class="icon-btn" aria-label="Fechar opções">×</button></div>
         <label>Movimento da leitura<select id="readerFlow"><option value="paginated">Passar páginas</option><option value="scrolled">Rolagem contínua</option></select></label>
@@ -155,6 +158,6 @@
     </form>
   </dialog>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="app.js?v=25"></script>
+    <script src="app.js?v=26"></script>
 </body>
 </html>
