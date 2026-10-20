@@ -717,9 +717,11 @@ async function openBook(bookId) {
   currentFileUrl = URL.createObjectURL(file);
 
   try {
-    if (book.ext === 'pdf') await loadPdf(file, book);
-    else if (book.ext === 'epub') await loadEpub(file, book);
-    else if (book.ext === 'txt') await loadText(file, book);
+    const extension = String(book.ext || '').toLowerCase();
+    if (extension === 'pdf') await loadPdf(file, book);
+    else if (extension === 'epub') await loadEpub(file, book);
+    else if (extension === 'txt') await loadText(file, book);
+    else throw new Error('Formato de arquivo não compatível: ' + extension);
   } catch (error) {
     if (readerContent) {
       const detail = error && error.message ? error.message : String(error || 'Erro desconhecido');
@@ -860,57 +862,96 @@ async function updatePdfNav(pdf, book) {
   renderBooks();
 }
 
+async function ensureEpubLibrary() {
+  if (typeof window.ePub === 'function') return;
+
+  const sources = [
+    'https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js',
+    'https://unpkg.com/epubjs@0.3.93/dist/epub.min.js'
+  ];
+  let lastError;
+
+  for (const src of sources) {
+    try {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => {
+          if (typeof window.ePub === 'function') resolve();
+          else reject(new Error('O arquivo do leitor carregou, mas a função EPUB não ficou disponível.'));
+        };
+        script.onerror = () => reject(new Error('Falha ao carregar o leitor em ' + new URL(src).hostname));
+        document.head.appendChild(script);
+      });
+      if (typeof window.ePub === 'function') return;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw new Error('Não foi possível carregar o leitor EPUB. Confira a conexão e tente novamente.' +
+    (lastError?.message ? ' (' + lastError.message + ')' : ''));
+}
+
 async function loadEpub(file, book) {
-  if (!window.ePub) {
-    await new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/epubjs@0.3.93/dist/epub.min.js';
-      script.onload = resolve;
-      script.onerror = () => reject(new Error('Não foi possível carregar o leitor EPUB. Verifique a conexão com a internet e tente novamente.'));
-      document.head.appendChild(script);
-    });
-  }
-
-  if (typeof window.ePub !== 'function') {
-    throw new Error('O componente de leitura EPUB não carregou.');
-  }
-
-  const buffer = await file.arrayBuffer();
-  epubBook = window.ePub(buffer);
+  await ensureEpubLibrary();
 
   const content = $('#readerContent');
+  if (!content) throw new Error('A área de leitura não foi encontrada.');
+
   content.innerHTML = `
-    <div id="epubView" style="height:60vh;min-height:320px;overflow:hidden"></div>
+    <div id="epubLoading" class="muted" style="padding:16px 0">Preparando o EPUB…</div>
+    <div id="epubView" style="width:100%;height:65vh;min-height:360px;overflow:hidden;background:var(--panel);color:var(--text)"></div>
     <div style="display:flex;gap:8px;margin-top:18px">
       <button type="button" class="secondary-btn" id="prevEpub">← Anterior</button>
       <button type="button" class="secondary-btn" id="nextEpub">Próxima →</button>
     </div>
   `;
 
-  const rendition = epubBook.renderTo('epubView', {
-    width: '100%',
-    height: '100%',
-    flow: 'paginated',
-    spread: 'none'
-  });
+  const buffer = await file.arrayBuffer();
+  if (!buffer || buffer.byteLength < 100) {
+    throw new Error('O arquivo EPUB parece vazio ou incompleto.');
+  }
 
-  rendition.on('relocated', location => {
-    if (!location.start) return;
+  try {
+    epubBook = window.ePub(buffer);
+    await epubBook.ready;
 
-    const position = $('#readerPosition');
-    const percentage = Math.round((location.start.percentage || 0) * 100);
+    const rendition = epubBook.renderTo('epubView', {
+      width: '100%',
+      height: '100%',
+      flow: 'paginated',
+      spread: 'none',
+      manager: 'default'
+    });
 
-    if (position) position.textContent = `EPUB · ${percentage}%`;
+    rendition.on('relocated', location => {
+      if (!location?.start) return;
+      const percentage = Math.round((location.start.percentage || 0) * 100);
+      const position = $('#readerPosition');
+      if (position) position.textContent = 'EPUB · ' + percentage + '%';
+      book.progress = percentage;
+      saveData('books', books).catch(console.warn);
+      renderBooks();
+    });
 
-    book.progress = percentage;
-    saveData('books', books);
-    renderBooks();
-  });
+    $('#prevEpub').onclick = () => rendition.prev().catch(error => console.warn('EPUB anterior:', error));
+    $('#nextEpub').onclick = () => rendition.next().catch(error => console.warn('EPUB próxima:', error));
 
-  $('#prevEpub').onclick = () => rendition.prev();
-  $('#nextEpub').onclick = () => rendition.next();
+    await rendition.display();
+    const loading = $('#epubLoading');
+    if (loading) loading.remove();
 
-  await rendition.display();
+    // Algumas obras levam um instante extra para montar o primeiro capítulo.
+    if (!$('#epubView iframe')) {
+      await new Promise(resolve => setTimeout(resolve, 250));
+    }
+  } catch (error) {
+    try { epubBook?.destroy(); } catch (_) {}
+    epubBook = null;
+    throw new Error('O leitor não conseguiu interpretar este EPUB. O arquivo pode estar incompleto ou usar uma estrutura não compatível. Detalhe: ' +
+      (error?.message || String(error)));
+  }
 }
 
 /* TEMPO DE LEITURA */
