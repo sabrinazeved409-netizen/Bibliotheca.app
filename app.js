@@ -14,6 +14,7 @@ let currentFileUrl = null;
 let timer = null;
 let sessionStarted = null;
 let activeFilter = 'all';
+let selectedGenre = null;
 let currentPdfPage = 1;
 let epubBook = null;
 let awaitlessReadGoal = 30;
@@ -227,18 +228,22 @@ function coverColor(book) {
   ];
 }
 
-const GENRES = [
-  'Não classificado',
-  'Romance',
-  'Fantasia',
-  'Mistério e suspense',
-  'Ficção científica',
-  'Clássicos',
-  'Drama',
-  'Terror',
-  'Não ficção',
-  'Outros'
+const GENRE_CONFIG = [
+  { name: 'Romance', icon: '🌹', desc: 'Jardins secretos, cartas de amor e histórias que florescem.', style: 'romance' },
+  { name: 'Fantasia', icon: '✨', desc: 'Reinos encantados, magia antiga e mundos impossíveis.', style: 'fantasia' },
+  { name: 'Mistério e suspense', icon: '🔎', desc: 'Passagens ocultas, pistas e segredos por desvendar.', style: 'misterio' },
+  { name: 'Ficção científica', icon: '🚀', desc: 'Galáxias distantes, tecnologia e futuros extraordinários.', style: 'ficcao' },
+  { name: 'Terror', icon: '🕯️', desc: 'Sombras, casas assombradas e arrepios na noite.', style: 'terror' },
+  { name: 'Clássicos', icon: '🏛️', desc: 'Salões históricos e obras que atravessam gerações.', style: 'classicos' },
+  { name: 'Drama', icon: '🎭', desc: 'Sentimentos intensos, escolhas difíceis e vidas cruzadas.', style: 'drama' },
+  { name: 'Aventura', icon: '🧭', desc: 'Mapas, jornadas e descobertas além do horizonte.', style: 'aventura' },
+  { name: 'Poesia', icon: '🪶', desc: 'Palavras, imagens e emoções em versos.', style: 'poesia' },
+  { name: 'Não ficção', icon: '📚', desc: 'Conhecimento, biografias e histórias reais.', style: 'nao-ficcao' },
+  { name: 'Infantil e juvenil', icon: '🦊', desc: 'Descobertas, imaginação e grandes primeiras leituras.', style: 'juvenil' },
+  { name: 'Não classificado', icon: '📖', desc: 'Livros que ainda estão esperando seu lugar.', style: 'outros' },
+  { name: 'Outros', icon: '🗂️', desc: 'Um espaço para todos os outros estilos.', style: 'outros' }
 ];
+const GENRES = GENRE_CONFIG.map(item => item.name);
 
 function card(book) {
   const progress = book.progress || 0;
@@ -271,71 +276,106 @@ function card(book) {
 
 /* BIBLIOTECA */
 
+function renderGenreRooms() {
+  const container = $('#genreRooms');
+  if (!container) return;
+  container.innerHTML = GENRE_CONFIG.map(genre => {
+    const count = books.filter(book => (book.genre || 'Não classificado') === genre.name).length;
+    return `<button type="button" class="genre-room room-${esc(genre.style)}" data-open-genre="${esc(genre.name)}">
+      <span class="room-icon">${genre.icon}</span>
+      <span class="room-name">${esc(genre.name)}</span>
+      <span class="room-desc">${esc(genre.desc)}</span>
+      <span class="room-count">${count} livro(s) <span aria-hidden="true">→</span></span>
+    </button>`;
+  }).join('');
+  container.querySelectorAll('[data-open-genre]').forEach(button => {
+    button.addEventListener('click', () => {
+      selectedGenre = button.dataset.openGenre;
+      renderBooks();
+      $('#searchInput')?.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
+function bindBookCards(container) {
+  if (!container) return;
+  container.querySelectorAll('.book-card[data-open]').forEach(cardElement => {
+    cardElement.addEventListener('click', event => {
+      if (event.target.closest('.genre-picker-label, .genre-picker')) return;
+      openBook(cardElement.dataset.open);
+    });
+  });
+}
+
+function bindGenrePickers(container) {
+  if (!container) return;
+  container.querySelectorAll('[data-genre-book]').forEach(select => {
+    select.addEventListener('click', event => event.stopPropagation());
+    select.addEventListener('change', async event => {
+      event.stopPropagation();
+      const book = books.find(item => item.id === select.dataset.genreBook);
+      if (!book) return;
+      book.genre = select.value;
+      await saveData('books', books);
+      renderBooks();
+      toast('Livro movido para ' + book.genre + '.');
+    });
+  });
+}
+
 function renderBooks() {
   const search = $('#searchInput');
   const query = search ? search.value.toLowerCase() : '';
-
-  const filtered = books.filter(book =>
-    (activeFilter === 'all' || book.status === activeFilter) &&
-    `${book.title} ${book.author || ''}`.toLowerCase().includes(query)
-  );
-
+  const rooms = $('#genreRooms');
+  const intro = $('#genreIntro');
+  const roomPanel = $('#selectedGenrePanel');
+  const roomTitle = $('#selectedGenreTitle');
+  const roomDescription = $('#selectedGenreDescription');
+  const backButton = $('#backToRooms');
   const shelf = $('#shelfList');
   const emptyLibrary = $('#emptyLibrary');
 
+  if (rooms) rooms.style.display = selectedGenre ? 'none' : 'grid';
+  if (intro) intro.style.display = selectedGenre ? 'none' : 'block';
+  if (roomPanel) roomPanel.style.display = selectedGenre ? 'block' : 'none';
+  if (backButton) backButton.onclick = () => { selectedGenre = null; renderBooks(); };
+  if (selectedGenre) {
+    const config = GENRE_CONFIG.find(item => item.name === selectedGenre);
+    if (roomTitle) roomTitle.textContent = (config ? config.icon + ' ' : '') + selectedGenre;
+    if (roomDescription) roomDescription.textContent = config ? config.desc : 'Sua coleção neste gênero.';
+    if (roomPanel) roomPanel.className = 'selected-genre-panel room-' + (config?.style || 'outros');
+  }
+
+  const filtered = books.filter(book =>
+    (activeFilter === 'all' || book.status === activeFilter) &&
+    `${book.title} ${book.author || ''}`.toLowerCase().includes(query) &&
+    (!selectedGenre || (book.genre || 'Não classificado') === selectedGenre)
+  );
+
   if (shelf) {
-    const grouped = new Map();
-    filtered.forEach(book => {
-      const genre = book.genre || 'Não classificado';
-      if (!grouped.has(genre)) grouped.set(genre, []);
-      grouped.get(genre).push(book);
-    });
-
-    const genreOrder = [
-      ...GENRES.filter(genre => grouped.has(genre)),
-      ...[...grouped.keys()].filter(genre => !GENRES.includes(genre))
-    ];
-    shelf.innerHTML = genreOrder.map(genre => `
-      <section class="genre-shelf">
-        <div class="genre-shelf-heading">
-          <h3>${esc(genre)}</h3>
-          <span>${grouped.get(genre).length} livro(s)</span>
-        </div>
-        <div class="book-grid">${grouped.get(genre).map(card).join('')}</div>
-      </section>
-    `).join('');
-
-    if (emptyLibrary) {
-      emptyLibrary.style.display = books.length ? 'none' : 'block';
-    }
-
-    shelf.style.display = filtered.length ? 'block' : 'none';
-    if (books.length && !filtered.length) {
-      shelf.innerHTML = '<p class="muted">Nenhum livro encontrado nesta seleção.</p>';
+    if (!selectedGenre) {
+      shelf.innerHTML = '';
+      shelf.style.display = 'none';
+    } else if (!filtered.length) {
+      shelf.innerHTML = '<div class="room-empty"><span>📚</span><h3>Esta sala está esperando seus livros</h3><p>Adicione um livro ou escolha o gênero ao editar um cartão da sua biblioteca.</p></div>';
+      shelf.style.display = 'block';
+    } else {
+      shelf.innerHTML = `<div class="book-grid">${filtered.map(card).join('')}</div>`;
       shelf.style.display = 'block';
     }
+    if (emptyLibrary) emptyLibrary.style.display = books.length || selectedGenre ? 'none' : 'block';
     bindBookCards(shelf);
     bindGenrePickers(shelf);
   }
 
+  renderGenreRooms();
   const continueList = $('#continueList');
-
   if (continueList) {
-    const reading = books
-      .filter(book => book.status === 'reading')
-      .slice(0, 4);
-
-    continueList.innerHTML = reading.map(card).join('');
-
-    if (!reading.length) {
-      continueList.innerHTML =
-        '<p class="muted">Seus livros em andamento aparecerão aqui.</p>';
-    }
-
+    const reading = books.filter(book => book.status === 'reading').slice(0, 4);
+    continueList.innerHTML = reading.map(card).join('') || '<p class="muted">Seus livros em andamento aparecerão aqui.</p>';
     bindBookCards(continueList);
     bindGenrePickers(continueList);
   }
-
 }
 
 /* ANOTAÇÕES */
