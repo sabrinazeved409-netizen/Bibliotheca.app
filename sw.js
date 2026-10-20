@@ -1,4 +1,4 @@
-const CACHE = 'bibliotheca-shell-v24';
+const CACHE = 'bibliotheca-shell-v25';
 const FILES = ['./', './index.html', './style.css', './app.js', './manifest.webmanifest'];
 
 self.addEventListener('message', event => {
