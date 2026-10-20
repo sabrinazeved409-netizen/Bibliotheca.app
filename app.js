@@ -971,7 +971,7 @@ async function loadEpub(file, book) {
     // Definir uma altura real evita que epub.js crie páginas com altura zero
     // em leitores móveis com layout flexível e viewport dinâmica.
     const view = $('#epubView');
-    const availableHeight = Math.max(320, content.clientHeight - 8);
+    const availableHeight = Math.max(320, (content.clientHeight || window.innerHeight) - 8);
     view.style.height = availableHeight + 'px';
 
     epubBook = window.ePub(buffer);
@@ -1000,7 +1000,7 @@ async function loadEpub(file, book) {
     await rendition.display();
     fillReaderChapters();
     // Recalcular depois que o leitor estiver visível, já com a tela cheia aplicada.
-    const finalHeight = Math.max(320, content.clientHeight - 8);
+    const finalHeight = Math.max(320, (content.clientHeight || window.innerHeight) - 8);
     view.style.height = finalHeight + 'px';
     rendition.resize('100%', finalHeight);
     applyReaderPreferences();
@@ -1183,6 +1183,7 @@ function setReaderFlow(value) {
   if (epubRendition) {
     try {
       epubRendition.flow(readerFlow === 'scrolled' ? 'scrolled-continuous' : 'paginated');
+      epubRendition.resize('100%', Math.max(320, ($('#readerContent')?.clientHeight || window.innerHeight) - 8));
       epubRendition.resize();
     } catch (error) { console.warn('Não foi possível mudar o movimento EPUB:', error); }
   } else if (currentBook?.ext === 'txt' && currentBook._chunks) {
@@ -1200,6 +1201,8 @@ function setReaderFlow(value) {
   }
   updateReaderProgress(oldProgress * 100);
   toggleReaderControls(true);
+  const reader = $('#reader');
+  reader?.classList.add('reader-controls-visible');
   requestAnimationFrame(() => {
     const target = $('#readerContent');
     if (target && readerFlow === 'scrolled' && currentBook?.ext !== 'epub') {
