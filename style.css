@@ -1502,7 +1502,7 @@ body.romance-room-open #selectedGenrePanel{
  padding-top:clamp(250px,76vw,390px)!important;
 }
 body.romance-room-open #selectedGenrePanel:before{
- content:"❦  ♡  ❦\\A ROMANCE\\A pq não há nada mais perigoso do que um coração apaixonado.\\A ❧  ✦  ❧";
+ content:"❦  ♡  ❦\A ROMANCE\A Porque não há nada mais perigoso do que um coração apaixonado.\A ❧  ✦  ❧";
  white-space:pre-line;
  box-sizing:border-box;
  position:absolute!important;
