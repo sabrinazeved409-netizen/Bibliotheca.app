@@ -64,3 +64,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}.t
   max-width: 300px;
   margin: 0;
 }
+
+/* Estante subdividida por gênero literário */
+.genre-shelf{margin:22px 0 28px;padding:0 0 16px;border-bottom:2px solid var(--line)}.genre-shelf-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;padding:0 2px}.genre-shelf-heading h3{font-family:Georgia,serif;font-size:20px;margin:0}.genre-shelf-heading span{font-size:11px;color:var(--muted)}.genre-picker-label{display:block;margin-top:10px;font-size:10px;color:var(--muted);font-weight:700}.genre-picker{display:block;width:100%;margin-top:4px;padding:8px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--text);font-size:11px;}
