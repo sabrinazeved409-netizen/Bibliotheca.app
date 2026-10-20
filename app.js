@@ -523,9 +523,36 @@ function renderBooks() {
   if (backButton) backButton.onclick = () => { selectedGenre = null; renderBooks(); };
   if (selectedGenre) {
     const config = GENRE_CONFIG.find(item => item.name === selectedGenre);
-    if (roomTitle) roomTitle.textContent = (config ? config.icon + ' ' : '') + selectedGenre;
+    if (roomTitle) roomTitle.textContent = selectedGenre;
     if (roomDescription) roomDescription.textContent = config ? config.desc : 'Sua coleção neste gênero.';
-    if (roomPanel) roomPanel.className = 'selected-genre-panel room-' + (config?.style || 'outros');
+    if (roomPanel) {
+      const style = config?.style || 'outros';
+      roomPanel.className = 'selected-genre-panel room-' + style + ' world-entering';
+      let atmosphere = roomPanel.querySelector('.room-atmosphere');
+      if (!atmosphere) {
+        atmosphere = document.createElement('div');
+        atmosphere.className = 'room-atmosphere';
+        roomPanel.prepend(atmosphere);
+      }
+      const scenes = {
+        romance: ['🌹', 'JARDIM DAS PROMESSAS', 'rosas antigas • cartas seladas • luar'],
+        fantasia: ['☾', 'FLORESTA ENCANTADA', 'runas esquecidas • estrelas • magia'],
+        misterio: ['🗝️', 'ARQUIVO DAS SOMBRAS', 'segredos • névoa • portas proibidas'],
+        ficcao: ['✦', 'FRONTEIRA ESTELAR', 'mundos distantes • sinais • infinito'],
+        terror: ['🕯️', 'MANSÃO ESQUECIDA', 'sussurros • espinhos • meia-noite'],
+        classicos: ['🏛️', 'SALÃO ATEMPORAL', 'veludo antigo • ouro gasto • memórias'],
+        drama: ['🥀', 'TEATRO DAS ALMAS', 'destinos cruzados • paixão • perda'],
+        aventura: ['⚔️', 'TERRAS INDOMADAS', 'mapas secretos • ruínas • jornada'],
+        poesia: ['🪻', 'JARDIM DOS VERSOS', 'flores noturnas • tinta • silêncio'],
+        'nao-ficcao': ['⌘', 'CÂMARA DO CONHECIMENTO', 'ideias • descobertas • verdades'],
+        juvenil: ['🦋', 'REINO DOS POSSÍVEIS', 'maravilhas • coragem • descoberta'],
+        outros: ['✧', 'MUNDOS INCLASSIFICÁVEIS', 'histórias à espera de um nome']
+      };
+      const scene = scenes[style] || scenes.outros;
+      atmosphere.innerHTML = '<div class="world-sky-symbol" aria-hidden="true">' + scene[0] + '</div><div class="world-scene-copy"><span class="world-kicker">VOCÊ ATRAVESSOU A ESTANTE</span><strong>' + scene[1] + '</strong><small>' + scene[2] + '</small></div><span class="world-scene-glint" aria-hidden="true">✧</span>';
+      atmosphere.setAttribute('aria-label', scene[1]);
+      requestAnimationFrame(() => roomPanel.classList.remove('world-entering'));
+    }
   }
 
   const filtered = books.filter(book =>
