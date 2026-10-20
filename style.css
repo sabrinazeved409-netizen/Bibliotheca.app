@@ -1315,17 +1315,16 @@ body.romance-room-open #library .shelf-row,body.romance-room-open #shelfList{pos
 }
 
 
-/* v68 — sala Romance com fotografia de arquitetura e flores realistas */
+/* v69 — fotografia real de castelo de pedra emoldurado por rosas vermelhas */
 body.romance-room-open #library.active{
  position:relative!important;isolation:isolate!important;
  background-color:#10070b!important;
  background-image:
- linear-gradient(180deg,rgba(12,5,8,.08) 0%,rgba(20,7,13,.04) 24%,rgba(20,7,13,.18) 42%,rgba(13,5,9,.72) 67%,#10070b 100%),
- url("https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1000&q=85"),
- url("https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1600&q=90")!important;
- background-repeat:no-repeat,no-repeat,no-repeat!important;
- background-position:center top,left top,center top!important;
- background-size:100% 100%,38% 62%,100% auto!important;
+ linear-gradient(180deg,rgba(12,5,8,.04) 0%,rgba(12,5,8,.02) 24%,rgba(13,5,9,.30) 43%,rgba(13,5,9,.78) 66%,#10070b 100%),
+ url("https://images.unsplash.com/photo-1758227012461-0ae0c89d7ebf?auto=format&fit=crop&fm=jpg&q=85&w=1800")!important;
+ background-repeat:no-repeat,no-repeat!important;
+ background-position:center top,center 8%!important;
+ background-size:100% 100%,auto 650px!important;
 }
 body.romance-room-open #library.active:before,
 body.romance-room-open #library.active:after{content:none!important;display:none!important}
@@ -1466,4 +1465,16 @@ body.romance-room-open #library .search-wrap{margin-top:7px!important;margin-bot
  body.romance-room-open #shelfList .book-cover{height:clamp(64px,21vw,82px)!important}
  body.romance-room-open #shelfList .book-title,
  body.romance-room-open #shelfList .book-meta strong{font-size:9px!important}
+}
+
+/* v69 — enquadramento fotográfico: castelo visível acima do conteúdo */
+body.romance-room-open #library.active{
+ background-size:100% 100%,auto min(760px,112vw)!important;
+ background-position:center top,center top!important;
+}
+@media(min-width:600px){
+ body.romance-room-open #library.active{
+  background-size:100% 100%,cover!important;
+  background-position:center top,center 20%!important;
+ }
 }
