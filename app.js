@@ -1566,7 +1566,7 @@ init();
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=31', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=32', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
