@@ -1397,19 +1397,13 @@ async function init() {
   }
 }
 
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-  navigator.serviceWorker.register('./sw.js').catch(error => {
-    console.warn('Service Worker não registrado:', error);
-  });
-}
-
 init();
 
 /* Atualização automática do aplicativo */
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('./sw.js?v=19', { updateViaCache: 'none' });
+      const registration = await navigator.serviceWorker.register('./sw.js?v=20', { updateViaCache: 'none' });
       registration.update().catch(() => {});
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
