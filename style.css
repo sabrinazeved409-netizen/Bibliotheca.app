@@ -630,3 +630,6 @@ body.reading-mode #readerContent #epubView iframe {
   .genre-room .room-name{font-size:10px!important}
   .genre-book-art{width:26px!important;height:34px!important}
 }
+
+/* v46 — remover as miniaturas de livros das janelas de gênero */
+.genre-room .genre-book-art{display:none!important}
