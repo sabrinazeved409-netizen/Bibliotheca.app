@@ -247,3 +247,7 @@ body.reading-mode #reader.screen-locked #readerQuickBrightness{opacity:0!importa
 body.reading-mode #reader.screen-locked .reader-content{padding-top:12px!important}
 body.reading-mode #reader.screen-locked #readerLockIndicator.visible{visibility:visible!important}
 body.reading-mode #readerContent .pdf-continuous-page{max-width:100%;height:auto!important}
+
+/* v31 — controles desaparecem ao segundo toque */
+body.reading-mode #reader:not(.reader-controls-visible) .reader-top{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transform:translateY(-8px)!important}
+body.reading-mode #reader:not(.reader-controls-visible) #readerMenuBtn{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
