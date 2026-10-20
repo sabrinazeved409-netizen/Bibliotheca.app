@@ -972,3 +972,27 @@ h2,h3{color:#f2e1c4}
 .room-romance #selectedGenreTitle{color:#f2d5b2!important}
 .room-romance #selectedGenreDescription{color:#d8b8a8!important}
 @media(max-width:390px){.room-romance .room-atmosphere{grid-template-columns:minmax(0,1fr) 92px!important;min-height:270px!important;padding:16px 9px 16px!important}.room-romance .romance-quote{font-size:10px;padding:10px 6px}.room-romance .world-scene-copy{padding:12px 8px}}
+
+
+/* v61 — ilustração real da sala Romance */
+.room-romance .room-atmosphere{
+ min-height:245px!important;
+ grid-template-columns:minmax(0,1fr) 112px!important;
+ background-image:linear-gradient(180deg,#17080b24 0%,#19080bc2 100%),url("./images/romance-room.svg")!important;
+ background-position:center!important;
+ background-size:cover!important;
+ background-repeat:no-repeat!important;
+}
+.room-romance .room-atmosphere:before{
+ inset:0!important;opacity:1!important;
+ background:linear-gradient(90deg,#17080b36,transparent 28%,transparent 72%,#17080b44),linear-gradient(0deg,#17080b99,transparent 46%)!important;
+}
+.room-romance .room-atmosphere:after{height:34px!important}
+.room-romance .world-sky-symbol{top:12px!important;left:50%!important;width:54px!important;height:62px!important;opacity:.86}
+.room-romance .world-sky-symbol svg{width:32px!important;height:32px!important}
+.room-romance .world-scene-copy{max-width:100%!important;padding:11px 10px!important}
+.room-romance .romance-quote{max-width:112px!important;font-size:11px!important;padding:10px 7px!important}
+@media(max-width:390px){
+ .room-romance .room-atmosphere{grid-template-columns:minmax(0,1fr) 92px!important;min-height:220px!important}
+ .room-romance .romance-quote{font-size:10px!important}
+}
