@@ -1,5 +1,5 @@
-const CACHE = 'bibliotheca-shell-v50';
-const FILES = ['./', './index.html', './style.css?v=50', './app.js?v=50', './manifest.webmanifest'];
+const CACHE = 'bibliotheca-shell-v51';
+const FILES = ['./', './index.html', './style.css?v=51', './app.js?v=51', './manifest.webmanifest'];
 
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
