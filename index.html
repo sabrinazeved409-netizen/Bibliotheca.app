@@ -136,6 +136,9 @@
         <label>Espaçamento entre linhas <span id="lineValue">1,8</span><input id="readerLine" type="range" min="1" max="2.6" step="0.1" value="1.8"></label>
         <label>Espaço entre parágrafos <span id="paragraphValue">1,2</span><input id="readerParagraph" type="range" min="0.4" max="2.5" step="0.1" value="1.2"></label>
         <label>Brilho da leitura <span id="brightnessValue">100%</span><input id="readerBrightness" type="range" min="35" max="100" step="5" value="100"></label>
+        <label class="reader-setting-toggle"><input id="showQuickBrightness" type="checkbox" checked> Mostrar atalho de brilho na tela do livro</label>
+        <button id="readerLockToggle" class="reader-lock-toggle" type="button">🔒 Travar tela</button>
+        <details class="reader-shortcuts"><summary>Atalhos e gestos de leitura</summary><div class="reader-shortcuts-copy"><p><strong>Toque na página:</strong> mostra ou esconde os controles.</p><p><strong>Deslize para a esquerda/direita:</strong> muda de página nos modos paginados.</p><p><strong>Rolagem contínua:</strong> deslize para cima e para baixo normalmente.</p><p><strong>Brilho rápido:</strong> deslize verticalmente perto da borda direita.</p><p><strong>Travar tela:</strong> os botões somem; toque na tela e depois no cadeado inferior para destravar.</p><p><strong>Marcador, citação e anotação:</strong> ficam neste menu.</p></div></details>
         <div class="reader-tools"><button id="markBtn">🔖 Marcar página</button><button id="quoteBtn">✦ Guardar citação</button><button id="noteBtn">✎ Fazer anotação</button></div>
         <p class="reader-settings-note">O tamanho da fonte e os espaçamentos dependem do formato do arquivo. PDFs mantêm a página original.</p>
       </aside>
