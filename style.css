@@ -773,7 +773,7 @@ h2,h3{color:#f2e1c4}
 .genre-cover-art{max-width:none!important;width:100%!important;aspect-ratio:1.08/1!important;object-fit:cover;filter:drop-shadow(0 4px 5px #0009)!important}
 .genre-room .room-name{font-size:15px!important;color:#f4dfbb!important;margin-top:2px!important;text-shadow:0 2px 8px #000}
 .genre-room .room-desc{display:block!important;font-size:10px!important;line-height:1.45!important;color:#c8b59b!important}
-.genre-room .room-count{display:flex!important;visibility:visible!important;height:auto!important;margin-top:2px!important;padding-top:7px!important;border-top:1px solid #d0a96b44!important;color:#d8b77d!important;font-size:9px!important}
+.genre-rooms .genre-room .room-count{display:flex!important;visibility:visible!important;height:auto!important;margin-top:2px!important;padding-top:7px!important;border-top:1px solid #d0a96b44!important;color:#d8b77d!important;font-size:9px!important}
 .room-romance{--book-cover:#552431;--book-edge:#c49a76;--book-glow:#7a2839}
 .room-fantasia{--book-cover:#1b4540;--book-edge:#a7b68a;--book-glow:#145d58}
 .room-terror{--book-cover:#32151b;--book-edge:#bd6557;--book-glow:#761b27}
