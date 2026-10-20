@@ -98,3 +98,12 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}.t
 .add-genre-list{display:flex;flex-direction:column;gap:8px}
 .add-genre-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 13px;border:1px dashed var(--line);border-radius:13px;background:var(--panel);color:var(--text);text-align:left;font-size:12px}
 .add-genre-btn strong{font-size:10px;color:var(--accent);white-space:nowrap}
+
+
+/* Atalho discreto para adicionar outras estantes */
+.add-genre-area{margin:2px 0 18px;padding:0;border:0}
+.add-genre-toggle{display:flex;align-items:center;gap:8px;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:var(--panel);color:var(--muted);font-size:12px;font-weight:700;text-align:left}
+.add-genre-toggle>span{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--soft);color:var(--accent);font-size:17px}
+.add-genre-toggle small{margin-left:auto;font-size:10px;font-weight:500;color:var(--muted)}
+.add-genre-options{padding-top:12px}
+.add-genre-options>p{font-size:12px;color:var(--muted);margin:0 0 10px}
