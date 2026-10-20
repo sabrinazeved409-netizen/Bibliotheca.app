@@ -662,3 +662,19 @@ body.reading-mode #readerContent #epubView iframe {
 @media(max-width:360px){.genre-rooms{gap:6px!important}.genre-room{min-height:88px!important;padding:8px 3px 7px!important}.genre-room-icon{font-size:21px!important;min-height:23px!important}.genre-room .room-name{font-size:9px!important}}
 
 /* v52 — atualização forçada dos ícones e janelas compactas */
+
+
+/* v53 — capas de estante ilustradas, como livros antigos sem título */
+.genre-rooms{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+.genre-room{position:relative!important;isolation:isolate!important;overflow:hidden!important;align-items:center!important;min-height:0!important;height:auto!important;padding:8px 8px 11px!important;gap:7px!important;border:1px solid #9d8057!important;border-radius:13px!important;background:linear-gradient(145deg,#3c3028,#171a18 68%,#302127)!important;box-shadow:inset 0 0 0 2px #171512,inset 0 0 0 3px #816746,0 8px 18px #0003!important;text-align:center!important}
+.genre-room::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.35;background:radial-gradient(ellipse at 50% 20%,var(--book-glow,#8c3b3f),transparent 70%)!important}
+.genre-cover-art{display:block;width:100%;max-width:158px;height:auto;aspect-ratio:200/170;filter:drop-shadow(0 4px 3px #0008);transition:transform .25s ease}
+.genre-room:active .genre-cover-art{transform:scale(.97)}
+.genre-room .room-name{font-family:Georgia,serif!important;font-size:13px!important;line-height:1.15!important;color:#f0e3cf!important;text-align:center!important;text-wrap:balance!important}
+.genre-room .room-desc{font-size:9px!important;line-height:1.3!important;color:#bdb1a0!important;flex:0 1 auto!important;text-align:center!important}
+.genre-room .room-count{font-size:8px!important;color:#c9ac79!important;padding-top:6px!important;border-color:#ffffff20!important}
+.genre-room-icon{display:none!important}
+.world-sky-symbol{display:grid!important;place-items:center!important;width:72px!important;height:72px!important;margin:0 auto 8px!important}
+.world-sky-symbol svg{display:block;width:100%;height:100%;filter:drop-shadow(0 0 8px #a51f2d55)}
+.room-terror .world-sky-symbol svg{filter:drop-shadow(0 0 9px #c3263588)}
+@media(max-width:360px){.genre-rooms{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.genre-room{padding:6px 5px 9px!important}.genre-cover-art{max-width:132px}.genre-room .room-name{font-size:11px!important}.genre-room .room-desc{font-size:8px!important}}
