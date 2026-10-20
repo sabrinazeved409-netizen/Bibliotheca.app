@@ -1313,3 +1313,54 @@ body.romance-room-open #library .shelf-row,body.romance-room-open #shelfList{pos
  body.romance-room-open #library .page-heading>div:before{width:50px;height:50px;top:-29px;font-size:30px}
  body.romance-room-open #library .page-heading h2{font-size:clamp(35px,9.7vw,46px)!important}
 }
+
+
+/* v66 — cena ilustrada SVG como cenário real da sala Romance */
+body.romance-room-open #library.active{
+ position:relative!important;isolation:isolate!important;
+ background-color:#14080d!important;
+ background-image:linear-gradient(180deg,rgba(13,5,9,.05) 0%,rgba(13,5,9,.04) 35%,rgba(13,5,9,.68) 73%,#10070b 100%),url("./images/romance-portal.svg")!important;
+ background-repeat:no-repeat!important;background-position:center top!important;background-size:100% auto!important;
+}
+body.romance-room-open #library.active:before,
+body.romance-room-open #library.active:after{content:none!important;display:none!important}
+body.romance-room-open #library .page-heading{
+ position:relative!important;z-index:4;display:flex!important;justify-content:flex-end!important;
+ min-height:48px!important;margin:0 -10px 0!important;padding:10px 12px!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;
+}
+body.romance-room-open #library .page-heading>div{display:none!important}
+body.romance-room-open #library .page-heading .import-btn{
+ position:relative!important;right:auto!important;bottom:auto!important;
+ margin:0!important;padding:9px 13px!important;font-size:12px!important;
+ background:linear-gradient(145deg,#f4d08d,#a66b35)!important;color:#24110d!important;
+ border:1px solid #ffe2a3!important;box-shadow:0 3px 12px #0009!important;
+}
+body.romance-room-open #selectedGenrePanel{
+ position:relative!important;z-index:3;display:flex!important;flex-direction:column!important;
+ margin:0 -10px 8px!important;padding:clamp(230px,68vw,420px) 10px 10px!important;
+ border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body.romance-room-open #selectedGenrePanel .room-atmosphere{display:none!important}
+body.romance-room-open #selectedGenreTitle,
+body.romance-room-open #selectedGenreDescription{display:none!important}
+body.romance-room-open #selectedGenrePanel .back-rooms{
+ align-self:center!important;margin:8px auto 0!important;
+ background:rgba(25,8,14,.94)!important;border:1px solid #d4a15d!important;
+ color:#f3d9b3!important;box-shadow:0 3px 18px #0009!important;
+}
+body.romance-room-open #library .search-wrap{
+ position:relative;z-index:3;margin:8px 0 10px!important;
+ background:rgba(19,7,12,.95)!important;border:1px solid #b9864d!important;
+ box-shadow:0 4px 18px #000b!important;
+}
+body.romance-room-open #library .shelf-row,
+body.romance-room-open #shelfList{position:relative;z-index:3}
+body.romance-room-open #library .filter-chip{background:rgba(25,8,14,.96)!important}
+body.romance-room-open #shelfList .book-card{
+ background:linear-gradient(180deg,rgba(48,17,26,.98),rgba(15,6,10,.99))!important;
+ border:1px solid #c18b50!important;box-shadow:0 5px 18px #000b,inset 0 0 0 2px #d9a45d20!important;
+}
+@media(min-width:700px){
+ body.romance-room-open #library.active{background-size:min(100%,1100px) auto!important;background-color:#10070b!important}
+}
