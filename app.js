@@ -862,35 +862,44 @@ async function updatePdfNav(pdf, book) {
   renderBooks();
 }
 
-async function ensureEpubLibrary() {
-  if (typeof window.ePub === 'function') return;
-
-  const sources = [
-    'https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js',
-    'https://unpkg.com/epubjs@0.3.93/dist/epub.min.js'
-  ];
+async function loadExternalScript(src, readyCheck, label) {
+  if (readyCheck()) return;
   let lastError;
 
-  for (const src of sources) {
+  for (const url of src) {
     try {
       await new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = src;
-        script.onload = () => {
-          if (typeof window.ePub === 'function') resolve();
-          else reject(new Error('O arquivo do leitor carregou, mas a função EPUB não ficou disponível.'));
-        };
-        script.onerror = () => reject(new Error('Falha ao carregar o leitor em ' + new URL(src).hostname));
+        script.src = url;
+        script.async = true;
+        script.onload = () => readyCheck()
+          ? resolve()
+          : reject(new Error(label + ' carregou, mas não ficou disponível.'));
+        script.onerror = () => reject(new Error('Falha ao carregar ' + label + ' em ' + new URL(url).hostname));
         document.head.appendChild(script);
       });
-      if (typeof window.ePub === 'function') return;
+      if (readyCheck()) return;
     } catch (error) {
       lastError = error;
     }
   }
 
-  throw new Error('Não foi possível carregar o leitor EPUB. Confira a conexão e tente novamente.' +
-    (lastError?.message ? ' (' + lastError.message + ')' : ''));
+  throw lastError || new Error('Não foi possível carregar ' + label + '.');
+}
+
+async function ensureEpubLibrary() {
+  // epub.js usa JSZip para descompactar os arquivos internos do EPUB.
+  await loadExternalScript([
+    'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
+    'https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js',
+    'https://unpkg.com/jszip@3.10.1/dist/jszip.min.js'
+  ], () => typeof window.JSZip === 'function', 'a biblioteca JSZip');
+
+  await loadExternalScript([
+    'https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js',
+    'https://unpkg.com/epubjs@0.3.93/dist/epub.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/epub.js/0.3.88/epub.min.js'
+  ], () => typeof window.ePub === 'function', 'o leitor EPUB');
 }
 
 async function loadEpub(file, book) {
