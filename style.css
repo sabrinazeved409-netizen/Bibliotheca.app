@@ -633,3 +633,7 @@ body.reading-mode #readerContent #epubView iframe {
 
 /* v46 — remover as miniaturas de livros das janelas de gênero */
 .genre-room .genre-book-art{display:none!important}
+
+/* v47 — centralizar títulos e contagem nas janelas de gênero */
+.genre-room .room-name{width:100%;text-align:center!important;margin:0 auto!important;text-wrap:balance}
+.genre-room .room-count{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;width:100%!important;margin:0 auto!important;padding-top:5px!important;line-height:1.25!important}
