@@ -19,6 +19,14 @@ let enabledExtraGenres = [];
 let showAddGenreOptions = false;
 let currentPdfPage = 1;
 let epubBook = null;
+let epubRendition = null;
+let currentPdfDocument = null;
+let readerFlow = localStorage.getItem('bibliotheca-reader-flow') || 'paginated';
+let readerAxis = localStorage.getItem('bibliotheca-reader-axis') || 'horizontal';
+let readerFontSize = Number(localStorage.getItem('bibliotheca-reader-font') || 100);
+let readerLineSpacing = Number(localStorage.getItem('bibliotheca-reader-line') || 1.8);
+let readerParagraphSpacing = Number(localStorage.getItem('bibliotheca-reader-paragraph') || 1.2);
+let readerBrightness = Number(localStorage.getItem('bibliotheca-reader-brightness') || 100);
 let awaitlessReadGoal = 30;
 
 const colors = [
@@ -590,6 +598,8 @@ function go(screen) {
   });
 
   target.classList.add('active');
+  if (screen === 'reader') document.body.classList.add('reading-mode');
+  else document.body.classList.remove('reading-mode');
 
   $$('.nav-item').forEach(button => {
     button.classList.toggle('active', button.dataset.go === screen);
@@ -700,6 +710,10 @@ async function openBook(bookId) {
   }
 
   go('reader');
+  document.body.classList.add('reading-mode');
+  $('#reader')?.classList.remove('reader-controls-visible');
+  $('#readerSettings')?.classList.remove('open');
+  applyReaderPreferences();
   startSession();
 
   const file = await getFile(book.id);
@@ -736,6 +750,7 @@ async function openBook(bookId) {
 
 async function loadText(file, book) {
   const text = await file.text();
+  book._fullText = text;
   const chunks = text.match(/[\s\S]{1,1800}/g) || [text];
 
   book._chunks = chunks;
@@ -760,16 +775,19 @@ async function showTextPart(chunks, index, book) {
 
   if (!content) return;
 
+  const textToShow = readerFlow === 'scrolled' ? (book._fullText || chunks.join('')) : (chunks[index] || '');
   content.innerHTML = `
-    <div class="reader-page">${esc(chunks[index] || '')}</div>
-    <div style="display:flex;gap:8px;margin-top:22px">
-      <button class="secondary-btn" id="prevPart">Anterior</button>
-      <button class="secondary-btn" id="nextPart">Próximo</button>
-    </div>
+    <div class="reader-page">${esc(textToShow)}</div>
+    ${readerFlow === 'scrolled' ? '' : `<div class="reader-page-nav"><button class="secondary-btn" id="prevPart">← Anterior</button><button class="secondary-btn" id="nextPart">Próximo →</button></div>`}
   `;
+  applyReaderPreferences();
+  if (readerFlow === 'scrolled') {
+    const percent = Math.round((content.scrollTop + content.clientHeight) / Math.max(content.scrollHeight, 1) * 100);
+    book.progress = Math.max(book.progress || 0, percent);
+  }
 
-  $('#prevPart').onclick = () => showTextPart(chunks, index - 1, book);
-  $('#nextPart').onclick = () => showTextPart(chunks, index + 1, book);
+  if ($('#prevPart')) $('#prevPart').onclick = () => showTextPart(chunks, index - 1, book);
+  if ($('#nextPart')) $('#nextPart').onclick = () => showTextPart(chunks, index + 1, book);
 
   book.progress = Math.round((index + 1) / chunks.length * 100);
 
@@ -789,6 +807,7 @@ async function loadPdf(file, book) {
 
   const bytes = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
+  currentPdfDocument = pdf;
 
   currentPdfPage = Math.max(
     1,
@@ -929,11 +948,13 @@ async function loadEpub(file, book) {
     const rendition = epubBook.renderTo('epubView', {
       width: '100%',
       height: '100%',
-      flow: 'paginated',
+      flow: readerFlow === 'scrolled' ? 'scrolled-doc' : 'paginated',
       spread: 'none',
-      manager: 'default'
+      manager: 'default',
+      allowScriptedContent: true
     });
 
+    epubRendition = rendition;
     rendition.on('relocated', location => {
       if (!location?.start) return;
       const percentage = Math.round((location.start.percentage || 0) * 100);
@@ -948,6 +969,7 @@ async function loadEpub(file, book) {
     $('#nextEpub').onclick = () => rendition.next().catch(error => console.warn('EPUB próxima:', error));
 
     await rendition.display();
+    applyReaderPreferences();
     const loading = $('#epubLoading');
     if (loading) loading.remove();
 
@@ -1023,7 +1045,10 @@ if (closeReader) {
         console.warn(error);
       }
       epubBook = null;
+      epubRendition = null;
     }
+    currentPdfDocument = null;
+    document.body.classList.remove('reading-mode');
 
     go('library');
   });
