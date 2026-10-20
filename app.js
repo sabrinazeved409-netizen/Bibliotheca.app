@@ -450,37 +450,42 @@ async function extractBookExcerpt(book) {
 
 const ONLINE_READING_EXCERPTS = [
   {
-    text: 'Uma noite destas, vindo da cidade para o Engenho Novo, encontrei no trem da Central um rapaz aqui do bairro, que eu conheço de vista e de chapéu.',
+    text: 'Uma noite destas, vindo da cidade para o Engenho Novo, encontrei no trem da Central um rapaz aqui do bairro, que eu conheço de vista e de chapéo.',
     title: 'Dom Casmurro',
     author: 'Machado de Assis',
     url: 'https://pt.wikisource.org/wiki/Dom_Casmurro/I'
   },
   {
-    text: 'Algum tempo hesitei se devia abrir estas memórias pelo princípio ou pelo fim, isto é, se poria em primeiro lugar o meu nascimento ou a minha morte.',
-    title: 'Memórias Póstumas de Brás Cubas',
+    text: 'Os visinhos, que não gostam dos meus hábitos reclusos e calados, deram curso á alcunha, que afinal pegou.',
+    title: 'Dom Casmurro',
+    author: 'Machado de Assis',
+    url: 'https://pt.wikisource.org/wiki/Dom_Casmurro/I'
+  },
+  {
+    text: 'Não consultes diccionarios. Casmurro não está aqui no sentido que elles lhe dão, mas no que lhe poz o vulgo de homem calado e mettido comsigo.',
+    title: 'Dom Casmurro',
+    author: 'Machado de Assis',
+    url: 'https://pt.wikisource.org/wiki/Dom_Casmurro/I'
+  },
+  {
+    text: 'Algum tempo hesitei se devia abrir estas memorias pelo principio ou pelo fim, isto é, se poria em primeiro logar o meu nascimento ou a minha morte.',
+    title: 'Memorias Posthumas de Braz Cubas',
     author: 'Machado de Assis',
     url: 'https://pt.wikisource.org/wiki/Mem%C3%B3rias_P%C3%B3stumas_de_Br%C3%A1s_Cubas/I'
   },
   {
     text: 'Eu não sou propriamente um autor defunto, mas um defunto autor, para quem a campa foi outro berço.',
-    title: 'Memórias Póstumas de Brás Cubas',
+    title: 'Memorias Posthumas de Braz Cubas',
     author: 'Machado de Assis',
     url: 'https://pt.wikisource.org/wiki/Mem%C3%B3rias_P%C3%B3stumas_de_Br%C3%A1s_Cubas/I'
   },
   {
-    text: 'Morri de uma pneumonia; mas, se lhe disser que foi menos a pneumonia do que uma ideia grandiosa e útil a causa da minha morte, é possível que o leitor me não creia.',
-    title: 'Memórias Póstumas de Brás Cubas',
-    author: 'Machado de Assis',
-    url: 'https://pt.wikisource.org/wiki/Mem%C3%B3rias_P%C3%B3stumas_de_Br%C3%A1s_Cubas/I'
-  },
-  {
-    text: 'Os vizinhos, que não gostam dos meus hábitos reclusos e calados, deram curso à alcunha, que afinal pegou.',
+    text: 'Ha livros que apenas terão isso dos seus autores; alguns nem tanto.',
     title: 'Dom Casmurro',
     author: 'Machado de Assis',
     url: 'https://pt.wikisource.org/wiki/Dom_Casmurro/I'
   }
 ];
-
 let lastOnlineExcerptIndex = -1;
 
 function renderReadingQuote() {
