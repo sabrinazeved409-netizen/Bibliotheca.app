@@ -1364,3 +1364,101 @@ body.romance-room-open #shelfList .book-card{
 @media(min-width:700px){
  body.romance-room-open #library.active{background-size:min(100%,1100px) auto!important;background-color:#10070b!important}
 }
+
+
+/* v67 — refinamento mobile de Romance baseado no prompt */
+body.romance-room-open #library.active{
+ background-size:100% auto!important;background-position:center top!important;
+ padding-bottom:82px!important;
+}
+body.romance-room-open #library .page-heading{
+ justify-content:center!important;min-height:0!important;padding:12px 14px 8px!important;
+}
+body.romance-room-open #library .page-heading .import-btn{display:none!important}
+body.romance-room-open #selectedGenrePanel{
+ padding-top:clamp(215px,61vw,335px)!important;padding-bottom:5px!important;
+}
+body.romance-room-open #selectedGenrePanel:before{
+ content:"";display:block;position:absolute;left:10%;right:10%;top:clamp(130px,39vw,220px);
+ height:1px;background:linear-gradient(90deg,transparent,#b78a4f,transparent);
+ opacity:.8;
+}
+body.romance-room-open #library .romance-action-pill{
+ position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:6px;
+ margin:8px 0 10px;padding:7px;border:1px solid #a87948;border-radius:999px;
+ background:linear-gradient(145deg,rgba(42,17,23,.96),rgba(14,7,10,.97));
+ box-shadow:0 7px 24px #0009,inset 0 0 0 2px #d2a15b16;
+}
+body.romance-room-open .romance-action-pill button,
+body.romance-room-open .romance-action-pill a{
+ display:flex;align-items:center;justify-content:center;gap:5px;min-width:0;
+ padding:9px 10px;border-radius:999px;border:1px solid #7e5b3d;
+ color:#ead1ab;background:rgba(255,255,255,.035);font-size:11px;font-weight:600;
+ text-decoration:none;white-space:nowrap;
+}
+body.romance-room-open .romance-action-pill .romance-source{
+ background:linear-gradient(135deg,#e2bc78,#9f6c3a);color:#24120e;border-color:#f3d59b;
+ flex:1 1 auto;
+}
+body.romance-room-open .romance-action-pill .romance-count{border-color:transparent;background:transparent;padding-inline:5px}
+body.romance-room-open #library .shelf-row{
+ display:flex!important;flex-wrap:nowrap!important;gap:6px!important;overflow-x:auto!important;
+ margin:0 0 9px!important;padding:2px 0 7px!important;
+ scrollbar-width:none;
+}
+body.romance-room-open #library .filter-chip{
+ flex:0 0 auto!important;padding:8px 12px!important;border:1px solid #9d754c!important;
+ border-radius:999px!important;background:rgba(21,9,13,.82)!important;
+ backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+ color:#ddc8aa!important;font-size:11px!important;
+}
+body.romance-room-open #library .filter-chip.selected{
+ background:linear-gradient(135deg,#6c3440,#34151e)!important;color:#ffe5b8!important;
+ border-color:#dfb56e!important;box-shadow:0 0 12px #bd80422b!important;
+}
+body.romance-room-open #shelfList>.book-grid,
+body.romance-room-open #shelfList .book-grid{
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ grid-auto-rows:minmax(0,1fr)!important;gap:7px!important;
+}
+body.romance-room-open #shelfList .book-card{
+ display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;
+ padding:5px 5px 6px!important;border-radius:7px!important;
+ background:linear-gradient(180deg,rgba(57,27,31,.96),rgba(15,7,10,.99))!important;
+ border:1px solid rgba(189,143,87,.8)!important;
+ box-shadow:inset 0 0 13px rgba(234,175,101,.12),0 4px 10px #0008!important;
+}
+body.romance-room-open #shelfList .book-cover{
+ height:clamp(76px,23vw,118px)!important;max-height:none!important;min-height:0!important;
+ object-fit:contain!important;align-self:center!important;
+}
+body.romance-room-open #shelfList .book-meta{min-width:0!important;padding:5px 1px 0!important}
+body.romance-room-open #shelfList .book-meta strong,
+body.romance-room-open #shelfList .book-title{
+ display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ white-space:nowrap!important;text-align:center!important;font-size:10px!important;line-height:1.2!important;
+}
+body.romance-room-open #shelfList .book-progress,
+body.romance-room-open #shelfList .progress-row{
+ display:flex!important;align-items:center!important;gap:4px!important;font-size:9px!important;
+}
+body.romance-room-open #shelfList .progress-bar{height:3px!important;flex:1}
+body.romance-room-open .bottom-nav{
+ background:rgba(9,7,9,.94)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+ border-top:1px solid rgba(190,145,85,.25)!important;
+}
+body.romance-room-open .bottom-nav .nav-item{color:#a99b8b!important}
+body.romance-room-open .bottom-nav .nav-item.active{color:#e3bb79!important}
+body.romance-room-open #library .search-wrap{margin-top:7px!important;margin-bottom:8px!important}
+@media(max-height:760px) and (max-width:600px){
+ body.romance-room-open #selectedGenrePanel{padding-top:clamp(185px,54vw,270px)!important}
+ body.romance-room-open #selectedGenrePanel:before{top:clamp(115px,34vw,185px)}
+ body.romance-room-open #shelfList .book-cover{height:clamp(65px,19vw,92px)!important}
+}
+@media(max-width:360px){
+ body.romance-room-open .romance-action-pill button,
+ body.romance-room-open .romance-action-pill a{font-size:10px;padding:8px 7px}
+ body.romance-room-open #shelfList .book-cover{height:clamp(64px,21vw,82px)!important}
+ body.romance-room-open #shelfList .book-title,
+ body.romance-room-open #shelfList .book-meta strong{font-size:9px!important}
+}
