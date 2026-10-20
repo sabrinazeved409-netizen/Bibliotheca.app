@@ -263,15 +263,15 @@ function card(book) {
 
  
 function ensureGardenSection() {
-  const home = $('#home');
-  if (!home) return;
+  const main = document.querySelector('main');
+  if (!main) return;
 
   let section = $('#gardenSection');
 
   if (!section) {
     section = document.createElement('section');
     section.id = 'gardenSection';
-    section.className = 'garden-section';
+    section.className = 'screen garden-screen';
 
     section.innerHTML = `
       <div class="section-head">
@@ -293,7 +293,7 @@ function ensureGardenSection() {
       </p>
     `;
 
-    home.appendChild(section);
+    main.appendChild(section);
 
     const manageButton = $('#gardenManage');
     if (manageButton) {
@@ -459,7 +459,7 @@ function go(screen) {
   if (screen === 'stats') renderStats();
   if (screen === 'notes') renderNotes();
 
-  if (screen === 'library' || screen === 'home') {
+  if (screen === 'library' || screen === 'home' || screen === 'garden') {
     renderBooks();
   }
 }
@@ -582,10 +582,11 @@ async function openBook(bookId) {
     else if (book.ext === 'txt') await loadText(file, book);
   } catch (error) {
     if (readerContent) {
+      const detail = error && error.message ? error.message : String(error || 'Erro desconhecido');
       readerContent.innerHTML =
-        '<p>Não foi possível abrir este arquivo. Tente outro arquivo ou formato.</p>';
+        '<p>Não foi possível abrir este livro.</p><p class="muted">Detalhe: ' + esc(detail) + '</p><p class="muted">Se for EPUB, confira se o arquivo abre normalmente em outro leitor.</p>';
     }
-    console.error(error);
+    console.error('Erro ao abrir livro:', error);
   }
 
   renderBooks();
@@ -721,13 +722,21 @@ async function updatePdfNav(pdf, book) {
 
 async function loadEpub(file, book) {
   if (!window.ePub) {
-    $('#readerContent').innerHTML =
-      '<p>O leitor EPUB precisa carregar o componente EPUB.js.</p>';
-    return;
+    await new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/epubjs@0.3.93/dist/epub.min.js';
+      script.onload = resolve;
+      script.onerror = () => reject(new Error('Não foi possível carregar o leitor EPUB. Verifique a conexão com a internet e tente novamente.'));
+      document.head.appendChild(script);
+    });
+  }
+
+  if (typeof window.ePub !== 'function') {
+    throw new Error('O componente de leitura EPUB não carregou.');
   }
 
   const buffer = await file.arrayBuffer();
-  epubBook = ePub(buffer);
+  epubBook = window.ePub(buffer);
 
   const content = $('#readerContent');
   content.innerHTML = `
