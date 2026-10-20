@@ -350,3 +350,14 @@ body.reading-mode #reader:not(.reader-controls-visible) .reader-top { display:fl
 body.reading-mode #reader:not(.reader-controls-visible) .reader-footer { display:none!important; }
 body.reading-mode #reader.reader-controls-visible .reader-top { display:flex!important; opacity:1!important; visibility:visible!important; pointer-events:auto!important; transform:none!important; }
 body.reading-mode #reader.reader-controls-visible .reader-footer { display:block!important; visibility:visible!important; opacity:1!important; pointer-events:auto!important; }
+
+
+/* v39 — controles sempre acessíveis e EPUB com rolagem do livro inteiro */
+body.reading-mode #reader.reader-screen:not(.reader-controls-visible) .reader-top,
+body.reading-mode #reader.reader-screen:not(.reader-controls-visible) .reader-footer,
+body.reading-mode #reader.reader-screen:not(.reader-controls-visible) #readerMenuBtn {
+  display:flex!important; visibility:visible!important; opacity:1!important; pointer-events:auto!important; transform:none!important;
+}
+body.reading-mode #reader.reader-screen:not(.reader-controls-visible) .reader-footer { display:block!important; }
+body.reading-mode #readerContent #epubView { height:100%!important; min-height:320px!important; overflow:hidden!important; }
+body.reading-mode #readerContent #epubView iframe { height:100%!important; min-height:320px!important; overflow:auto!important; }
