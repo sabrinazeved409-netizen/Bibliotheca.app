@@ -416,3 +416,44 @@ body.reading-mode #readerContent #epubView iframe {
   display:block!important; width:100%!important; border:0!important;
   background:var(--panel)!important; touch-action:pan-y pinch-zoom!important;
 }
+
+
+/* v42 — mini livros góticos para cada estante literária */
+.genre-rooms{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.genre-room{
+  min-height:0!important;position:relative;isolation:isolate;overflow:hidden;
+  align-items:center!important;text-align:center!important;gap:7px!important;
+  padding:15px 10px 13px!important;border:1px solid #8d7857!important;
+  border-radius:15px!important;color:#eee3d1!important;
+  background:linear-gradient(155deg,#292522,#171615 80%)!important;
+  box-shadow:inset 0 1px #ffffff0b,0 8px 18px #0003!important;
+}
+.genre-room::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.65;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,var(--book-glow,#69414a),transparent 72%)}
+.genre-book-art{
+  position:relative;display:grid;place-items:center;width:66px;height:83px;
+  margin:1px auto 4px;border-radius:3px 7px 7px 3px;
+  background:linear-gradient(90deg,#100f0f 0 7%,var(--book-cover,#4b2932) 8% 89%,#211719 90% 100%);
+  border:1px solid var(--book-edge,#92704f);
+  box-shadow:inset 3px 0 0 #ffffff12,inset -3px 0 0 #0006,5px 6px 9px #0008;
+  transform:perspective(160px) rotateY(-7deg);
+}
+.genre-book-art::before{content:"";position:absolute;left:5px;right:5px;top:6px;bottom:6px;border:1px solid var(--book-edge,#92704f);opacity:.65}
+.genre-book-art::after{content:"";position:absolute;left:2px;bottom:-4px;width:calc(100% - 4px);height:5px;border-radius:0 0 3px 3px;background:repeating-linear-gradient(0deg,#b6a58b 0 1px,#e0d4bd 1px 2px);box-shadow:0 2px 2px #0005}
+.genre-book-ornament{position:relative;z-index:1;font-size:28px;line-height:1;filter:drop-shadow(0 2px 2px #0009)}
+.room-name{font-family:Georgia,serif!important;font-size:15px!important;line-height:1.2!important;color:#f0e3cf!important}
+.room-desc{font-size:10px!important;line-height:1.45!important;color:#bdb1a0!important;flex:1}
+.room-count{font-size:9px!important;color:#c9ac79!important;padding-top:7px!important;border-color:#ffffff20!important}
+.room-romance{--book-cover:#542432;--book-edge:#b17c83;--book-glow:#57232f}
+.room-fantasia{--book-cover:#302747;--book-edge:#9280b2;--book-glow:#32254d}
+.room-terror{--book-cover:#321c23;--book-edge:#8d5058;--book-glow:#4b1d28}
+.room-ficcao{--book-cover:#1e3941;--book-edge:#6f9c9d;--book-glow:#1c3a42}
+.room-misterio{--book-cover:#29333a;--book-edge:#829097;--book-glow:#293841}
+.room-classicos{--book-cover:#493722;--book-edge:#b69a62;--book-glow:#493820}
+.room-drama{--book-cover:#482c30;--book-edge:#a8736b;--book-glow:#48272c}
+.room-aventura{--book-cover:#35402a;--book-edge:#969365;--book-glow:#303a29}
+.room-poesia{--book-cover:#453148;--book-edge:#aa8ba5;--book-glow:#3d2b42}
+.room-nao-ficcao{--book-cover:#293d34;--book-edge:#7e9a82;--book-glow:#253b31}
+.room-juvenil{--book-cover:#51402c;--book-edge:#b99a64;--book-glow:#493824}
+.room-outros{--book-cover:#39332e;--book-edge:#9b8b79;--book-glow:#37302b}
+.genre-room:active .genre-book-art{transform:perspective(160px) rotateY(-7deg) translateY(2px)}
+@media(max-width:360px){.genre-rooms{grid-template-columns:repeat(2,minmax(0,1fr))}.genre-room{padding:12px 8px!important}.genre-book-art{width:58px;height:74px}.room-desc{font-size:9px!important}}
