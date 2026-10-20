@@ -7,7 +7,7 @@
   <meta name="description" content="Sua biblioteca digital pessoal">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" href="ChatGPT%20Image%2019%20de%20out.%20de%202026,%2016_03_23.png">
-  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="style.css?v=18">
   <title>Bibliotheca — sua biblioteca</title>
 </head>
 <body>
@@ -114,13 +114,24 @@
     </section>
 
     <section id="reader" class="screen reader-screen">
-      <div class="reader-top">
-        <button id="closeReader" class="icon-btn">‹</button><div class="reader-title-wrap"><strong id="readerTitle">Leitura</strong><small id="readerPosition">Abra um livro</small></div><button id="readerTheme" class="icon-btn">◐</button>
+      <div class="reader-top reader-chrome">
+        <button id="closeReader" class="icon-btn" aria-label="Fechar leitura">‹</button>
+        <div class="reader-title-wrap"><strong id="readerTitle">Leitura</strong><small id="readerPosition">Abra um livro</small></div>
+        <button id="readerTheme" class="icon-btn" aria-label="Alternar tema">◐</button>
+        <button id="readerMenuBtn" class="icon-btn" aria-label="Opções de leitura">⋮</button>
       </div>
       <div id="readerContent" class="reader-content"><div class="empty-state"><div class="empty-icon">📘</div><h3>Escolha um livro</h3><p>Abra um livro da sua biblioteca para começar.</p></div></div>
-      <div class="reader-toolbar">
-        <button id="markBtn">🔖 Marcar</button><button id="quoteBtn">✦ Citação</button><button id="noteBtn">✎ Anotar</button>
-      </div>
+      <aside id="readerSettings" class="reader-settings reader-chrome" aria-label="Configurações de leitura">
+        <div class="reader-settings-head"><strong>Modo de leitura</strong><button id="readerSettingsClose" class="icon-btn" aria-label="Fechar opções">×</button></div>
+        <label>Movimento da leitura<select id="readerFlow"><option value="paginated">Passar páginas</option><option value="scrolled">Rolagem contínua</option></select></label>
+        <label>Direção das páginas<select id="readerAxis"><option value="horizontal">Lado a lado</option><option value="vertical">De cima para baixo</option></select></label>
+        <label>Tamanho da fonte <span id="fontValue">100%</span><input id="readerFont" type="range" min="70" max="180" step="5" value="100"></label>
+        <label>Espaçamento entre linhas <span id="lineValue">1,8</span><input id="readerLine" type="range" min="1" max="2.6" step="0.1" value="1.8"></label>
+        <label>Espaço entre parágrafos <span id="paragraphValue">1,2</span><input id="readerParagraph" type="range" min="0.4" max="2.5" step="0.1" value="1.2"></label>
+        <label>Brilho da leitura <span id="brightnessValue">100%</span><input id="readerBrightness" type="range" min="35" max="100" step="5" value="100"></label>
+        <div class="reader-tools"><button id="markBtn">🔖 Marcar página</button><button id="quoteBtn">✦ Guardar citação</button><button id="noteBtn">✎ Fazer anotação</button></div>
+        <p class="reader-settings-note">O tamanho da fonte e os espaçamentos dependem do formato do arquivo. PDFs mantêm a página original.</p>
+      </aside>
     </section>
   </main>
 
@@ -141,6 +152,6 @@
     </form>
   </dialog>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="app.js?v=17"></script>
+    <script src="app.js?v=18"></script>
 </body>
 </html>
