@@ -435,7 +435,9 @@ async function extractBookExcerpt(book) {
     }
 
     if (String(book.ext).toLowerCase() === 'epub') {
-      await loadScriptOnce('https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js', () => typeof window.ePub === 'function');
+      // Sempre carregar JSZip antes do epub.js, inclusive ao extrair a frase da página inicial.
+      // Carregar epub.js sozinho aqui pode inicializá-lo sem JSZip e impedir a abertura do livro.
+      await ensureEpubLibrary();
       const epub = window.ePub(await file.arrayBuffer());
       try {
         const spine = await epub.loaded.spine;
