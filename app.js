@@ -16,6 +16,7 @@ let sessionStarted = null;
 let activeFilter = 'all';
 let selectedGenre = null;
 let enabledExtraGenres = [];
+let showAddGenreOptions = false;
 let currentPdfPage = 1;
 let epubBook = null;
 let awaitlessReadGoal = 30;
@@ -296,7 +297,17 @@ function renderGenreRooms() {
       <span class="room-desc">${esc(genre.desc)}</span>
       <span class="room-count">${count} livro(s) <span aria-hidden="true">→</span></span>
     </button>`;
-  }).join('') + (addable.length ? `<section class="add-genre-area"><h3>Outras salas</h3><p>Adicione somente os gêneros que quiser na sua biblioteca.</p><div class="add-genre-list">${addable.map(genre => `<button type="button" class="add-genre-btn" data-add-genre="${esc(genre.name)}"><span>${genre.icon} ${esc(genre.name)}</span><strong>＋ Adicionar sala</strong></button>`).join('')}</div></section>` : '');
+  }).join('') + (addable.length ? `
+    <section class="add-genre-area">
+      <button type="button" class="add-genre-toggle" aria-expanded="${showAddGenreOptions}">
+        <span>＋</span> Adicionar estante <small>${addable.length} opções</small>
+      </button>
+      ${showAddGenreOptions ? `<div class="add-genre-options"><p>Escolha quais salas quer adicionar.</p><div class="add-genre-list">${addable.map(genre => `<button type="button" class="add-genre-btn" data-add-genre="${esc(genre.name)}"><span>${genre.icon} ${esc(genre.name)}</span><strong>＋ Adicionar</strong></button>`).join('')}</div></div>` : ''}
+    </section>` : '');
+  container.querySelector('.add-genre-toggle')?.addEventListener('click', () => {
+    showAddGenreOptions = !showAddGenreOptions;
+    renderGenreRooms();
+  });
   container.querySelectorAll('[data-open-genre]').forEach(button => {
     button.addEventListener('click', () => {
       selectedGenre = button.dataset.openGenre;
@@ -309,6 +320,7 @@ function renderGenreRooms() {
       const genre = button.dataset.addGenre;
       if (!enabledExtraGenres.includes(genre)) enabledExtraGenres.push(genre);
       await saveData('enabledExtraGenres', enabledExtraGenres);
+      showAddGenreOptions = false;
       selectedGenre = genre;
       renderBooks();
       toast('Sala adicionada à sua biblioteca.');
