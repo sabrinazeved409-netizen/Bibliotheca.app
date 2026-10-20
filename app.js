@@ -1006,10 +1006,13 @@ function applyReaderPreferences() {
   if (line) line.value = readerLineSpacing;
   if (paragraph) paragraph.value = readerParagraphSpacing;
   if (brightness) brightness.value = readerBrightness;
+  const quickBrightness = $('#readerBrightnessQuick');
+  if (quickBrightness) quickBrightness.value = readerBrightness;
   if ($('#fontValue')) $('#fontValue').textContent = readerFontSize + '%';
   if ($('#lineValue')) $('#lineValue').textContent = readerLineSpacing.toLocaleString('pt-BR', {maximumFractionDigits:1});
   if ($('#paragraphValue')) $('#paragraphValue').textContent = readerParagraphSpacing.toLocaleString('pt-BR', {maximumFractionDigits:1});
   if ($('#brightnessValue')) $('#brightnessValue').textContent = readerBrightness + '%';
+  if ($('#quickBrightnessValue')) $('#quickBrightnessValue').textContent = readerBrightness + '%';
   if (epubRendition) {
     try {
       epubRendition.themes.default({
@@ -1108,11 +1111,13 @@ if ($('#readerParagraph')) $('#readerParagraph').addEventListener('input', event
   localStorage.setItem('bibliotheca-reader-paragraph', readerParagraphSpacing);
   applyReaderPreferences();
 });
-if ($('#readerBrightness')) $('#readerBrightness').addEventListener('input', event => {
-  readerBrightness = Number(event.target.value) || 100;
+const updateReaderBrightness = value => {
+  readerBrightness = Math.max(35, Math.min(100, Number(value) || 100));
   localStorage.setItem('bibliotheca-reader-brightness', readerBrightness);
   applyReaderPreferences();
-});
+};
+if ($('#readerBrightness')) $('#readerBrightness').addEventListener('input', event => updateReaderBrightness(event.target.value));
+if ($('#readerBrightnessQuick')) $('#readerBrightnessQuick').addEventListener('input', event => updateReaderBrightness(event.target.value));
 if ($('#readerContent')) {
   $('#readerContent').addEventListener('click', event => {
     if (event.target.closest('button, input, select, a')) return;
@@ -1120,8 +1125,15 @@ if ($('#readerContent')) {
     toggleReaderControls();
   });
   let touchStartX = 0, touchStartY = 0;
-  const navigateReaderSwipe = (dx, dy) => {
+  const navigateReaderSwipe = (dx, dy, startX = touchStartX) => {
     if (!currentBook || $('#readerSettings')?.classList.contains('open')) return;
+    // Deslize para cima/baixo na faixa direita para ajustar o brilho sem sair do livro.
+    if (startX >= window.innerWidth * 0.76 && Math.abs(dy) >= 24 && Math.abs(dy) > Math.abs(dx)) {
+      readerBrightness = Math.max(35, Math.min(100, readerBrightness + (dy < 0 ? 5 : -5)));
+      localStorage.setItem('bibliotheca-reader-brightness', readerBrightness);
+      applyReaderPreferences();
+      return;
+    }
     if (readerFlow === 'scrolled') {
       if (Math.abs(dy) < 55 || Math.abs(dy) < Math.abs(dx)) return;
       $('#readerContent')?.scrollBy({top: dy < 0 ? window.innerHeight * 0.72 : -window.innerHeight * 0.72, behavior:'smooth'});
@@ -1145,14 +1157,23 @@ if ($('#readerContent')) {
     touchStartY = event.changedTouches[0]?.clientY || 0;
   }, {passive:true});
   $('#readerContent').addEventListener('touchend', event => {
-    navigateReaderSwipe((event.changedTouches[0]?.clientX || 0) - touchStartX, (event.changedTouches[0]?.clientY || 0) - touchStartY);
+    navigateReaderSwipe((event.changedTouches[0]?.clientX || 0) - touchStartX, (event.changedTouches[0]?.clientY || 0) - touchStartY, touchStartX);
   }, {passive:true});
   // EPUB aparece dentro de iframe, então escutamos o gesto dentro dele também.
   const bindEpubSwipe = () => {
     const frame = $('#epubView iframe');
+    if (!frame) return;
+    // O iframe do epub.js pode carregar depois da primeira tentativa; ligar o gesto no evento load.
+    if (frame.dataset.swipeLoadBound !== 'yes') {
+      frame.dataset.swipeLoadBound = 'yes';
+      frame.addEventListener('load', () => {
+        frame.dataset.swipeLoadBound = '';
+        bindEpubSwipe();
+      });
+    }
     try {
-      const doc = frame?.contentDocument;
-      if (!doc || doc.documentElement.dataset.swipeBound === 'yes') return;
+      const doc = frame.contentDocument;
+      if (!doc?.documentElement || doc.documentElement.dataset.swipeBound === 'yes') return;
       doc.documentElement.dataset.swipeBound = 'yes';
       let sx = 0, sy = 0;
       doc.addEventListener('touchstart', event => {
@@ -1160,13 +1181,17 @@ if ($('#readerContent')) {
         sy = event.changedTouches[0]?.clientY || 0;
       }, {passive:true});
       doc.addEventListener('touchend', event => {
-        navigateReaderSwipe((event.changedTouches[0]?.clientX || 0) - sx, (event.changedTouches[0]?.clientY || 0) - sy);
+        const ex = event.changedTouches[0]?.clientX || 0;
+        const ey = event.changedTouches[0]?.clientY || 0;
+        navigateReaderSwipe(ex - sx, ey - sy, sx);
       }, {passive:true});
     } catch (_) {}
   };
   const epubSwipeObserver = new MutationObserver(bindEpubSwipe);
   epubSwipeObserver.observe($('#readerContent'), {childList:true, subtree:true});
-  setTimeout(bindEpubSwipe, 500);
+  // Tentar novamente após a primeira renderização e em caso de iframe tardio.
+  setTimeout(bindEpubSwipe, 250);
+  setTimeout(bindEpubSwipe, 900);
 }
 
 /* TEMPO DE LEITURA */
