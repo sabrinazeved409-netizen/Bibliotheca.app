@@ -67,3 +67,26 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}.t
 
 /* Estante subdividida por gênero literário */
 .genre-shelf{margin:22px 0 28px;padding:0 0 16px;border-bottom:2px solid var(--line)}.genre-shelf-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;padding:0 2px}.genre-shelf-heading h3{font-family:Georgia,serif;font-size:20px;margin:0}.genre-shelf-heading span{font-size:11px;color:var(--muted)}.genre-picker-label{display:block;margin-top:10px;font-size:10px;color:var(--muted);font-weight:700}.genre-picker{display:block;width:100%;margin-top:4px;padding:8px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--text);font-size:11px;}
+
+/* Salas literárias clicáveis: cada gênero existe desde o início. */
+.genre-rooms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 24px}
+.genre-room{min-height:190px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:16px 13px;border:1px solid #b79a67;border-radius:18px;color:#fff7e8;box-shadow:inset 0 0 25px #0003,0 8px 18px #0001;background:linear-gradient(145deg,#53664c,#202d25);transition:transform .15s}
+.genre-room:active{transform:scale(.98)}
+.room-icon{font-size:28px}.room-name{font-family:Georgia,serif;font-size:17px;line-height:1.15;font-weight:700}.room-desc{font-size:11px;line-height:1.45;color:#f0e6d4;flex:1}.room-count{font-size:10px;font-weight:700;color:#e5c98f;display:flex;justify-content:space-between;width:100%;padding-top:7px;border-top:1px solid #ffffff35}
+.room-romance{background:radial-gradient(ellipse at top right,#b86b7c99,transparent 55%),linear-gradient(145deg,#354c37,#39232e)}
+.room-fantasia{background:radial-gradient(ellipse at top right,#b5a1ef88,transparent 55%),linear-gradient(145deg,#30284e,#171c32)}
+.room-misterio{background:radial-gradient(ellipse at top right,#8394a088,transparent 55%),linear-gradient(145deg,#34424a,#171e25)}
+.room-ficcao{background:radial-gradient(ellipse at top right,#5faeb488,transparent 55%),linear-gradient(145deg,#183f4a,#17232f)}
+.room-terror{background:radial-gradient(ellipse at top right,#9b344c88,transparent 55%),linear-gradient(145deg,#38232b,#171619)}
+.room-classicos{background:radial-gradient(ellipse at top right,#c6a66c88,transparent 55%),linear-gradient(145deg,#6a5239,#30271f)}
+.room-drama{background:radial-gradient(ellipse at top right,#c0786588,transparent 55%),linear-gradient(145deg,#69413f,#2d252b)}
+.room-aventura{background:radial-gradient(ellipse at top right,#a6a35d88,transparent 55%),linear-gradient(145deg,#53613a,#233329)}
+.room-poesia{background:radial-gradient(ellipse at top right,#d4b0d988,transparent 55%),linear-gradient(145deg,#684e70,#30263f)}
+.room-nao-ficcao{background:radial-gradient(ellipse at top right,#9bba9988,transparent 55%),linear-gradient(145deg,#355747,#1e302b)}
+.room-juvenil{background:radial-gradient(ellipse at top right,#dfb86b88,transparent 55%),linear-gradient(145deg,#8b623e,#3b3828)}
+.room-outros{background:radial-gradient(ellipse at top right,#b6a99b88,transparent 55%),linear-gradient(145deg,#665b52,#302b27)}
+.selected-genre-panel{margin:18px 0 12px;padding:22px 18px;border-radius:22px;color:#fff7e8;border:1px solid #b79a67;background:linear-gradient(145deg,#344332,#18231d);box-shadow:inset 0 0 35px #0003}
+.selected-genre-panel h2{margin:18px 0 8px;color:#ead7a7}.selected-genre-panel .world-description{color:#eee0cc;font-size:13px;line-height:1.6}.back-rooms{background:#ffffff18;color:#fff7e8;border-color:#ffffff44}
+.room-empty{text-align:center;padding:28px 18px;border:1px dashed var(--line);border-radius:18px;color:var(--muted)}.room-empty span{font-size:36px}.room-empty h3{color:var(--text);margin:10px 0}.room-empty p{font-size:12px}
+.genre-picker-label,.genre-picker{position:relative;z-index:2}
+@media(max-width:360px){.genre-rooms{grid-template-columns:1fr}.genre-room{min-height:150px}}
