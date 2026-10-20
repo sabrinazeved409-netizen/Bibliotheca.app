@@ -853,3 +853,41 @@ h2,h3{color:#f2e1c4}
  .genre-room .room-name{font-size:9px!important}
  .genre-rooms .genre-room .room-count{font-size:6px!important}
 }
+
+
+/* v58 — primeira sala temática: Romance */
+.room-romance{
+  --book-cover:#401823;--book-edge:#d8b276;--book-glow:#9b3048;
+  background:
+    radial-gradient(ellipse at 50% 28%,#a13b4c66,transparent 62%),
+    linear-gradient(180deg,#251016 0%,#170d0d 62%,#0e0b09 100%)!important;
+  border-color:#b88b58!important;
+}
+.room-romance::before{
+  background:
+    radial-gradient(ellipse at 10% 15%,#b34a5a33,transparent 36%),
+    radial-gradient(ellipse at 90% 80%,#6e263b44,transparent 40%),
+    linear-gradient(135deg,#e8c98c0c,transparent 55%)!important;
+}
+.room-romance::after{
+  border-color:#d8ad705e!important;
+  box-shadow:inset 0 0 12px #b94a5a16!important;
+}
+.room-romance .genre-cover-art{
+  filter:drop-shadow(0 3px 5px #000c) drop-shadow(0 0 7px #a72c4533)!important;
+}
+.room-romance .room-name{
+  color:#f5d8b0!important;
+  text-shadow:0 1px 9px #b34a5a66!important;
+}
+.room-romance .room-count{color:#e2b77f!important;border-color:#c27d7144!important}
+/* Cada sala mantém uma atmosfera própria, sem perder a moldura antiga. */
+.room-fantasia{--book-cover:#153e39;--book-edge:#a6c2a2;--book-glow:#1c766a}
+.room-terror{--book-cover:#321017;--book-edge:#c96a5f;--book-glow:#871d2b}
+.room-ficcao{--book-cover:#102d3b;--book-edge:#8bc5d4;--book-glow:#17617b}
+.room-misterio{--book-cover:#202b36;--book-edge:#b0a4a0;--book-glow:#3b536b}
+.room-classicos{--book-cover:#422d19;--book-edge:#d9bc80;--book-glow:#765322}
+.room-drama{--book-cover:#3e202d;--book-edge:#d7a0a2;--book-glow:#71334b}
+.room-aventura{--book-cover:#263321;--book-edge:#c3b27b;--book-glow:#50663b}
+.room-poesia{--book-cover:#30243a;--book-edge:#c8a8d6;--book-glow:#62466f}
+.room-juvenil{--book-cover:#263b2a;--book-edge:#c5d19a;--book-glow:#526e43}
