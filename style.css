@@ -838,3 +838,18 @@ h2,h3{color:#f2e1c4}
   .genre-room .room-name{font-size:10px!important}
   .genre-rooms .genre-room .room-count{font-size:7px!important}
 }
+
+
+/* v57 — quatro janelas por linha */
+.genre-rooms{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+.genre-room{padding:6px 3px 7px!important;gap:4px!important}
+.genre-cover-art{aspect-ratio:0.92/1!important;max-height:76px!important}
+.genre-room .room-name{font-size:10px!important;line-height:1.1!important}
+.genre-rooms .genre-room .room-count{font-size:7px!important;padding-top:4px!important}
+@media(max-width:360px){
+ .genre-rooms{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important}
+ .genre-room{padding:5px 2px 6px!important}
+ .genre-cover-art{max-height:64px!important}
+ .genre-room .room-name{font-size:9px!important}
+ .genre-rooms .genre-room .room-count{font-size:6px!important}
+}
