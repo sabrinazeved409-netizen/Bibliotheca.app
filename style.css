@@ -1567,7 +1567,7 @@ body.romance-room-open #selectedGenrePanel{
   padding-top:clamp(265px,79vw,405px)!important;
 }
 body.romance-room-open #selectedGenrePanel:before{
-  content:"ROMANCE\\A Porque não há nada mais perigoso do que um coração apaixonado.\\A ❧  ✦  ❧"!important;
+  content:"ROMANCE\A Porque não há nada mais perigoso do que um coração apaixonado.\A ❧  ✦  ❧"!important;
   white-space:pre-line!important;
   top:clamp(31px,8vw,48px)!important;
   width:min(91%,410px)!important;
@@ -1616,7 +1616,7 @@ body.romance-room-open #selectedGenrePanel:before{
   border-radius:0!important;
   outline:0!important;
   outline-offset:0!important;
-  background:linear-gradient(180deg,rgba(19,7,10,.05),rgba(19,7,10,.55)),url("./images/romance-rococo-arch.svg") center center/100% 100% no-repeat!important;
+  background:linear-gradient(180deg,rgba(19,7,10,.05),rgba(19,7,10,.55)),url("./images/ChatGPT%20Image%2022%20de%20out.%20de%202026,%2013_14_12%20(1).png") center center/100% 100% no-repeat!important;
   box-shadow:none!important;
   color:#f7d78e!important;
   text-shadow:0 2px 5px #16070b,0 0 12px #d9a44d70!important;
