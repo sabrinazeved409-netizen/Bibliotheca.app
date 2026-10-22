@@ -1560,3 +1560,42 @@ body.romance-room-open #selectedGenrePanel:after{
  }
  body.romance-room-open #selectedGenrePanel:after{top:15px!important}
 }
+
+
+/* v81 — cartucho rococó alongado com coração no topo */
+body.romance-room-open #selectedGenrePanel{
+  padding-top:clamp(265px,79vw,405px)!important;
+}
+body.romance-room-open #selectedGenrePanel:before{
+  content:"ROMANCE\\A Porque não há nada mais perigoso do que um coração apaixonado.\\A ❧  ✦  ❧"!important;
+  white-space:pre-line!important;
+  top:clamp(31px,8vw,48px)!important;
+  width:min(91%,410px)!important;
+  height:clamp(205px,55vw,282px)!important;
+  padding:clamp(37px,10vw,54px) clamp(26px,8vw,45px) clamp(22px,6vw,34px)!important;
+  border:2px solid #e0b65e!important;
+  border-radius:48% 48% 42% 42% / 12% 12% 9% 9%!important;
+  outline:1px solid #f7dfa0!important;
+  outline-offset:-8px!important;
+  background:
+    radial-gradient(ellipse at 50% 13%,#e7bd6b35,transparent 34%),
+    linear-gradient(90deg,transparent 0%,#d7a44b1b 12%,transparent 25%,#d7a44b18 50%,transparent 75%,#d7a44b1b 88%,transparent 100%),
+    linear-gradient(180deg,#1c090eea,#35101beF 52%,#17080deF)!important;
+  box-shadow:0 0 0 2px #3d1c0d,0 0 0 4px #b98537,0 0 20px #d8a84d55,0 12px 30px #000b,inset 0 0 0 4px #d8a84d1f,inset 0 0 22px #e2b45325!important;
+  font-size:clamp(15px,4.2vw,21px)!important;
+  line-height:1.65!important;
+}
+body.romance-room-open #selectedGenrePanel:after{
+  content:"♥"!important;
+  top:clamp(12px,3.3vw,22px)!important;
+  width:100%!important;
+  color:#b51f3c!important;
+  -webkit-text-stroke:.7px #ffe0a0;
+  font:clamp(27px,7.5vw,39px)/1 Georgia,serif!important;
+  text-shadow:0 1px 2px #16070b,0 0 9px #e9b85b,0 0 18px #a83c4d!important;
+}
+@media(min-width:600px){
+  body.romance-room-open #selectedGenrePanel{padding-top:320px!important}
+  body.romance-room-open #selectedGenrePanel:before{width:min(72%,560px)!important;height:245px!important;top:30px!important}
+  body.romance-room-open #selectedGenrePanel:after{top:15px!important}
+}
