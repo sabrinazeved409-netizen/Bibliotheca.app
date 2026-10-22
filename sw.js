@@ -1,4 +1,4 @@
-const CACHE = 'bibliotheca-shell-v83';
+const CACHE = 'bibliotheca-shell-v84';
 const FILES = ['./', './index.html', './style.css?v=83', './app.js?v=83', './manifest.webmanifest', './images/romance-portal.svg', './images/romance-rococo-arch.svg', './images/ChatGPT Image 22 de out. de 2026, 13_14_12 (1).png'];
 
 self.addEventListener('message', event => {
