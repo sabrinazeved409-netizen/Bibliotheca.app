@@ -1599,3 +1599,32 @@ body.romance-room-open #selectedGenrePanel:after{
   body.romance-room-open #selectedGenrePanel:before{width:min(72%,560px)!important;height:245px!important;top:30px!important}
   body.romance-room-open #selectedGenrePanel:after{top:15px!important}
 }
+
+
+/* v82 — usa a arte do arco rococó com coração rubi */
+body.romance-room-open #selectedGenrePanel{
+  padding-top:clamp(265px,79vw,405px)!important;
+}
+body.romance-room-open #selectedGenrePanel:before{
+  content:"ROMANCE\\A Porque não há nada mais perigoso do que um coração apaixonado.\\A ❧  ✦  ❧"!important;
+  white-space:pre-line!important;
+  top:clamp(20px,5vw,34px)!important;
+  width:min(94%,430px)!important;
+  height:clamp(225px,60vw,310px)!important;
+  padding:clamp(42px,11vw,60px) clamp(35px,10vw,58px) clamp(23px,7vw,38px)!important;
+  border:0!important;
+  border-radius:0!important;
+  outline:0!important;
+  outline-offset:0!important;
+  background:linear-gradient(180deg,rgba(19,7,10,.05),rgba(19,7,10,.55)),url("./images/romance-rococo-arch.svg") center center/100% 100% no-repeat!important;
+  box-shadow:none!important;
+  color:#f7d78e!important;
+  text-shadow:0 2px 5px #16070b,0 0 12px #d9a44d70!important;
+  font-size:clamp(14px,3.9vw,20px)!important;
+  line-height:1.55!important;
+}
+body.romance-room-open #selectedGenrePanel:after{content:none!important;display:none!important}
+@media(min-width:600px){
+  body.romance-room-open #selectedGenrePanel{padding-top:330px!important}
+  body.romance-room-open #selectedGenrePanel:before{width:min(72%,570px)!important;height:265px!important;top:28px!important}
+}
