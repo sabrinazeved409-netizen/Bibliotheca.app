@@ -1601,30 +1601,49 @@ body.romance-room-open #selectedGenrePanel:after{
 }
 
 
-/* v82 — usa a arte do arco rococó com coração rubi */
+/* v84 — arco original sem fundo branco e texto com quebras corretas */
 body.romance-room-open #selectedGenrePanel{
   padding-top:clamp(265px,79vw,405px)!important;
 }
 body.romance-room-open #selectedGenrePanel:before{
-  content:"ROMANCE\\A Porque não há nada mais perigoso do que um coração apaixonado.\\A ❧  ✦  ❧"!important;
-  white-space:pre-line!important;
+  content:""!important;
+  position:absolute!important;
+  z-index:5!important;
   top:clamp(20px,5vw,34px)!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
   width:min(94%,430px)!important;
   height:clamp(225px,60vw,310px)!important;
-  padding:clamp(42px,11vw,60px) clamp(35px,10vw,58px) clamp(23px,7vw,38px)!important;
   border:0!important;
   border-radius:0!important;
   outline:0!important;
-  outline-offset:0!important;
-  background:linear-gradient(180deg,rgba(19,7,10,.05),rgba(19,7,10,.55)),url("./images/ChatGPT%20Image%2022%20de%20out.%20de%202026,%2013_14_12%20(1).png") center center/100% 100% no-repeat!important;
+  background:url("./images/ChatGPT%20Image%2022%20de%20out.%20de%202026,%2013_14_12%20(1).png") center center/100% 100% no-repeat!important;
+  mix-blend-mode:multiply!important;
   box-shadow:none!important;
-  color:#f7d78e!important;
-  text-shadow:0 2px 5px #16070b,0 0 12px #d9a44d70!important;
-  font-size:clamp(14px,3.9vw,20px)!important;
-  line-height:1.55!important;
+  pointer-events:none!important;
 }
-body.romance-room-open #selectedGenrePanel:after{content:none!important;display:none!important}
+body.romance-room-open #selectedGenrePanel:after{
+  content:"ROMANCE\A Porque não há nada mais perigoso do que um coração apaixonado."!important;
+  white-space:pre-line!important;
+  position:absolute!important;
+  z-index:6!important;
+  top:clamp(105px,30vw,155px)!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  width:min(78%,350px)!important;
+  display:block!important;
+  text-align:center!important;
+  color:#f7d78e!important;
+  font-family:Georgia,'Times New Roman',serif!important;
+  font-size:clamp(14px,3.9vw,20px)!important;
+  font-weight:700!important;
+  line-height:1.55!important;
+  letter-spacing:.035em!important;
+  text-shadow:0 2px 5px #16070b,0 0 12px #d9a44d70!important;
+  pointer-events:none!important;
+}
 @media(min-width:600px){
   body.romance-room-open #selectedGenrePanel{padding-top:330px!important}
   body.romance-room-open #selectedGenrePanel:before{width:min(72%,570px)!important;height:265px!important;top:28px!important}
+  body.romance-room-open #selectedGenrePanel:after{top:115px!important;width:min(55%,400px)!important}
 }
