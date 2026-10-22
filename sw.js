@@ -1,5 +1,5 @@
-const CACHE = 'bibliotheca-shell-v82';
-const FILES = ['./', './index.html', './style.css?v=82', './app.js?v=82', './manifest.webmanifest', './images/romance-portal.svg', './images/romance-rococo-arch.svg'];
+const CACHE = 'bibliotheca-shell-v83';
+const FILES = ['./', './index.html', './style.css?v=83', './app.js?v=83', './manifest.webmanifest', './images/romance-portal.svg', './images/romance-rococo-arch.svg', './images/ChatGPT Image 22 de out. de 2026, 13_14_12 (1).png'];
 
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
