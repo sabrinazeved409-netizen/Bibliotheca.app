@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" fill="none">
+<defs>
+ <linearGradient id="gold" x1="40" y1="20" x2="380" y2="285" gradientUnits="userSpaceOnUse"><stop stop-color="#fff0b0"/><stop offset=".22" stop-color="#b9802c"/><stop offset=".46" stop-color="#ffe5a0"/><stop offset=".7" stop-color="#a86b22"/><stop offset="1" stop-color="#f6d987"/></linearGradient>
+ <linearGradient id="ruby" x1="202" y1="16" x2="218" y2="43" gradientUnits="userSpaceOnUse"><stop stop-color="#ff8b9b"/><stop offset=".45" stop-color="#bd1738"/><stop offset="1" stop-color="#65091f"/></linearGradient>
+ <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<!-- long rococo cartouche silhouette -->
+<path d="M210 44 C187 35 170 22 153 12 C134 1 111 8 112 25 C113 38 132 44 147 35 C160 27 168 40 158 50 C145 63 123 56 111 45 C94 29 76 30 64 42 C52 54 61 71 77 69 C91 67 91 53 82 51 C101 43 112 62 101 77 C87 96 62 83 47 70 C29 54 12 65 17 83 C21 96 38 96 45 85 C52 74 65 88 57 101 C48 115 30 111 22 124 C11 143 27 160 43 151 C58 143 49 129 39 132 C52 117 70 134 61 151 C52 169 35 172 39 191 C43 208 61 210 68 195 C74 182 60 177 55 188 C50 168 72 159 85 174 C99 190 83 210 72 221 C57 236 70 254 85 246 C98 239 92 225 83 229 C77 210 100 203 112 218 C127 237 143 247 163 242 C182 238 193 225 210 215 C227 225 238 238 257 242 C277 247 293 237 308 218 C320 203 343 210 337 229 C328 225 322 239 335 246 C350 254 363 236 348 221 C337 210 321 190 335 174 C348 159 370 168 365 188 C360 177 346 182 352 195 C359 210 377 208 381 191 C385 172 368 169 359 151 C350 134 368 117 381 132 C371 129 362 143 377 151 C393 160 409 143 398 124 C390 111 372 115 363 101 C355 88 368 74 375 85 C382 96 399 96 403 83 C408 65 391 54 373 70 C358 83 333 96 319 77 C308 62 319 43 338 51 C329 53 329 67 343 69 C359 71 368 54 356 42 C344 30 326 29 309 45 C297 56 275 63 262 50 C252 40 260 27 273 35 C288 44 307 38 308 25 C309 8 286 1 267 12 C250 22 233 35 210 44Z" stroke="url(#gold)" stroke-width="2.8" filter="url(#glow)"/>
+<path d="M210 50 C190 43 172 31 155 22 C143 16 129 18 127 27 C126 34 139 36 146 29 M210 50 C230 43 248 31 265 22 C277 16 291 18 293 27 C294 34 281 36 274 29" stroke="url(#gold)" stroke-width="1.5"/>
+<!-- inner tall arch -->
+<path d="M73 270 V122 C73 54 128 42 210 42 C292 42 347 54 347 122 V270" stroke="url(#gold)" stroke-width="3"/>
+<path d="M83 270 V124 C83 67 134 53 210 53 C286 53 337 67 337 124 V270" stroke="url(#gold)" stroke-width="1.4"/>
+<!-- rococo side scrolls -->
+<g stroke="url(#gold)" stroke-width="2" stroke-linecap="round">
+ <path d="M73 105 C48 90 37 109 52 123 C63 133 76 121 67 113 C60 108 56 117 62 119"/>
+ <path d="M73 137 C45 128 34 149 50 161 C65 173 79 155 66 150 C59 147 56 155 62 157"/>
+ <path d="M73 174 C48 169 38 190 54 201 C68 211 81 196 69 190 C62 187 59 195 65 197"/>
+ <path d="M347 105 C372 90 383 109 368 123 C357 133 344 121 353 113 C360 108 364 117 358 119"/>
+ <path d="M347 137 C375 128 386 149 370 161 C355 173 341 155 354 150 C361 147 364 155 358 157"/>
+ <path d="M347 174 C372 169 382 190 366 201 C352 211 339 196 351 190 C358 187 361 195 355 197"/>
+</g>
+<!-- center ruby heart -->
+<path d="M210 43 C201 31 181 27 178 42 C175 55 193 65 210 78 C227 65 245 55 242 42 C239 27 219 31 210 43Z" fill="url(#ruby)" stroke="url(#gold)" stroke-width="2.5" filter="url(#glow)"/>
+<path d="M188 41 C190 35 197 35 202 40" stroke="#ffd5d8" stroke-width="2" stroke-linecap="round"/>
+<!-- small leaves and flourishes -->
+<g stroke="url(#gold)" stroke-width="1.7" stroke-linecap="round">
+ <path d="M210 81 C190 91 186 105 196 114 C205 105 209 94 210 81Z"/>
+ <path d="M210 81 C230 91 234 105 224 114 C215 105 211 94 210 81Z"/>
+ <path d="M73 247 C92 240 102 250 94 262 C85 270 76 260 84 255 M347 247 C328 240 318 250 326 262 C335 270 344 260 336 255"/>
+ <path d="M105 276 C130 287 164 285 181 270 M315 276 C290 287 256 285 239 270"/>
+</g>
+<path d="M73 270 H347" stroke="url(#gold)" stroke-width="2.5"/>
+<path d="M91 270 C105 256 117 257 128 270 C139 282 153 281 165 270 M329 270 C315 256 303 257 292 270 C281 282 267 281 255 270" stroke="url(#gold)" stroke-width="1.8"/>
+</svg>
